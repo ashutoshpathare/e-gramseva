@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('Certificate Services') }}{% endblock %}
+{% block description %}Apply for Birth, Death, or Residence certificates from the Gram Panchayat.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-4">
+    <h1 class="page-title">{{ _('Certificate Services') }}</h1>
+    <p class="text-muted mb-0" style="font-size:0.875rem;">
+      Apply for official Gram Panchayat certificates online. Upload your documents and track your application status.
+    </p>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- Birth Certificate -->
+    <div class="col-md-4">
+      <div class="service-card">
+        <div class="service-card-icon" style="background:#065f46;">
+          <i class="bi bi-person-heart"></i>
+        </div>
+        <h3 class="service-card-title">{{ _('Birth Certificate') }}</h3>
+        <p class="service-card-desc">
+          Official birth registration certificate issued by the Gram Panchayat.
+          Required for school admission, Aadhaar enrollment, and other government services.
+        </p>
+        <ul class="service-card-docs">
+          <li>Parent's identity proof (Aadhaar / Voter ID)</li>
+          <li>Hospital discharge certificate (if available)</li>
+        </ul>
+        <a href="{{ url_for('certificate_apply', sub_type='birth') }}" class="btn btn-primary w-100">
+          <i class="bi bi-pencil-square me-1"></i>{{ _('Apply Now') }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Death Certificate -->
+    <div class="col-md-4">
+      <div class="service-card">
+        <div class="service-card-icon" style="background:#7c2d12;">
+          <i class="bi bi-journal-medical"></i>
+        </div>
+        <h3 class="service-card-title">{{ _('Death Certificate') }}</h3>
+        <p class="service-card-desc">
+          Official death registration certificate. Required for insurance claims,
+          property transfer, and legal proceedings.
+        </p>
+        <ul class="service-card-docs">
+          <li>Deceased's identity proof</li>
+          <li>Medical certificate of cause of death</li>
+        </ul>
+        <a href="{{ url_for('certificate_apply', sub_type='death') }}" class="btn btn-primary w-100">
+          <i class="bi bi-pencil-square me-1"></i>{{ _('Apply Now') }}
+        </a>
+      </div>
+    </div>
+
+    <!-- Residence Certificate -->
+    <div class="col-md-4">
+      <div class="service-card">
+        <div class="service-card-icon" style="background:#1e3a8a;">
+          <i class="bi bi-house-check"></i>
+        </div>
+        <h3 class="service-card-title">{{ _('Residence Certificate') }}</h3>
+        <p class="service-card-desc">
+          Proof of residence issued by the Gram Panchayat. Required for
+          school admission, employment, and government scheme applications.
+        </p>
+        <ul class="service-card-docs">
+          <li>Aadhaar card or ration card copy</li>
+          <li>Electricity bill / property tax receipt</li>
+        </ul>
+        <a href="{{ url_for('certificate_apply', sub_type='residence') }}" class="btn btn-primary w-100">
+          <i class="bi bi-pencil-square me-1"></i>{{ _('Apply Now') }}
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

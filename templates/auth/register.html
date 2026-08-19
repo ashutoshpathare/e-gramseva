@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+{% block description %}Create your resident account on the Village Complaint Management System.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="register-wrap">
+    <div class="register-form-panel">
+      <h3><i class="bi bi-person-plus me-2"></i>New Resident Registration</h3>
+      <p class="form-note">
+        Fill in your details below. Your mobile number will be your login username.
+      </p>
+
+      <form method="post" action="{{ url_for('register') }}" novalidate>
+
+        <div class="mb-3">
+          <label for="full_name" class="form-label">
+            Full Name <span class="required-mark">*</span>
+          </label>
+          <input
+            type="text"
+            id="full_name"
+            name="full_name"
+            class="form-control"
+            placeholder="As per Aadhaar or official record"
+            value="{{ form.get('full_name', '') }}"
+            autofocus
+            required
+          >
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-sm-7">
+            <label for="mobile" class="form-label">
+              Mobile Number <span class="required-mark">*</span>
+            </label>
+            <input
+              type="tel"
+              id="mobile"
+              name="mobile"
+              class="form-control"
+              placeholder="10-digit number"
+              maxlength="10"
+              inputmode="numeric"
+              value="{{ form.get('mobile', '') }}"
+              required
+            >
+            <div class="form-text">This will be used to log in.</div>
+          </div>
+          <div class="col-sm-5">
+            <label for="ward" class="form-label">
+              Ward <span class="required-mark">*</span>
+            </label>
+            <select id="ward" name="ward" class="form-select" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for w in wards %}
+                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
+                  {{ w }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6">
+            <label for="password" class="form-label">
+              Password <span class="required-mark">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Minimum 6 characters"
+              required
+            >
+          </div>
+          <div class="col-sm-6">
+            <label for="confirm_password" class="form-label">
+              Confirm Password <span class="required-mark">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirm_password"
+              name="confirm_password"
+              class="form-control"
+              placeholder="Repeat password"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <button type="submit" class="btn btn-primary" id="btn-register">
+            <i class="bi bi-person-check me-1"></i>Register
+          </button>
+          <span style="font-size:0.85rem; color:var(--muted);">
+            Already registered? <a href="{{ url_for('login') }}">Login here</a>.
+          </span>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

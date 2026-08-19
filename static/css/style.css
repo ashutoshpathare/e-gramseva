@@ -1,0 +1,1238 @@
+/* ================================================================
+   VCMS Custom Stylesheet
+   Extends Bootstrap 5. Goal: civic/government portal aesthetic —
+   restrained palette, functional layout, minimal decoration.
+   ================================================================ */
+
+:root {
+  --navy:   #1a3a5c;
+  --maroon: #8b1a1a;
+  --green:  #2d6a2d;
+  --cream:  #f4f3ee;
+  --border: #c5c5c0;
+  --text:   #1a1a1a;
+  --muted:  #5a5a5a;
+}
+
+/* ── Base ─────────────────────────────────────────────────────── */
+
+body {
+  font-family: 'Noto Sans', Arial, sans-serif;
+  font-size: 0.9375rem;
+  color: var(--text);
+  background-color: var(--cream);
+  line-height: 1.6;
+}
+
+a { color: var(--navy); }
+a:hover { color: var(--maroon); }
+
+/* ── Top Utility Bar ──────────────────────────────────────────── */
+
+.top-bar {
+  background-color: var(--navy);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8125rem;
+  padding: 5px 0;
+}
+
+/* ── Site Header ──────────────────────────────────────────────── */
+
+.site-header {
+  background-color: #fff;
+  border-bottom: 3px solid var(--maroon);
+  padding: 12px 0;
+}
+
+.header-emblem {
+  font-size: 2.5rem;
+  color: var(--maroon);
+  line-height: 1;
+}
+
+.header-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+
+.header-subtitle {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+/* ── Navigation ───────────────────────────────────────────────── */
+
+.main-nav {
+  background-color: var(--navy);
+  border-bottom: 3px solid var(--maroon);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.nav-links li a {
+  display: block;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.15s ease;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  background-color: var(--maroon);
+  color: #fff;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  padding: 6px 0;
+  flex-wrap: wrap;
+}
+
+.nav-username { font-size: 0.8125rem; }
+
+.ward-badge {
+  background-color: var(--maroon);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 2px;
+  margin-left: 4px;
+}
+
+.notif-bell {
+  position: relative;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.notif-bell:hover { color: #fff; }
+
+.notif-count {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background-color: var(--maroon);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 8px;
+  line-height: 1.4;
+  min-width: 16px;
+  text-align: center;
+}
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8125rem;
+  padding: 3px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.15s ease;
+  font-family: inherit;
+}
+
+.btn-logout:hover {
+  background-color: var(--maroon);
+  border-color: var(--maroon);
+  color: #fff;
+}
+
+.btn-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 4px 10px;
+}
+
+.btn-nav-link:hover { color: #fff; }
+
+.btn-nav-primary {
+  background-color: var(--maroon);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 14px;
+  border-radius: 2px;
+}
+
+.btn-nav-primary:hover { background-color: #6e1515; color: #fff; }
+
+/* ── Main Content ─────────────────────────────────────────────── */
+
+.main-content {
+  min-height: calc(100vh - 250px);
+  padding: 24px 0 48px;
+}
+
+/* ── Bootstrap Component Overrides ───────────────────────────── */
+
+.btn { border-radius: 3px !important; }
+
+.btn-primary {
+  background-color: var(--navy) !important;
+  border-color: var(--navy) !important;
+  font-weight: 500;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #12284a !important;
+  border-color: #12284a !important;
+}
+
+.form-control,
+.form-select {
+  border-radius: 3px !important;
+  border-color: var(--border);
+  font-size: 0.9375rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 0.15rem rgba(26, 58, 92, 0.2);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.form-text { font-size: 0.8rem; }
+
+.alert {
+  border-radius: 3px !important;
+  border-left-width: 4px;
+}
+
+.card {
+  border-radius: 4px !important;
+  border-color: var(--border);
+}
+
+.card-header {
+  background-color: var(--navy) !important;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 16px;
+  border-radius: 4px 4px 0 0 !important;
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+
+.site-footer {
+  background-color: var(--navy);
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.8125rem;
+  padding: 18px 0;
+}
+
+/* ── Login Page ───────────────────────────────────────────────── */
+
+.login-wrap {
+  max-width: 860px;
+  margin: 28px auto 0;
+}
+
+.login-info-panel {
+  background-color: var(--navy);
+  color: rgba(255, 255, 255, 0.88);
+  padding: 36px 28px;
+  min-height: 100%;
+}
+
+.login-info-panel h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  border-bottom: 2px solid var(--maroon);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.login-info-panel ul {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  line-height: 2.1;
+}
+
+.login-info-panel .divider {
+  border-color: rgba(255, 255, 255, 0.2);
+  margin: 24px 0 16px;
+}
+
+.register-link {
+  color: #f0c040;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.register-link:hover { color: #fdd835; text-decoration: underline; }
+
+.login-form-panel {
+  background-color: #fff;
+  border: 1px solid var(--border);
+  border-left: none;
+  padding: 36px 28px;
+  min-height: 100%;
+}
+
+.login-form-panel h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--navy);
+  border-left: 4px solid var(--maroon);
+  padding-left: 10px;
+  margin-bottom: 24px;
+}
+
+/* ── Register Page ────────────────────────────────────────────── */
+
+.register-wrap {
+  max-width: 640px;
+  margin: 28px auto 0;
+}
+
+.register-form-panel {
+  background-color: #fff;
+  border: 1px solid var(--border);
+  padding: 32px 28px;
+}
+
+.register-form-panel h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--navy);
+  border-left: 4px solid var(--maroon);
+  padding-left: 10px;
+  margin-bottom: 6px;
+}
+
+.form-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.required-mark {
+  color: var(--maroon);
+  font-weight: 700;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .nav-inner { flex-direction: column; }
+
+  .nav-user {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 0;
+  }
+
+  .login-info-panel {
+    padding: 24px 20px;
+    min-height: auto;
+  }
+
+  .login-form-panel {
+    border-left: 1px solid var(--border);
+    padding: 24px 20px;
+    min-height: auto;
+  }
+
+  .register-form-panel { padding: 24px 16px; }
+}
+
+/* ================================================================
+   Phase 2 additions: Dashboard, Complaint Form, Detail, Timeline
+   ================================================================ */
+
+/* ── Page Titles ─────────────────────────────────────────────── */
+
+.page-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.back-link {
+  font-size: 0.875rem;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back-link:hover { color: var(--navy); }
+
+/* ── Summary Strip (Dashboard) ───────────────────────────────── */
+
+.summary-strip {
+  display: flex;
+  border: 1px solid var(--border);
+  background: #fff;
+  max-width: 480px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  flex: 1;
+  text-align: center;
+  padding: 10px 8px;
+  border-right: 1px solid var(--border);
+}
+
+.summary-item:last-child { border-right: none; }
+
+.summary-item strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+}
+
+.summary-item span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Complaints Table ────────────────────────────────────────── */
+
+.table-wrap {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  overflow-x: auto;
+}
+
+.complaints-table {
+  font-size: 0.875rem;
+  margin-bottom: 0;
+  min-width: 560px;
+}
+
+.complaints-table thead th {
+  background-color: #eeece7;
+  border-color: var(--border);
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text);
+  padding: 9px 12px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.complaints-table td {
+  border-color: var(--border);
+  padding: 9px 12px;
+  vertical-align: middle;
+}
+
+.cid-cell {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+/* ── Status Badges ───────────────────────────────────────────── */
+
+.status-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.status-pending     { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.status-in-progress { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
+.status-resolved    { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.status-rejected    { background: #fee2e2; color: #7f1d1d; border: 1px solid #fca5a5; }
+
+.status-badge-lg { font-size: 0.8125rem; padding: 4px 14px; }
+
+/* ── Empty State ─────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 56px 24px;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--border);
+}
+
+/* ── Complaint Form Page ─────────────────────────────────────── */
+
+.form-page-wrap { max-width: 760px; }
+
+.form-page-header {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--maroon);
+}
+
+.form-section {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+
+.form-section-heading {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--maroon);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.section-optional {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.location-info { font-size: 0.875rem; }
+
+.photo-preview-img {
+  max-width: 100%;
+  max-height: 240px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+.form-submit-bar { padding: 16px 0 8px; }
+
+/* ── Complaint Detail Page ───────────────────────────────────── */
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 0 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.category-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--maroon);
+}
+
+.priority-high {
+  color: var(--maroon);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.detail-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+}
+
+.detail-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.detail-table {
+  width: 100%;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+  margin-bottom: 14px;
+}
+
+.detail-table th {
+  color: var(--muted);
+  font-weight: 600;
+  width: 116px;
+  padding: 4px 0;
+  vertical-align: top;
+}
+
+.detail-table td { padding: 4px 0; }
+
+.description-block {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.complaint-photo {
+  max-width: 100%;
+  max-height: 320px;
+  display: block;
+  border: 1px solid var(--border);
+}
+
+/* ── Status Timeline ─────────────────────────────────────────── */
+
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 4px;
+}
+
+.timeline-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 16px;
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--navy);
+  background: #fff;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.timeline-dot-pending     { border-color: #92400e; background: #fef3c7; }
+.timeline-dot-in-progress { border-color: #1e3a8a; background: #dbeafe; }
+.timeline-dot-resolved    { border-color: #065f46; background: #d1fae5; }
+.timeline-dot-rejected    { border-color: #7f1d1d; background: #fee2e2; }
+
+.timeline-line {
+  flex: 1;
+  width: 2px;
+  background-color: var(--border);
+  margin: 4px 0;
+  min-height: 22px;
+}
+
+.timeline-content { padding-bottom: 20px; flex: 1; }
+.timeline-item-last .timeline-content { padding-bottom: 0; }
+.timeline-status { margin-bottom: 4px; }
+
+.timeline-date {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.timeline-note {
+  font-size: 0.875rem;
+  background: #f8f8f6;
+  border-left: 3px solid var(--border);
+  padding: 4px 8px;
+  margin-top: 4px;
+  color: var(--text);
+}
+
+/* ── Star Rating ─────────────────────────────────────────────── */
+
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.star-rating input { display: none; }
+
+.star-rating label {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--border);
+  transition: color 0.1s;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label { color: #d97706; }
+
+.stars-display i { font-size: 1.1rem; }
+.star-filled { color: #d97706; }
+.star-empty  { color: var(--border); }
+
+.feedback-card { border-top: 3px solid var(--maroon); }
+
+/* ================================================================
+   Phase 3 additions: Admin Dashboard, Detail, Reports
+   ================================================================ */
+
+/* ── Admin Stats Bar ─────────────────────────────────────────── */
+
+.admin-stats-bar {
+  display: flex;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+
+.admin-stat-item {
+  flex: 1;
+  padding: 14px 12px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+
+.admin-stat-item:last-child { border-right: none; }
+
+.admin-stat-value {
+  display: block;
+  font-size: 1.625rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.admin-stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Filter Bar ──────────────────────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  flex-wrap: wrap;
+}
+
+.filter-bar .form-select-sm {
+  max-width: 175px;
+  font-size: 0.875rem;
+}
+
+/* ── High Priority Row ───────────────────────────────────────── */
+
+.high-priority-row { background-color: #fffbfb; }
+
+.high-priority-row > td:first-child {
+  border-left: 3px solid var(--maroon) !important;
+}
+
+/* ── Admin Manage Card ───────────────────────────────────────── */
+
+.admin-manage-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--navy);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.admin-manage-card h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 18px;
+}
+
+/* ── Report Metric Cards ─────────────────────────────────────── */
+
+.metric-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--navy);
+  padding: 16px 18px;
+}
+
+.metric-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Chart Cards ─────────────────────────────────────────────── */
+
+.chart-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+}
+
+.chart-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--navy);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.chart-container { position: relative; }
+
+/* ── Audit trail: from->to arrow ─────────────────────────────── */
+
+.status-arrow {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin: 0 4px;
+  vertical-align: middle;
+}
+
+/* ── Admin responsive ────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .admin-stats-bar { flex-wrap: wrap; }
+  .admin-stat-item { flex: 1 1 45%; border-bottom: 1px solid var(--border); }
+  .metric-value { font-size: 1.75rem; }
+}
+
+/* ================================================================
+   Phase 2 Polish: Home page, Notice Board, Language Toggle, QR Card
+   ================================================================ */
+
+/* ── Home Page Banner ────────────────────────────────────────── */
+
+.home-banner {
+  background: var(--navy);
+  color: #fff;
+  padding: 32px 28px;
+  margin-top: 12px;
+}
+
+.home-banner-title {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+
+.home-banner-sub {
+  font-size: 0.9375rem;
+  color: rgba(255,255,255,0.78);
+  margin-bottom: 20px;
+}
+
+/* ── Public Notice Board ─────────────────────────────────────── */
+
+.notice-board { border: 1px solid var(--border); }
+
+.notice-board-header {
+  background: var(--maroon);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notice-item {
+  padding: 14px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.notice-item:last-child { border-bottom: none; }
+
+.notice-title {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--navy);
+  margin-bottom: 5px;
+}
+
+.notice-body {
+  font-size: 0.875rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+
+.notice-date {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.notice-empty {
+  padding: 22px 16px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* ── How It Works sidebar ────────────────────────────────────── */
+
+.how-it-works {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 16px;
+  height: 100%;
+}
+
+.hiw-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.hiw-step {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.hiw-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  background: var(--maroon);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-top: 1px;
+}
+
+/* ── Admin notice management cards ───────────────────────────── */
+
+.notice-admin-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--maroon);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.notice-inactive {
+  opacity: 0.55;
+  border-left-color: #ccc;
+}
+
+.notice-admin-title {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--navy);
+  margin-bottom: 4px;
+}
+
+.notice-admin-body {
+  font-size: 0.875rem;
+  color: var(--text);
+  white-space: pre-wrap;
+  margin-bottom: 6px;
+  max-height: 80px;
+  overflow: hidden;
+}
+
+.notice-admin-meta { font-size: 0.75rem; color: var(--muted); }
+
+/* ── Language toggle button ──────────────────────────────────── */
+
+.lang-toggle { display: flex; align-items: center; }
+
+.lang-btn {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.72);
+  text-decoration: none;
+  padding: 2px 9px;
+  border: 1px solid rgba(255,255,255,0.28);
+  white-space: nowrap;
+  line-height: 1.6;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.lang-btn:hover {
+  background-color: rgba(255,255,255,0.14);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ── QR code card ────────────────────────────────────────────── */
+
+.qr-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.qr-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--navy);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.qr-img {
+  border: 1px solid var(--border);
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.qr-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: monospace;
+}
+
+/* ================================================================
+   Phase 5: Service Cards, Service Status Badges, Dashboard Tabs
+   ================================================================ */
+
+/* ── Service Cards (certificate selection) ───────────────────── */
+
+.service-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 24px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-card-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 14px;
+}
+
+.service-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+
+.service-card-desc {
+  font-size: 0.875rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.service-card-docs {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  padding-left: 18px;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.service-card-docs li { margin-bottom: 2px; }
+
+/* ── Service Request Status Badges ───────────────────────────── */
+
+.svc-status-pending {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.svc-status-verified {
+  background: #dbeafe;
+  color: #1e3a8a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.svc-status-approved {
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.svc-status-rejected {
+  background: #fce7e7;
+  color: #8b1a1a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Dashboard Tabs ──────────────────────────────────────────── */
+
+.dash-tabs {
+  border-bottom: 2px solid var(--border);
+}
+
+.dash-tabs .nav-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 8px 16px;
+}
+
+.dash-tabs .nav-link:hover {
+  color: var(--navy);
+  border-bottom-color: #ccc;
+}
+
+.dash-tabs .nav-link.active {
+  color: var(--navy);
+  border-bottom-color: var(--navy);
+  background: transparent;
+}
+
+.dash-tabs .badge {
+  font-size: 0.68rem;
+  vertical-align: middle;
+}
+
+/* ── Tax Status Badges ──────────────────────────────────────── */
+
+.tax-status-unpaid {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tax-status-overdue {
+  background: #fce7e7;
+  color: #8b1a1a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tax-status-paid {
+  background: #d1fae5;
+  color: #065f46;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tax-status-waived {
+  background: #dbeafe;
+  color: #1e3a8a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

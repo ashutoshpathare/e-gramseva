@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificate — {{ sr['request_no'] }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: A4; margin: 12mm; }
+
+    body {
+      font-family: 'Noto Sans', Arial, sans-serif;
+      font-size: 12px;
+      color: #1a1a1a;
+      background: #e0e0e0;
+    }
+
+    .cert-page {
+      width: 210mm;
+      min-height: 280mm;
+      margin: 20px auto;
+      background: #fff;
+      border: 2px solid #1a3a5c;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .cert-page { margin: 0; border: none; box-shadow: none; width: 100%; }
+      .no-print { display: none !important; }
+    }
+
+    /* Decorative border */
+    .cert-border {
+      position: absolute;
+      inset: 6px;
+      border: 1.5px solid #8b1a1a;
+      pointer-events: none;
+    }
+    .cert-border-inner {
+      position: absolute;
+      inset: 10px;
+      border: 0.5px solid #d4c8a8;
+      pointer-events: none;
+    }
+
+    .cert-content {
+      position: relative;
+      z-index: 1;
+      padding: 24mm 18mm 20mm;
+    }
+
+    /* Header */
+    .cert-header {
+      text-align: center;
+      border-bottom: 2px solid #1a3a5c;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .cert-header-devanagari {
+      font-size: 18px;
+      font-weight: 700;
+      color: #8b1a1a;
+      letter-spacing: 0.04em;
+    }
+
+    .cert-header-english {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin-top: 2px;
+    }
+
+    .cert-header-sub {
+      font-size: 10px;
+      color: #666;
+      margin-top: 4px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Certificate type title */
+    .cert-type-title {
+      text-align: center;
+      font-family: 'Noto Serif', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a3a5c;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 18px 0 6px;
+    }
+
+    .cert-ref-no {
+      text-align: center;
+      font-size: 10px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Body text */
+    .cert-body {
+      font-size: 12.5px;
+      line-height: 2;
+      text-align: justify;
+      margin-bottom: 24px;
+    }
+
+    .cert-body strong {
+      color: #1a3a5c;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Details table */
+    .cert-details-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .cert-details-table th {
+      text-align: left;
+      font-weight: 600;
+      color: #666;
+      padding: 6px 12px 6px 0;
+      width: 35%;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px dotted #ccc;
+    }
+    .cert-details-table td {
+      padding: 6px 0;
+      font-size: 12.5px;
+      border-bottom: 1px dotted #ccc;
+    }
+
+    /* Signature block */
+    .cert-signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 48px;
+      padding-top: 12px;
+    }
+
+    .sig-block {
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .sig-line {
+      border-top: 1px solid #333;
+      width: 130px;
+      margin: 0 auto 6px;
+    }
+
+    .sig-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1a3a5c;
+      text-transform: uppercase;
+    }
+
+    .sig-sub {
+      font-size: 9px;
+      color: #888;
+    }
+
+    /* QR + date footer */
+    .cert-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 30px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    .cert-footer-qr { text-align: center; }
+    .cert-footer-qr img { border: 1px solid #ddd; }
+    .cert-footer-qr small { display: block; font-size: 8px; color: #999; margin-top: 3px; }
+
+    .cert-footer-meta {
+      text-align: right;
+      font-size: 10px;
+      color: #888;
+      line-height: 1.7;
+    }
+
+    /* Print button */
+    .print-bar {
+      text-align: center;
+      padding: 16px;
+    }
+    .print-bar button {
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 28px;
+      background: #1a3a5c;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .print-bar button:hover { background: #0f2640; }
+  </style>
+</head>
+<body>
+
+  <!-- Print bar (hidden on print) -->
+  <div class="print-bar no-print">
+    <button onclick="window.print()">
+      🖨️ Print / Save as PDF
+    </button>
+  </div>
+
+  <div class="cert-page">
+    <div class="cert-border"></div>
+    <div class="cert-border-inner"></div>
+
+    <div class="cert-content">
+
+      <!-- Header -->
+      <div class="cert-header">
+        <div class="cert-header-devanagari">ग्राम पंचायत &mdash; इ-ग्रामसेवा</div>
+        <div class="cert-header-english">Gram Panchayat &mdash; e-gramSeva</div>
+        <div class="cert-header-sub">Citizen Services Portal &bull; Official Document</div>
+      </div>
+
+      <!-- Certificate type -->
+      {% set type_labels = {'BIRTH': 'Birth Certificate', 'DEATH': 'Death Certificate', 'RESIDENCE': 'Residence Certificate'} %}
+      <div class="cert-type-title">{{ type_labels.get(sr['sub_type'], 'Certificate') }}</div>
+      <div class="cert-ref-no">Reference No: {{ sr['request_no'] }} &nbsp;|&nbsp; Date: {{ sr['updated_at'][:10] }}</div>
+
+      <!-- Body paragraph -->
+      {% if sr['sub_type'] == 'BIRTH' %}
+      <div class="cert-body">
+        This is to certify that <strong>{{ sr['applicant_name'] }}</strong>,
+        born on <strong>{{ form_data.get('date_of_birth', '—') }}</strong>
+        {% if form_data.get('place_of_birth') %}at <strong>{{ form_data['place_of_birth'] }}</strong>{% endif %},
+        {% if form_data.get('gender') %}gender <strong>{{ form_data['gender'] }}</strong>,{% endif %}
+        {% if form_data.get('father_name') %}son/daughter of Shri <strong>{{ form_data['father_name'] }}</strong>{% endif %}
+        {% if form_data.get('mother_name') %}and Smt. <strong>{{ form_data['mother_name'] }}</strong>{% endif %},
+        is a registered resident of <strong>{{ sr['ward'] }}</strong> under the jurisdiction of
+        this Gram Panchayat. This birth has been duly recorded in the official register
+        maintained by the Gram Panchayat as per the Registration of Births and Deaths Act, 1969.
+      </div>
+
+      {% elif sr['sub_type'] == 'DEATH' %}
+      <div class="cert-body">
+        This is to certify that <strong>{{ form_data.get('deceased_name', sr['applicant_name']) }}</strong>
+        expired on <strong>{{ form_data.get('date_of_death', '—') }}</strong>
+        {% if form_data.get('place_of_death') %}at <strong>{{ form_data['place_of_death'] }}</strong>{% endif %}.
+        {% if form_data.get('cause_of_death') %}The cause of death was recorded as <strong>{{ form_data['cause_of_death'] }}</strong>.{% endif %}
+        This certificate is issued to <strong>{{ sr['applicant_name'] }}</strong>
+        {% if form_data.get('relation') %}({{ form_data['relation'] }} of the deceased){% endif %}
+        upon request, as per records maintained by this Gram Panchayat under the
+        Registration of Births and Deaths Act, 1969.
+      </div>
+
+      {% elif sr['sub_type'] == 'RESIDENCE' %}
+      <div class="cert-body">
+        This is to certify that <strong>{{ sr['applicant_name'] }}</strong>,
+        currently residing at <strong>{{ form_data.get('full_address', '—') }}</strong>,
+        <strong>{{ sr['ward'] }}</strong>,
+        {% if form_data.get('resident_since') %}has been a permanent resident of this village
+        since <strong>{{ form_data['resident_since'] }}</strong>{% else %}is a resident of this village{% endif %}.
+        {% if form_data.get('aadhaar_last4') %}(Aadhaar ending: ****{{ form_data['aadhaar_last4'] }}){% endif %}
+        {% if form_data.get('purpose') %}<br>Purpose: <strong>{{ form_data['purpose'] }}</strong>.{% endif %}
+        This certificate is issued on request for official purposes as per records
+        maintained by the Gram Panchayat.
+      </div>
+      {% endif %}
+
+      <!-- Details table -->
+      <table class="cert-details-table">
+        <tr><th>Applicant Name</th><td>{{ sr['applicant_name'] }}</td></tr>
+        <tr><th>Ward</th><td>{{ sr['ward'] }}</td></tr>
+        {% for key, val in form_data.items() %}
+        <tr>
+          <th>{{ key.replace('_', ' ').title() }}</th>
+          <td>{{ val if val else '—' }}</td>
+        </tr>
+        {% endfor %}
+        <tr><th>Request No.</th><td>{{ sr['request_no'] }}</td></tr>
+        <tr><th>Issue Date</th><td>{{ sr['updated_at'][:10] }}</td></tr>
+      </table>
+
+      <!-- Signature blocks -->
+      <div class="cert-signatures">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Gram Sevak</div>
+          <div class="sig-sub">Village Level Worker</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Sarpanch</div>
+          <div class="sig-sub">Gram Panchayat</div>
+        </div>
+      </div>
+
+      <!-- Footer: QR + meta -->
+      <div class="cert-footer">
+        <div class="cert-footer-qr">
+          <img src="{{ url_for('certificate_qr', request_no=sr['request_no']) }}"
+               alt="Verification QR" width="80" height="80">
+          <small>Scan to verify</small>
+        </div>
+        <div class="cert-footer-meta">
+          Generated by e-gramSeva<br>
+          Ref: {{ sr['request_no'] }}<br>
+          This is a computer-generated document.<br>
+          Valid without physical signature when verified via QR.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

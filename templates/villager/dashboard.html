@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('My Complaints') }}{% endblock %}
+{% block description %}View and track all your civic complaints and certificate applications.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 pt-2 mb-3">
+    <div>
+      <h1 class="page-title">{{ _('My Complaints') }}</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        {{ session['full_name'] }}
+        {% if session.get('ward') %} &mdash; {{ session['ward'] }}{% endif %}
+      </p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ url_for('new_complaint') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>{{ _('File New Complaint') }}
+      </a>
+      <a href="{{ url_for('certificate_services') }}" class="btn btn-outline-primary">
+        <i class="bi bi-file-earmark-text me-1"></i>{{ _('Certificates') }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs dash-tabs mb-3" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="complaints-tab" data-bs-toggle="tab"
+              data-bs-target="#complaints-pane" type="button" role="tab">
+        <i class="bi bi-list-check me-1"></i>{{ _('My Complaints') }}
+        <span class="badge bg-secondary ms-1">{{ counts.total }}</span>
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="applications-tab" data-bs-toggle="tab"
+              data-bs-target="#applications-pane" type="button" role="tab">
+        <i class="bi bi-file-earmark-text me-1"></i>{{ _('My Applications') }}
+        <span class="badge bg-secondary ms-1">{{ svc_requests | length }}</span>
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- ─── Tab 1: Complaints ──────────────────────────────── -->
+    <div class="tab-pane fade show active" id="complaints-pane" role="tabpanel">
+
+      <!-- Summary strip -->
+      <div class="summary-strip">
+        <div class="summary-item">
+          <strong>{{ counts.total }}</strong>
+          <span>{{ _('Total') }}</span>
+        </div>
+        <div class="summary-item">
+          <strong style="color:#92400e;">{{ counts.pending }}</strong>
+          <span>{{ _('Pending') }}</span>
+        </div>
+        <div class="summary-item">
+          <strong style="color:#1e3a8a;">{{ counts.in_progress }}</strong>
+          <span>{{ _('In Progress') }}</span>
+        </div>
+        <div class="summary-item">
+          <strong style="color:#065f46;">{{ counts.resolved }}</strong>
+          <span>{{ _('Resolved') }}</span>
+        </div>
+      </div>
+
+      {% if complaints %}
+      <div class="table-wrap">
+        <table class="table table-bordered complaints-table mb-0">
+          <thead>
+            <tr>
+              <th>{{ _('Complaint ID') }}</th>
+              <th>{{ _('Category') }}</th>
+              <th>{{ _('Ward') }}</th>
+              <th>{{ _('Status') }}</th>
+              <th>{{ _('Filed On') }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in complaints %}
+            <tr>
+              <td class="cid-cell">{{ c['complaint_id'] }}</td>
+              <td>{{ _(c['category']) }}</td>
+              <td>{{ c['ward'] }}</td>
+              <td>
+                <span class="status-badge status-{{ c['status'].replace(' ', '-').lower() }}">
+                  {{ _(c['status']) }}
+                </span>
+              </td>
+              <td>{{ c['created_at'][:10] }}</td>
+              <td>
+                <a href="{{ url_for('complaint_detail', complaint_id=c['complaint_id']) }}"
+                   class="btn btn-sm btn-outline-secondary">
+                  {{ _('View') }}
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-inbox d-block mb-2" style="font-size:2.5rem;"></i>
+        <p class="mb-3">No complaints filed yet.</p>
+        <a href="{{ url_for('new_complaint') }}" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-1"></i>{{ _('File New Complaint') }}
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- ─── Tab 2: Certificate Applications ────────────────── -->
+    <div class="tab-pane fade" id="applications-pane" role="tabpanel">
+
+      {% if svc_requests %}
+      <div class="table-wrap">
+        <table class="table table-bordered complaints-table mb-0">
+          <thead>
+            <tr>
+              <th>Request No.</th>
+              <th>Type</th>
+              <th>Applicant</th>
+              <th>Ward</th>
+              <th>Status</th>
+              <th>Applied On</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sr in svc_requests %}
+            <tr>
+              <td class="cid-cell">{{ sr['request_no'] }}</td>
+              <td>
+                {% if sr['sub_type'] == 'BIRTH' %}
+                  <i class="bi bi-person-heart me-1" style="color:#065f46;"></i>Birth
+                {% elif sr['sub_type'] == 'DEATH' %}
+                  <i class="bi bi-journal-medical me-1" style="color:#7c2d12;"></i>Death
+                {% else %}
+                  <i class="bi bi-house-check me-1" style="color:#1e3a8a;"></i>Residence
+                {% endif %}
+              </td>
+              <td>{{ sr['applicant_name'] }}</td>
+              <td>{{ sr['ward'] }}</td>
+              <td>
+                <span class="status-badge svc-status-{{ sr['status'].lower() }}">
+                  {{ _(sr['status']) }}
+                </span>
+              </td>
+              <td>{{ sr['created_at'][:10] }}</td>
+              <td>
+                {% if sr['status'] == 'APPROVED' %}
+                  <a href="{{ url_for('certificate_download', request_no=sr['request_no']) }}"
+                     class="btn btn-sm btn-success">
+                    <i class="bi bi-download me-1"></i>Download
+                  </a>
+                {% elif sr['status'] == 'REJECTED' %}
+                  <span class="text-muted" style="font-size:0.8rem;">Rejected</span>
+                {% else %}
+                  <span class="text-muted" style="font-size:0.8rem;">Processing…</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="bi bi-file-earmark d-block mb-2" style="font-size:2.5rem;"></i>
+        <p class="mb-3">No certificate applications yet.</p>
+        <a href="{{ url_for('certificate_services') }}" class="btn btn-primary">
+          <i class="bi bi-pencil-square me-1"></i>Apply for a Certificate
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

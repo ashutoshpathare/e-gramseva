@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Home — Gram Panchayat VCMS{% endblock %}
+{% block description %}Gram Panchayat Village Complaint Management System — file and track civic complaints online.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <!-- Welcome banner -->
+  <div class="home-banner">
+    <div class="home-banner-title">
+      ग्राम पंचायत &mdash; Village Complaint Management System
+    </div>
+    <p class="home-banner-sub">
+      File civic complaints and track their resolution online &mdash;
+      anytime, from any device.
+    </p>
+    {% if not session.get('user_id') %}
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ url_for('register') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus me-1"></i>{{ _('Register') }}
+      </a>
+      <a href="{{ url_for('login') }}" class="btn btn-outline-light">
+        <i class="bi bi-box-arrow-in-right me-1"></i>{{ _('Login') }}
+      </a>
+    </div>
+    {% elif session.get('role') == 'villager' %}
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="{{ url_for('villager_dashboard') }}" class="btn btn-primary">
+        <i class="bi bi-list-check me-1"></i>{{ _('My Complaints') }}
+      </a>
+      <a href="{{ url_for('new_complaint') }}" class="btn btn-outline-light">
+        <i class="bi bi-plus-circle me-1"></i>{{ _('File a Complaint') }}
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row g-3 mt-1">
+
+    <!-- Notice board -->
+    <div class="col-lg-8">
+      <div class="notice-board">
+        <div class="notice-board-header">
+          <i class="bi bi-megaphone-fill me-2"></i>{{ _('Panchayat Notices') }}
+        </div>
+        {% if notices %}
+          {% for notice in notices %}
+          <div class="notice-item">
+            <div class="notice-title">{{ notice['title'] }}</div>
+            <div class="notice-body">{{ notice['body'] }}</div>
+            <div class="notice-date">
+              <i class="bi bi-calendar3 me-1"></i>{{ notice['created_at'][:10] }}
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+        <div class="notice-empty">
+          <i class="bi bi-info-circle me-1"></i>
+          {{ _('No notices posted yet') }}.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="col-lg-4">
+      <div class="how-it-works">
+        <div class="hiw-title">{{ _('How It Works') }}</div>
+        <div class="hiw-step">
+          <span class="hiw-num">1</span>
+          <span>Register with your mobile number and ward number.</span>
+        </div>
+        <div class="hiw-step">
+          <span class="hiw-num">2</span>
+          <span>File a complaint with a description and optional photo.</span>
+        </div>
+        <div class="hiw-step">
+          <span class="hiw-num">3</span>
+          <span>Track the status as Gram Panchayat assigns a worker.</span>
+        </div>
+        <div class="hiw-step">
+          <span class="hiw-num">4</span>
+          <span>Get notified when your complaint is resolved.</span>
+        </div>
+        <div class="hiw-step">
+          <span class="hiw-num">5</span>
+          <span>Rate the resolution to help improve services.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

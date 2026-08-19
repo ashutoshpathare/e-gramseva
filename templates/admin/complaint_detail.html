@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin: {{ complaint['complaint_id'] }}{% endblock %}
+{% block description %}Admin view and management for complaint {{ complaint['complaint_id'] }}.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-2">
+    <a href="{{ url_for('admin_dashboard') }}" class="back-link">
+      <i class="bi bi-arrow-left me-1"></i>Back to All Complaints
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="detail-header">
+    <div>
+      <h1 class="page-title mb-1">{{ complaint['complaint_id'] }}</h1>
+      <span class="category-label"><i class="bi bi-tag me-1"></i>{{ complaint['category'] }}</span>
+      &nbsp;&mdash;&nbsp;
+      <span style="font-size:0.875rem; color:var(--muted);">{{ complaint['ward'] }}</span>
+      &nbsp;&mdash;&nbsp;
+      <span style="font-size:0.875rem;">
+        Filed by <strong>{{ complaint['filer_name'] }}</strong>
+        {% if complaint['filer_mobile'] %}
+          &nbsp;<a href="tel:{{ complaint['filer_mobile'] }}"
+                   style="font-size:0.8125rem; color:var(--muted);">{{ complaint['filer_mobile'] }}</a>
+        {% endif %}
+      </span>
+    </div>
+    <span class="status-badge status-badge-lg status-{{ complaint['status'].replace(' ', '-').lower() }}">
+      {{ complaint['status'] }}
+    </span>
+  </div>
+
+  <div class="row g-3 mt-0">
+
+    <!-- LEFT: Info + Update Form -->
+    <div class="col-lg-7">
+
+      <!-- Complaint Info -->
+      <div class="detail-card">
+        <div class="detail-card-title">Complaint Information</div>
+        <table class="detail-table">
+          <tr>
+            <th>Filed On</th>
+            <td>{{ complaint['created_at'][:16].replace('T', ' ') }}</td>
+          </tr>
+          <tr><th>Ward</th><td>{{ complaint['ward'] }}</td></tr>
+          {% if complaint['address_detail'] %}
+          <tr><th>Address</th><td>{{ complaint['address_detail'] }}</td></tr>
+          {% endif %}
+          <tr>
+            <th>Priority</th>
+            <td>
+              {% if complaint['priority'] == 'High' %}
+                <span class="priority-high">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>High
+                </span>
+              {% else %}Normal{% endif %}
+            </td>
+          </tr>
+          {% if complaint['assigned_to'] %}
+          <tr><th>Assigned To</th><td>{{ complaint['assigned_to'] }}</td></tr>
+          {% endif %}
+          {% if complaint['resolved_at'] %}
+          <tr><th>Resolved On</th><td>{{ complaint['resolved_at'][:16].replace('T', ' ') }}</td></tr>
+          {% endif %}
+        </table>
+        <div class="description-block">
+          <strong style="font-size:0.8125rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;">
+            Description
+          </strong>
+          <p class="mt-1 mb-0">{{ complaint['description'] }}</p>
+        </div>
+      </div>
+
+      <!-- Resident's complaint photo -->
+      {% if complaint['photo_path'] %}
+      <div class="detail-card">
+        <div class="detail-card-title">Resident's Complaint Photo</div>
+        <img src="{{ url_for('static', filename='uploads/' + complaint['photo_path']) }}"
+             alt="Resident complaint photo" class="complaint-photo">
+      </div>
+      {% endif %}
+
+      <!-- Management Form -->
+      <div class="admin-manage-card">
+        <h4><i class="bi bi-pencil-square me-2"></i>Update This Complaint</h4>
+        <form method="post"
+              action="{{ url_for('admin_update_complaint', complaint_id=complaint['complaint_id']) }}"
+              enctype="multipart/form-data">
+
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label for="status" class="form-label">Status</label>
+              <select id="status" name="status" class="form-select" required>
+                {% for s in statuses %}
+                  <option value="{{ s }}" {% if complaint['status'] == s %}selected{% endif %}>
+                    {{ s }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-sm-6">
+              <label for="assigned_to" class="form-label">Assign Worker</label>
+              <input type="text" id="assigned_to" name="assigned_to" class="form-control"
+                     placeholder="Worker's full name"
+                     value="{{ complaint['assigned_to'] or '' }}">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="note" class="form-label">Progress Note</label>
+            <textarea id="note" name="note" class="form-control" rows="3"
+                      placeholder="Describe the action taken, reason for update, or instructions to the worker"></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label for="resolution_photo" class="form-label">
+              Resolution Photo
+              <span style="font-weight:400; color:var(--muted);">(optional — for Resolved status)</span>
+            </label>
+            <input type="file" id="resolution_photo" name="resolution_photo"
+                   class="form-control" accept=".jpg,.jpeg,.png,.webp">
+            {% if complaint['resolution_photo_path'] %}
+            <div class="mt-2">
+              <small class="text-muted">Current resolution photo:</small><br>
+              <img src="{{ url_for('static', filename='uploads/' + complaint['resolution_photo_path']) }}"
+                   alt="Resolution photo"
+                   style="max-height:120px; margin-top:6px; display:block; border:1px solid var(--border);">
+            </div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-admin-update">
+            <i class="bi bi-check-circle me-1"></i>Save Changes
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Audit Trail + Feedback -->
+    <div class="col-lg-5">
+
+      <div class="detail-card">
+        <div class="detail-card-title">Audit Trail — Complete History</div>
+        <div class="timeline">
+          {% for log in logs %}
+          <div class="timeline-item {% if loop.last %}timeline-item-last{% endif %}">
+            <div class="timeline-marker">
+              <div class="timeline-dot timeline-dot-{{ log['new_status'].replace(' ', '-').lower() }}"></div>
+              {% if not loop.last %}<div class="timeline-line"></div>{% endif %}
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-status">
+                {% if log['old_status'] %}
+                  <span class="status-badge status-{{ log['old_status'].replace(' ', '-').lower() }}">
+                    {{ log['old_status'] }}
+                  </span>
+                  <i class="bi bi-arrow-right status-arrow"></i>
+                {% endif %}
+                <span class="status-badge status-{{ log['new_status'].replace(' ', '-').lower() }}">
+                  {{ log['new_status'] }}
+                </span>
+              </div>
+              <div class="timeline-date">
+                {{ log['changed_at'][:16].replace('T', ' ') }}
+                &nbsp;&mdash;&nbsp;
+                <span style="color:var(--muted);">{{ log['changed_by_name'] }}</span>
+                {% if log['changed_by_role'] == 'admin' %}
+                  <span style="font-size:0.7rem; color:var(--maroon); font-weight:600;">(Admin)</span>
+                {% else %}
+                  <span style="font-size:0.7rem; color:var(--muted);">(Resident)</span>
+                {% endif %}
+              </div>
+              {% if log['note'] %}
+                <div class="timeline-note">{{ log['note'] }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+
+      <!-- QR code card (for sharing / printing) -->
+      <div class="qr-card">
+        <div class="qr-card-title">QR Code — Scan to Track</div>
+        <img src="{{ url_for('complaint_qr', complaint_id=complaint['complaint_id']) }}"
+             alt="QR code for {{ complaint['complaint_id'] }}"
+             width="120" height="120" class="qr-img" loading="lazy">
+        <div class="qr-label">{{ complaint['complaint_id'] }}</div>
+      </div>
+
+      {% if feedback_row %}
+      <div class="detail-card">
+        <div class="detail-card-title">Resident Feedback</div>
+        <div class="stars-display mb-2">
+          {% for i in range(1, 6) %}
+            <i class="bi bi-star-fill {% if i <= feedback_row['rating'] %}star-filled{% else %}star-empty{% endif %}"></i>
+          {% endfor %}
+          <span class="ms-2" style="font-size:0.875rem; color:var(--muted);">
+            {{ feedback_row['rating'] }} / 5
+          </span>
+        </div>
+        {% if feedback_row['comment'] %}
+        <p class="mb-0" style="font-size:0.875rem; color:var(--muted);">
+          &ldquo;{{ feedback_row['comment'] }}&rdquo;
+        </p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% set type_labels = {'BIRTH': 'Birth Certificate', 'DEATH': 'Death Certificate', 'RESIDENCE': 'Residence Certificate'} %}
+
+{% block title %}Admin: {{ sr['request_no'] }}{% endblock %}
+{% block description %}Review service request {{ sr['request_no'] }}.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-2">
+    <a href="{{ url_for('admin_service_requests') }}" class="back-link">
+      <i class="bi bi-arrow-left me-1"></i>Back to Service Requests
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="detail-header">
+    <div>
+      <h1 class="page-title mb-1">{{ sr['request_no'] }}</h1>
+      <span class="category-label">
+        <i class="bi bi-file-earmark-text me-1"></i>{{ type_labels.get(sr['sub_type'], sr['sub_type']) }}
+      </span>
+      &nbsp;&mdash;&nbsp;
+      <span style="font-size:0.875rem; color:var(--muted);">{{ sr['ward'] }}</span>
+      &nbsp;&mdash;&nbsp;
+      <span style="font-size:0.875rem;">
+        Filed by <strong>{{ sr['filer_name'] }}</strong>
+        {% if sr['filer_mobile'] %}
+          <a href="tel:{{ sr['filer_mobile'] }}" style="font-size:0.8125rem; color:var(--muted);">{{ sr['filer_mobile'] }}</a>
+        {% endif %}
+      </span>
+    </div>
+    <span class="status-badge status-badge-lg svc-status-{{ sr['status'].lower() }}">
+      {{ sr['status'] }}
+    </span>
+  </div>
+
+  <div class="row g-3 mt-0">
+
+    <!-- LEFT: Application details + update form -->
+    <div class="col-lg-7">
+
+      <div class="detail-card">
+        <div class="detail-card-title">Application Details</div>
+        <table class="detail-table">
+          <tr><th>Applicant Name</th><td>{{ sr['applicant_name'] }}</td></tr>
+          <tr><th>Certificate Type</th><td>{{ type_labels.get(sr['sub_type'], sr['sub_type']) }}</td></tr>
+          <tr><th>Ward</th><td>{{ sr['ward'] }}</td></tr>
+          <tr><th>Applied On</th><td>{{ sr['created_at'][:16] }}</td></tr>
+          <tr><th>Last Updated</th><td>{{ sr['updated_at'][:16] }}</td></tr>
+        </table>
+      </div>
+
+      <!-- Form data fields -->
+      <div class="detail-card">
+        <div class="detail-card-title">{{ type_labels.get(sr['sub_type'], sr['sub_type']) }} — Submitted Data</div>
+        <table class="detail-table">
+          {% for key, val in form_data.items() %}
+          <tr>
+            <th>{{ key.replace('_', ' ').title() }}</th>
+            <td>{{ val if val else '—' }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <!-- Uploaded document -->
+      {% if sr['document_path'] %}
+      <div class="detail-card">
+        <div class="detail-card-title">Uploaded Document</div>
+        {% if sr['document_path'].endswith('.pdf') %}
+          <a href="{{ url_for('static', filename='uploads/docs/' + sr['document_path']) }}"
+             target="_blank" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-file-pdf me-1"></i>View PDF Document
+          </a>
+        {% else %}
+          <img src="{{ url_for('static', filename='uploads/docs/' + sr['document_path']) }}"
+               alt="Uploaded document" class="complaint-photo">
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- Admin action form -->
+      <div class="admin-manage-card">
+        <h4><i class="bi bi-pencil-square me-2"></i>Update Status</h4>
+        <form method="post"
+              action="{{ url_for('admin_update_service_request', request_no=sr['request_no']) }}">
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label for="status" class="form-label">Status</label>
+              <select id="status" name="status" class="form-select" required>
+                {% for s in service_statuses %}
+                  <option value="{{ s }}" {% if sr['status'] == s %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="remarks" class="form-label">Admin Remarks</label>
+            <textarea id="remarks" name="remarks" class="form-control" rows="3"
+                      placeholder="Verification notes, reason for rejection, etc.">{{ sr['remarks'] or '' }}</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check-circle me-1"></i>Save Changes
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Status info + preview -->
+    <div class="col-lg-5">
+
+      {% if sr['remarks'] %}
+      <div class="detail-card">
+        <div class="detail-card-title">Admin Remarks</div>
+        <p class="mb-0" style="font-size:0.875rem; white-space:pre-wrap;">{{ sr['remarks'] }}</p>
+      </div>
+      {% endif %}
+
+      {% if sr['status'] == 'APPROVED' %}
+      <div class="detail-card" style="border-top:3px solid var(--green);">
+        <div class="detail-card-title" style="color:var(--green);">
+          <i class="bi bi-check-circle-fill me-1"></i>Certificate Approved
+        </div>
+        <p style="font-size:0.875rem; margin-bottom:12px;">
+          The certificate has been generated and is available for download.
+        </p>
+        <a href="{{ url_for('certificate_download', request_no=sr['request_no']) }}"
+           class="btn btn-success" target="_blank">
+          <i class="bi bi-download me-1"></i>View / Download Certificate
+        </a>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

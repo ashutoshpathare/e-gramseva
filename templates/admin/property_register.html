@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin — Register Property{% endblock %}
+{% block description %}Register a new property in the Gram Panchayat records.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="form-page-wrap">
+
+    <div class="pt-2 mb-2">
+      <a href="{{ url_for('admin_properties') }}" class="back-link">
+        <i class="bi bi-arrow-left me-1"></i>Back to Properties
+      </a>
+    </div>
+
+    <div class="form-page-header">
+      <h1 class="page-title">Register New Property</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        A unique property number (EGS-PROP-XXXX) will be auto-generated on submission.
+      </p>
+    </div>
+
+    <form method="post" action="{{ url_for('admin_register_property') }}" novalidate>
+
+      <!-- Owner lookup -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">1</span> Property Owner
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="owner_mobile" class="form-label">
+              Owner's Mobile Number <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="owner_mobile" name="owner_mobile" class="form-control"
+                   placeholder="10-digit registered mobile number"
+                   value="{{ form.get('owner_mobile', '') }}" required>
+            <div class="form-text">Must be a registered villager account.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property details -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">2</span> Property Details
+        </div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="ward" class="form-label">Ward <span class="required-mark">*</span></label>
+            <select id="ward" name="ward" class="form-select" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for w in wards %}
+                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="property_type" class="form-label">Type <span class="required-mark">*</span></label>
+            <select id="property_type" name="property_type" class="form-select" required>
+              <option value="" disabled {% if not form.get('property_type') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for t in property_types %}
+                <option value="{{ t }}" {% if form.get('property_type') == t %}selected{% endif %}>
+                  {{ t.replace('_', ' ').title() }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="area_sqft" class="form-label">Area (sq ft) <span class="required-mark">*</span></label>
+            <input type="number" id="area_sqft" name="area_sqft" class="form-control"
+                   step="0.01" min="1" value="{{ form.get('area_sqft', '') }}" required>
+          </div>
+          <div class="col-12">
+            <label for="address" class="form-label">Full Address <span class="required-mark">*</span></label>
+            <input type="text" id="address" name="address" class="form-control"
+                   placeholder="House/Plot No., Street, Locality, Ward"
+                   value="{{ form.get('address', '') }}" required>
+          </div>
+          <div class="col-md-4">
+            <label for="assessed_value" class="form-label">Assessed Value (₹) <span class="required-mark">*</span></label>
+            <input type="number" id="assessed_value" name="assessed_value" class="form-control"
+                   step="0.01" min="0" value="{{ form.get('assessed_value', '') }}" required>
+            <div class="form-text">Market value for tax calculation.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit-bar">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-check-circle me-1"></i>Register Property
+        </button>
+        <a href="{{ url_for('admin_properties') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

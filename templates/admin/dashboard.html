@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin — All Complaints{% endblock %}
+{% block description %}Gram Panchayat administration — manage all citizen complaints.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <!-- Page header -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
+    <div>
+      <h1 class="page-title">All Complaints</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">Gram Panchayat — Administration View</p>
+    </div>
+    <a href="{{ url_for('admin_reports') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-bar-chart-line me-1"></i>View Reports
+    </a>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="admin-stats-bar mb-3">
+    <div class="admin-stat-item">
+      <span class="admin-stat-value">{{ stats.total }}</span>
+      <span class="admin-stat-label">Total</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:#92400e;">{{ stats.pending }}</span>
+      <span class="admin-stat-label">Pending</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:var(--maroon);">{{ stats.high_priority }}</span>
+      <span class="admin-stat-label">High Priority</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:var(--green);">{{ stats.resolved }}</span>
+      <span class="admin-stat-label">Resolved</span>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <form method="get" action="{{ url_for('admin_dashboard') }}">
+    <div class="filter-bar mb-3">
+      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
+      <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if filters.category == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        {% for s in statuses %}
+          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      <select name="ward" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Wards</option>
+        {% for w in wards %}
+          <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
+        {% endfor %}
+      </select>
+      {% if filters.category or filters.status or filters.ward %}
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-x-circle me-1"></i>Clear
+        </a>
+        <span style="font-size:0.8125rem; color:var(--muted);">
+          {{ complaints | length }} result{{ 's' if complaints | length != 1 else '' }}
+        </span>
+      {% endif %}
+    </div>
+  </form>
+
+  <!-- Complaints table -->
+  {% if complaints %}
+  <div class="table-wrap">
+    <table class="table table-bordered complaints-table mb-0">
+      <thead>
+        <tr>
+          <th>Complaint ID</th>
+          <th>Category</th>
+          <th>Ward</th>
+          <th>Filed By</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Assigned To</th>
+          <th>Filed On</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in complaints %}
+        <tr class="{% if c['priority'] == 'High' %}high-priority-row{% endif %}">
+          <td class="cid-cell">{{ c['complaint_id'] }}</td>
+          <td>{{ c['category'] }}</td>
+          <td>{{ c['ward'] }}</td>
+          <td>{{ c['filer_name'] }}</td>
+          <td>
+            <span class="status-badge status-{{ c['status'].replace(' ', '-').lower() }}">
+              {{ c['status'] }}
+            </span>
+          </td>
+          <td>
+            {% if c['priority'] == 'High' %}
+              <span style="color:var(--maroon); font-weight:700; font-size:0.8rem;">
+                <i class="bi bi-exclamation-triangle-fill"></i> High
+              </span>
+            {% else %}
+              <span style="color:var(--muted); font-size:0.8rem;">Normal</span>
+            {% endif %}
+          </td>
+          <td style="font-size:0.875rem; color:var(--muted);">
+            {{ c['assigned_to'] if c['assigned_to'] else '—' }}
+          </td>
+          <td style="white-space:nowrap; font-size:0.875rem;">{{ c['created_at'][:10] }}</td>
+          <td>
+            <a href="{{ url_for('admin_complaint_detail', complaint_id=c['complaint_id']) }}"
+               class="btn btn-sm btn-outline-primary">Manage</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-inbox d-block mb-2" style="font-size:2.5rem;"></i>
+    <p class="mb-0">No complaints found for the selected filters.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

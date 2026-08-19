@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+{% block description %}Log in to the Village Complaint Management System to file and track your civic complaints.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="login-wrap">
+    <div class="row g-0">
+
+      <!-- Left: information panel -->
+      <div class="col-md-5">
+        <div class="login-info-panel h-100">
+          <h2><i class="bi bi-building me-2"></i>Citizen Services</h2>
+          <p style="font-size:0.9rem;">
+            The VCMS allows village residents to register civic complaints and
+            track their resolution in real time.
+          </p>
+          <ul>
+            <li>File complaints 24 hours a day, 7 days a week</li>
+            <li>Track status with your unique complaint ID</li>
+            <li>Get notified when your issue is addressed</li>
+            <li>Rate the quality of resolution</li>
+          </ul>
+          <hr class="divider">
+          <p class="mb-0" style="font-size:0.85rem;">
+            New resident?
+            <a href="{{ url_for('register') }}" class="register-link">
+              Create an account &rarr;
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: login form -->
+      <div class="col-md-7">
+        <div class="login-form-panel h-100">
+          <h3><i class="bi bi-person-lock me-2"></i>Resident Login</h3>
+
+          <form method="post" action="{{ url_for('login') }}" novalidate>
+            <div class="mb-3">
+              <label for="mobile" class="form-label">Mobile Number</label>
+              <input
+                type="tel"
+                id="mobile"
+                name="mobile"
+                class="form-control"
+                placeholder="10-digit mobile number"
+                maxlength="10"
+                inputmode="numeric"
+                autofocus
+                required
+              >
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                  required
+                >
+                <button
+                  class="btn btn-outline-secondary"
+                  type="button"
+                  id="toggle-pwd"
+                  title="Show / hide password"
+                  style="border-radius:0 3px 3px 0 !important;"
+                >
+                  <i class="bi bi-eye" id="pwd-icon"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary" id="btn-login">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+              </button>
+            </div>
+          </form>
+
+          <hr class="my-4">
+
+          <p class="mb-1" style="font-size:0.85rem; color:var(--muted);">
+            <strong>Gram Panchayat staff?</strong> Use your official credentials above.
+            There is no separate admin login page.
+          </p>
+          <p class="mb-0" style="font-size:0.85rem;">
+            Not registered? <a href="{{ url_for('register') }}">Register here</a>.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('toggle-pwd').addEventListener('click', function () {
+    var pwd  = document.getElementById('password');
+    var icon = document.getElementById('pwd-icon');
+    if (pwd.type === 'password') {
+      pwd.type       = 'text';
+      icon.className = 'bi bi-eye-slash';
+    } else {
+      pwd.type       = 'password';
+      icon.className = 'bi bi-eye';
+    }
+  });
+</script>
+{% endblock %}

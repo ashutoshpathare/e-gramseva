@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% set type_labels = {'BIRTH': 'Birth Certificate', 'DEATH': 'Death Certificate', 'RESIDENCE': 'Residence Certificate'} %}
+
+{% block title %}Apply: {{ _(type_labels[sub_type]) }}{% endblock %}
+{% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="form-page-wrap">
+
+    <div class="pt-2 mb-2">
+      <a href="{{ url_for('certificate_services') }}" class="back-link">
+        <i class="bi bi-arrow-left me-1"></i>Back to Certificate Services
+      </a>
+    </div>
+
+    <div class="form-page-header">
+      <h1 class="page-title">{{ _(type_labels[sub_type]) }} — Application</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
+        A unique request number will be generated on submission.
+      </p>
+    </div>
+
+    <form method="post"
+          action="{{ url_for('certificate_apply', sub_type=sub_type.lower()) }}"
+          enctype="multipart/form-data" novalidate>
+
+      <!-- Section 1: Applicant Info -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">1</span> Applicant Details
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="applicant_name" class="form-label">
+              Applicant Name <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="applicant_name" name="applicant_name" class="form-control"
+                   value="{{ form.get('applicant_name', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="ward" class="form-label">
+              Ward <span class="required-mark">*</span>
+            </label>
+            <select id="ward" name="ward" class="form-select" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
+                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
+                  {{ w }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Sub-type specific fields -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">2</span> {{ type_labels[sub_type] }} Details
+        </div>
+
+        {% if sub_type == 'BIRTH' %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="date_of_birth" class="form-label">Date of Birth <span class="required-mark">*</span></label>
+            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control"
+                   value="{{ form.get('date_of_birth', '') }}" required>
+          </div>
+          <div class="col-md-4">
+            <label for="place_of_birth" class="form-label">Place of Birth</label>
+            <input type="text" id="place_of_birth" name="place_of_birth" class="form-control"
+                   placeholder="e.g. Shivaji Hospital, Pune"
+                   value="{{ form.get('place_of_birth', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label for="gender" class="form-label">Gender</label>
+            <select id="gender" name="gender" class="form-select">
+              <option value="">—</option>
+              <option value="Male" {% if form.get('gender')=='Male' %}selected{% endif %}>Male</option>
+              <option value="Female" {% if form.get('gender')=='Female' %}selected{% endif %}>Female</option>
+              <option value="Other" {% if form.get('gender')=='Other' %}selected{% endif %}>Other</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="father_name" class="form-label">Father's Name</label>
+            <input type="text" id="father_name" name="father_name" class="form-control"
+                   value="{{ form.get('father_name', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="mother_name" class="form-label">Mother's Name</label>
+            <input type="text" id="mother_name" name="mother_name" class="form-control"
+                   value="{{ form.get('mother_name', '') }}">
+          </div>
+        </div>
+
+        {% elif sub_type == 'DEATH' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="deceased_name" class="form-label">Deceased's Full Name <span class="required-mark">*</span></label>
+            <input type="text" id="deceased_name" name="deceased_name" class="form-control"
+                   value="{{ form.get('deceased_name', '') }}" required>
+          </div>
+          <div class="col-md-3">
+            <label for="date_of_death" class="form-label">Date of Death <span class="required-mark">*</span></label>
+            <input type="date" id="date_of_death" name="date_of_death" class="form-control"
+                   value="{{ form.get('date_of_death', '') }}" required>
+          </div>
+          <div class="col-md-3">
+            <label for="relation" class="form-label">Relation to Deceased</label>
+            <input type="text" id="relation" name="relation" class="form-control"
+                   placeholder="e.g. Son, Daughter"
+                   value="{{ form.get('relation', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="place_of_death" class="form-label">Place of Death</label>
+            <input type="text" id="place_of_death" name="place_of_death" class="form-control"
+                   value="{{ form.get('place_of_death', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="cause_of_death" class="form-label">Cause of Death</label>
+            <input type="text" id="cause_of_death" name="cause_of_death" class="form-control"
+                   value="{{ form.get('cause_of_death', '') }}">
+          </div>
+        </div>
+
+        {% elif sub_type == 'RESIDENCE' %}
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label for="full_address" class="form-label">Full Residential Address <span class="required-mark">*</span></label>
+            <input type="text" id="full_address" name="full_address" class="form-control"
+                   placeholder="House No., Street, Village, Taluka, District"
+                   value="{{ form.get('full_address', '') }}" required>
+          </div>
+          <div class="col-md-4">
+            <label for="resident_since" class="form-label">Resident Since</label>
+            <input type="text" id="resident_since" name="resident_since" class="form-control"
+                   placeholder="e.g. 2005 or Birth"
+                   value="{{ form.get('resident_since', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="purpose" class="form-label">Purpose of Certificate</label>
+            <input type="text" id="purpose" name="purpose" class="form-control"
+                   placeholder="e.g. School admission, Employment"
+                   value="{{ form.get('purpose', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="aadhaar_last4" class="form-label">Aadhaar Last 4 Digits</label>
+            <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="form-control"
+                   placeholder="e.g. 5678" maxlength="4"
+                   value="{{ form.get('aadhaar_last4', '') }}">
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Section 3: Document Upload -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">3</span> Supporting Document
+          <span class="section-optional">(recommended)</span>
+        </div>
+        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
+          Upload a scanned copy of your identity proof (Aadhaar, Voter ID) or supporting document.
+          Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+        </p>
+        <input type="file" id="document" name="document" class="form-control"
+               accept=".jpg,.jpeg,.png,.webp,.pdf" style="max-width:400px;">
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit-bar">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-send me-1"></i>Submit Application
+        </button>
+        <a href="{{ url_for('certificate_services') }}" class="btn btn-outline-secondary ms-2">
+          {{ _('Cancel') }}
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin — Service Requests{% endblock %}
+{% block description %}Review and manage certificate and service applications.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
+    <div>
+      <h1 class="page-title">Service Requests</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate and service applications from residents</p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>Complaints Dashboard
+    </a>
+  </div>
+
+  <!-- Stats -->
+  <div class="admin-stats-bar mb-3">
+    <div class="admin-stat-item">
+      <span class="admin-stat-value">{{ stats.total }}</span>
+      <span class="admin-stat-label">Total</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:#d97706;">{{ stats.pending }}</span>
+      <span class="admin-stat-label">Pending</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:var(--green);">{{ stats.approved }}</span>
+      <span class="admin-stat-label">Approved</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <form method="get" action="{{ url_for('admin_service_requests') }}">
+    <div class="filter-bar mb-3">
+      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
+      <select name="sub_type" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Types</option>
+        {% for t in certificate_types %}
+          <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        {% for s in service_statuses %}
+          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      {% if filters.status or filters.sub_type %}
+        <a href="{{ url_for('admin_service_requests') }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-x-circle me-1"></i>Clear
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+  <!-- Table -->
+  {% if requests %}
+  <div class="table-wrap">
+    <table class="table table-bordered complaints-table mb-0">
+      <thead>
+        <tr>
+          <th>Request No.</th>
+          <th>Type</th>
+          <th>Applicant</th>
+          <th>Ward</th>
+          <th>Filed By</th>
+          <th>Status</th>
+          <th>Applied</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sr in requests %}
+        <tr>
+          <td class="cid-cell">{{ sr['request_no'] }}</td>
+          <td>{{ sr['sub_type'] }}</td>
+          <td>{{ sr['applicant_name'] }}</td>
+          <td>{{ sr['ward'] }}</td>
+          <td>{{ sr['filer_name'] }}</td>
+          <td>
+            <span class="status-badge svc-status-{{ sr['status'].lower() }}">
+              {{ sr['status'] }}
+            </span>
+          </td>
+          <td style="white-space:nowrap; font-size:0.875rem;">{{ sr['created_at'][:10] }}</td>
+          <td>
+            <a href="{{ url_for('admin_service_request_detail', request_no=sr['request_no']) }}"
+               class="btn btn-sm btn-outline-primary">Review</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-file-earmark d-block mb-2" style="font-size:2.5rem;"></i>
+    <p class="mb-0">No service requests found.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

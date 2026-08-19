@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('Property & Tax') }}{% endblock %}
+{% block description %}View your registered properties, tax records, and payment history.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 pt-2 mb-3">
+    <div>
+      <h1 class="page-title">Property &amp; Tax</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        {{ session['full_name'] }}
+        {% if session.get('ward') %} &mdash; {{ session['ward'] }}{% endif %}
+      </p>
+    </div>
+    <a href="{{ url_for('villager_dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>My Complaints
+    </a>
+  </div>
+
+  {% if properties_data %}
+    {% for pd in properties_data %}
+    {% set prop = pd.property %}
+    <div class="detail-card mb-3" style="border-top:3px solid var(--navy);">
+
+      <!-- Property header -->
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+        <div>
+          <div style="font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;">
+            {{ prop['property_no'] }}
+          </div>
+          <h2 style="font-size:1.125rem; font-weight:700; color:var(--navy); margin:4px 0 2px;">
+            {{ prop['address'] }}
+          </h2>
+          <span style="font-size:0.8125rem; color:var(--muted);">
+            {{ prop['ward'] }} &bull;
+            {{ prop['property_type'].replace('_',' ').title() }} &bull;
+            {{ prop['area_sqft'] | int }} sq ft &bull;
+            Assessed: ₹{{ '{:,.0f}'.format(prop['assessed_value']) }}
+          </span>
+        </div>
+        <span class="status-badge svc-status-{{ 'approved' if prop['status'] == 'ACTIVE' else 'rejected' if prop['status'] == 'DISPUTED' else 'verified' }}">
+          {{ prop['status'] }}
+        </span>
+      </div>
+
+      <!-- Tax Records -->
+      <div class="detail-card-title" style="margin-bottom:10px;">
+        <i class="bi bi-receipt-cutoff me-1"></i>Tax Records
+      </div>
+
+      {% if pd.tax_records %}
+      <div class="table-wrap mb-3">
+        <table class="table table-bordered complaints-table mb-0">
+          <thead>
+            <tr>
+              <th>Tax Type</th>
+              <th>Financial Year</th>
+              <th>Amount Due</th>
+              <th>Due Date</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tr in pd.tax_records %}
+            <tr>
+              <td>{{ tr['tax_type'].replace('_', ' ').title() }}</td>
+              <td>{{ tr['financial_year'] }}</td>
+              <td style="font-weight:600;">₹{{ '{:,.0f}'.format(tr['amount_due']) }}</td>
+              <td style="white-space:nowrap; font-size:0.875rem;">{{ tr['due_date'] }}</td>
+              <td>
+                <span class="status-badge tax-status-{{ tr['status'].lower() }}">
+                  {{ tr['status'] }}
+                </span>
+              </td>
+              <td>
+                {% if tr['status'] in ('UNPAID', 'OVERDUE') %}
+                  {% if razorpay_enabled %}
+                    <button class="btn btn-sm btn-primary pay-now-btn"
+                            data-tax-id="{{ tr['id'] }}"
+                            data-amount="{{ tr['amount_due'] }}"
+                            data-desc="{{ tr['tax_type'].replace('_', ' ').title() }} — {{ tr['financial_year'] }}">
+                      <i class="bi bi-credit-card me-1"></i>Pay Now
+                    </button>
+                  {% else %}
+                    <button class="btn btn-sm btn-outline-secondary" disabled
+                            title="Payment gateway not configured">
+                      <i class="bi bi-credit-card me-1"></i>Pay Now
+                    </button>
+                  {% endif %}
+                {% elif tr['status'] == 'PAID' %}
+                  <span style="color:var(--green); font-size:0.8rem; font-weight:600;">
+                    <i class="bi bi-check-circle-fill me-1"></i>Paid
+                  </span>
+                {% else %}
+                  <span style="color:var(--muted); font-size:0.8rem;">{{ tr['status'] }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-muted mb-3" style="font-size:0.875rem;">No tax records yet.</p>
+      {% endif %}
+
+      <!-- Payment History -->
+      {% if pd.payments %}
+      <div class="detail-card-title" style="margin-bottom:10px;">
+        <i class="bi bi-wallet2 me-1"></i>Payment History
+      </div>
+      <div class="table-wrap">
+        <table class="table table-bordered complaints-table mb-0">
+          <thead>
+            <tr>
+              <th>Receipt No.</th>
+              <th>Tax Type</th>
+              <th>Year</th>
+              <th>Amount Paid</th>
+              <th>Method</th>
+              <th>Paid On</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for py in pd.payments %}
+            <tr>
+              <td class="cid-cell">{{ py['receipt_no'] or '—' }}</td>
+              <td>{{ py['tax_type'].replace('_', ' ').title() }}</td>
+              <td>{{ py['financial_year'] }}</td>
+              <td style="font-weight:600;">₹{{ '{:,.0f}'.format(py['amount_paid']) }}</td>
+              <td style="font-size:0.8125rem;">{{ py['payment_method'] or '—' }}</td>
+              <td style="white-space:nowrap; font-size:0.875rem;">{{ py['paid_at'][:10] if py['paid_at'] else '—' }}</td>
+              <td>
+                {% if py['receipt_no'] %}
+                <a href="{{ url_for('receipt_download', receipt_no=py['receipt_no']) }}"
+                   class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-download me-1"></i>Receipt
+                </a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-house d-block mb-2" style="font-size:2.5rem;"></i>
+    <p class="mb-1">No properties registered to your account.</p>
+    <small class="text-muted">Contact the Gram Panchayat office to register your property.</small>
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- Hidden form for Razorpay verification POST -->
+<form id="razorpay-verify-form" method="post" action="{{ url_for('pay_verify') }}" style="display:none;">
+  <input type="hidden" name="razorpay_order_id" id="rz-order-id">
+  <input type="hidden" name="razorpay_payment_id" id="rz-payment-id">
+  <input type="hidden" name="razorpay_signature" id="rz-signature">
+  <input type="hidden" name="tax_record_id" id="rz-tax-record-id">
+</form>
+
+{% if razorpay_enabled %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.pay-now-btn').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var taxId = this.dataset.taxId;
+      var btnEl = this;
+      btnEl.disabled = true;
+      btnEl.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processing…';
+
+      // Step 1: Create order on server
+      var formData = new FormData();
+      formData.append('tax_record_id', taxId);
+
+      fetch('{{ url_for("pay_create_order") }}', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(function(resp) { return resp.json(); })
+      .then(function(data) {
+        if (data.error) {
+          alert(data.error);
+          btnEl.disabled = false;
+          btnEl.innerHTML = '<i class="bi bi-credit-card me-1"></i>Pay Now';
+          return;
+        }
+
+        // Step 2: Open Razorpay checkout
+        var options = {
+          key: data.key_id,
+          amount: data.amount,
+          currency: data.currency,
+          name: 'e-gramSeva',
+          description: data.description,
+          order_id: data.order_id,
+          handler: function(response) {
+            // Step 3: Submit to server for verification
+            document.getElementById('rz-order-id').value = response.razorpay_order_id;
+            document.getElementById('rz-payment-id').value = response.razorpay_payment_id;
+            document.getElementById('rz-signature').value = response.razorpay_signature;
+            document.getElementById('rz-tax-record-id').value = taxId;
+            document.getElementById('razorpay-verify-form').submit();
+          },
+          modal: {
+            ondismiss: function() {
+              // Cancelled — no error, just re-enable button
+              btnEl.disabled = false;
+              btnEl.innerHTML = '<i class="bi bi-credit-card me-1"></i>Pay Now';
+            }
+          },
+          prefill: {
+            name: '{{ session.get("full_name", "") }}',
+            contact: '{{ session.get("mobile", "") }}',
+          },
+          theme: { color: '#1a3a5c' },
+        };
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function(response) {
+          alert('Payment failed: ' + response.error.description);
+          btnEl.disabled = false;
+          btnEl.innerHTML = '<i class="bi bi-credit-card me-1"></i>Pay Now';
+        });
+        rzp.open();
+      })
+      .catch(function(err) {
+        alert('Network error. Please try again.');
+        btnEl.disabled = false;
+        btnEl.innerHTML = '<i class="bi bi-credit-card me-1"></i>Pay Now';
+      });
+    });
+  });
+});
+</script>
+{% endif %}
+{% endblock %}

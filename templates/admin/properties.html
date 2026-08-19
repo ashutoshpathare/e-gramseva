@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin — Properties{% endblock %}
+{% block description %}Manage registered properties across all wards.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
+    <div>
+      <h1 class="page-title">Properties</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">Registered properties in the Gram Panchayat</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('admin_tax_overview') }}" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-receipt me-1"></i>Tax Overview
+      </a>
+      <a href="{{ url_for('admin_register_property') }}" class="btn btn-primary btn-sm">
+        <i class="bi bi-plus-circle me-1"></i>Register Property
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="admin-stats-bar mb-3">
+    <div class="admin-stat-item">
+      <span class="admin-stat-value">{{ stats.total }}</span>
+      <span class="admin-stat-label">Total</span>
+    </div>
+    <div class="admin-stat-item">
+      <span class="admin-stat-value" style="color:var(--green);">{{ stats.active }}</span>
+      <span class="admin-stat-label">Active</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <form method="get" action="{{ url_for('admin_properties') }}">
+    <div class="filter-bar mb-3">
+      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
+      <select name="ward" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Wards</option>
+        {% for w in wards %}
+          <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
+        {% endfor %}
+      </select>
+      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+        <option value="">All Statuses</option>
+        {% for s in property_statuses %}
+          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+      {% if filters.ward or filters.status %}
+        <a href="{{ url_for('admin_properties') }}" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-x-circle me-1"></i>Clear
+        </a>
+      {% endif %}
+    </div>
+  </form>
+
+  <!-- Table -->
+  {% if properties %}
+  <div class="table-wrap">
+    <table class="table table-bordered complaints-table mb-0">
+      <thead>
+        <tr>
+          <th>Property No.</th>
+          <th>Owner</th>
+          <th>Ward</th>
+          <th>Type</th>
+          <th>Area</th>
+          <th>Assessed Value</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in properties %}
+        <tr>
+          <td class="cid-cell">{{ p['property_no'] }}</td>
+          <td>{{ p['owner_name'] }}</td>
+          <td>{{ p['ward'] }}</td>
+          <td>{{ p['property_type'].replace('_', ' ').title() }}</td>
+          <td>{{ p['area_sqft'] | int }} sq ft</td>
+          <td style="font-weight:600;">₹{{ '{:,.0f}'.format(p['assessed_value']) }}</td>
+          <td>
+            <span class="status-badge svc-status-{{ 'approved' if p['status'] == 'ACTIVE' else 'rejected' if p['status'] == 'DISPUTED' else 'verified' }}">
+              {{ p['status'] }}
+            </span>
+          </td>
+          <td>
+            <a href="{{ url_for('admin_property_detail', property_no=p['property_no']) }}"
+               class="btn btn-sm btn-outline-primary">Manage</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <i class="bi bi-house d-block mb-2" style="font-size:2.5rem;"></i>
+    <p class="mb-0">No properties found.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

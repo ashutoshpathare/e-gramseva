@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ complaint['complaint_id'] }}{% endblock %}
+{% block description %}Status and details for complaint {{ complaint['complaint_id'] }}.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-2">
+    <a href="{{ url_for('villager_dashboard') }}" class="back-link">
+      <i class="bi bi-arrow-left me-1"></i>{{ _('Back to My Complaints') }}
+    </a>
+  </div>
+
+  <!-- Header -->
+  <div class="detail-header">
+    <div>
+      <h1 class="page-title mb-1">{{ complaint['complaint_id'] }}</h1>
+      <span class="category-label">
+        <i class="bi bi-tag me-1"></i>{{ _(complaint['category']) }}
+      </span>
+      &nbsp;&mdash;&nbsp;
+      <span style="font-size:0.875rem; color:var(--muted);">{{ complaint['ward'] }}</span>
+    </div>
+    <span class="status-badge status-badge-lg
+                 status-{{ complaint['status'].replace(' ', '-').lower() }}">
+      {{ _(complaint['status']) }}
+    </span>
+  </div>
+
+  <div class="row g-3 mt-0">
+
+    <!-- Left: details + photo -->
+    <div class="col-lg-7">
+
+      <div class="detail-card">
+        <div class="detail-card-title">{{ _('Complaint Information') }}</div>
+        <table class="detail-table">
+          <tr>
+            <th>{{ _('Filed On') }}</th>
+            <td>{{ complaint['created_at'][:16].replace('T', ' ') }}</td>
+          </tr>
+          <tr>
+            <th>{{ _('Ward') }}</th>
+            <td>{{ complaint['ward'] }}</td>
+          </tr>
+          {% if complaint['address_detail'] %}
+          <tr>
+            <th>{{ _('Address') }}</th>
+            <td>{{ complaint['address_detail'] }}</td>
+          </tr>
+          {% endif %}
+          <tr>
+            <th>Priority</th>
+            <td>
+              {% if complaint['priority'] == 'High' %}
+                <span class="priority-high">
+                  <i class="bi bi-exclamation-triangle-fill me-1"></i>High
+                </span>
+              {% else %}Normal{% endif %}
+            </td>
+          </tr>
+          {% if complaint['assigned_to'] %}
+          <tr>
+            <th>Assigned To</th>
+            <td>{{ complaint['assigned_to'] }}</td>
+          </tr>
+          {% endif %}
+          {% if complaint['resolved_at'] %}
+          <tr>
+            <th>Resolved On</th>
+            <td>{{ complaint['resolved_at'][:16].replace('T', ' ') }}</td>
+          </tr>
+          {% endif %}
+        </table>
+        <div class="description-block">
+          <strong style="font-size:0.8125rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;">
+            {{ _('Description') }}
+          </strong>
+          <p class="mt-1 mb-0">{{ complaint['description'] }}</p>
+        </div>
+      </div>
+
+      {% if complaint['photo_path'] %}
+      <div class="detail-card">
+        <div class="detail-card-title">{{ _('Photo') }}</div>
+        <img src="{{ url_for('static', filename='uploads/' + complaint['photo_path']) }}"
+             alt="Complaint photo" class="complaint-photo">
+      </div>
+      {% endif %}
+
+    </div>
+
+    <!-- Right: timeline + QR + feedback -->
+    <div class="col-lg-5">
+
+      <div class="detail-card">
+        <div class="detail-card-title">{{ _('Status Timeline') }}</div>
+        <div class="timeline">
+          {% for log in logs %}
+          <div class="timeline-item {% if loop.last %}timeline-item-last{% endif %}">
+            <div class="timeline-marker">
+              <div class="timeline-dot timeline-dot-{{ log['new_status'].replace(' ', '-').lower() }}"></div>
+              {% if not loop.last %}<div class="timeline-line"></div>{% endif %}
+            </div>
+            <div class="timeline-content">
+              <div class="timeline-status">
+                <span class="status-badge status-{{ log['new_status'].replace(' ', '-').lower() }}">
+                  {{ _(log['new_status']) }}
+                </span>
+              </div>
+              <div class="timeline-date">{{ log['changed_at'][:16].replace('T', ' ') }}</div>
+              {% if log['note'] %}
+                <div class="timeline-note">{{ log['note'] }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- QR code card -->
+      <div class="qr-card">
+        <div class="qr-card-title">{{ _('Scan to Track') }}</div>
+        <img src="{{ url_for('complaint_qr', complaint_id=complaint['complaint_id']) }}"
+             alt="QR code for {{ complaint['complaint_id'] }}"
+             width="130" height="130" class="qr-img" loading="lazy">
+        <div class="qr-label">{{ complaint['complaint_id'] }}</div>
+      </div>
+
+      <!-- Feedback: prompt if resolved and not yet rated -->
+      {% if complaint['status'] == 'Resolved' and not feedback_row %}
+      <div class="detail-card feedback-card">
+        <div class="detail-card-title">{{ _('Rate This Resolution') }}</div>
+        <p style="font-size:0.875rem; margin-bottom:12px;">
+          Your complaint has been resolved. How satisfied are you?
+        </p>
+        <form method="post"
+              action="{{ url_for('submit_feedback', complaint_id=complaint['complaint_id']) }}">
+          <div class="star-rating mb-3" id="star-rating">
+            {% for i in [5,4,3,2,1] %}
+            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+            <label for="star{{ i }}" title="{{ i }} star">
+              <i class="bi bi-star-fill"></i>
+            </label>
+            {% endfor %}
+          </div>
+          <textarea name="comment" class="form-control mb-3" rows="2"
+                    placeholder="Optional comment about the resolution"></textarea>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="bi bi-star me-1"></i>{{ _('Submit Rating') }}
+          </button>
+        </form>
+      </div>
+
+      {% elif feedback_row %}
+      <div class="detail-card">
+        <div class="detail-card-title">{{ _('Your Rating') }}</div>
+        <div class="stars-display mb-2">
+          {% for i in range(1, 6) %}
+            <i class="bi bi-star-fill {% if i <= feedback_row['rating'] %}star-filled{% else %}star-empty{% endif %}"></i>
+          {% endfor %}
+          <span class="ms-2" style="font-size:0.875rem; color:var(--muted);">
+            {{ feedback_row['rating'] }} / 5
+          </span>
+        </div>
+        {% if feedback_row['comment'] %}
+        <p class="mb-0" style="font-size:0.875rem; color:var(--muted);">
+          &ldquo;{{ feedback_row['comment'] }}&rdquo;
+        </p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}

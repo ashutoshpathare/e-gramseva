@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin — Notice Board{% endblock %}
+{% block description %}Manage Gram Panchayat public notices and announcements.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-4">
+    <div>
+      <h1 class="page-title">Notice Board Management</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        Active notices appear on the public home page.
+      </p>
+    </div>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+    </a>
+  </div>
+
+  <!-- Post new notice -->
+  <div class="admin-manage-card mb-4" style="max-width:640px;">
+    <h4><i class="bi bi-megaphone me-2"></i>Post New Notice</h4>
+    <form method="post" action="{{ url_for('admin_post_notice') }}">
+      <div class="mb-3">
+        <label for="notice-title" class="form-label">Notice Title <span class="required-mark">*</span></label>
+        <input type="text" id="notice-title" name="title" class="form-control"
+               placeholder="e.g. Water Supply Schedule — Ward 3 &amp; 5" required>
+      </div>
+      <div class="mb-4">
+        <label for="notice-body" class="form-label">Notice Details <span class="required-mark">*</span></label>
+        <textarea id="notice-body" name="body" class="form-control" rows="4" required
+                  placeholder="Full notice text. Include dates, timings, contact info as needed.
+Example:
+Water supply will be available 6–8 AM on Tuesday, 12 August 2026 for Ward 3 and Ward 5.
+For queries: Gram Panchayat office — 9876500000"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-megaphone me-1"></i>Post Notice
+      </button>
+    </form>
+  </div>
+
+  <!-- Existing notices -->
+  <div class="d-flex align-items-center gap-3 mb-3">
+    <h2 style="font-size:0.9375rem; font-weight:700; margin:0;">
+      All Notices
+    </h2>
+    <span style="font-size:0.8125rem; color:var(--muted);">{{ notices | length }} total</span>
+  </div>
+
+  {% if notices %}
+  {% for notice in notices %}
+  <div class="notice-admin-card {% if not notice['is_active'] %}notice-inactive{% endif %}">
+    <div class="d-flex justify-content-between align-items-start gap-3">
+      <div style="flex:1; min-width:0;">
+        <div class="notice-admin-title">{{ notice['title'] }}</div>
+        <div class="notice-admin-body">{{ notice['body'] }}</div>
+        <div class="notice-admin-meta">
+          <i class="bi bi-calendar3 me-1"></i>{{ notice['created_at'][:10] }}
+          &nbsp;&mdash;&nbsp;
+          <i class="bi bi-person me-1"></i>{{ notice['poster_name'] }}
+          {% if not notice['is_active'] %}
+          &nbsp;&mdash;&nbsp;
+          <span style="color:var(--muted);">Deactivated</span>
+          {% endif %}
+        </div>
+      </div>
+      <form method="post"
+            action="{{ url_for('admin_toggle_notice', notice_id=notice['id']) }}"
+            style="flex-shrink:0;">
+        <button type="submit" class="btn btn-sm
+          {% if notice['is_active'] %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+          {% if notice['is_active'] %}
+            <i class="bi bi-eye-slash me-1"></i>Deactivate
+          {% else %}
+            <i class="bi bi-eye me-1"></i>Activate
+          {% endif %}
+        </button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <div class="empty-state" style="max-width:400px;">
+    <i class="bi bi-megaphone d-block mb-2" style="font-size:2rem;"></i>
+    <p class="mb-0">No notices posted yet.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
