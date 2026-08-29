@@ -663,7 +663,9 @@ def submit_feedback(complaint_id):
 @app.route('/services/certificates')
 @login_required
 def certificate_services():
-    return render_template('villager/certificates.html')
+    db = get_db()
+    unpaid_dues = get_unpaid_dues(db, session['user_id'])
+    return render_template('villager/certificates.html', unpaid_dues=unpaid_dues)
 
 
 @app.route('/services/certificates/apply/<sub_type>', methods=['GET', 'POST'])
@@ -753,8 +755,12 @@ def certificate_apply(sub_type):
         flash(f'Application {rno} submitted successfully.', 'success')
         return redirect(url_for('villager_dashboard'))
 
+    # Phase 7.2 — pass dues to template so the UX banner/submit-block renders
+    db = get_db()
+    unpaid_dues = get_unpaid_dues(db, session['user_id'])
     return render_template('villager/certificate_form.html',
                            sub_type=sub_type,
+                           unpaid_dues=unpaid_dues,
                            form={'ward': session.get('ward', ''), 'applicant_name': session.get('full_name', '')})
 
 
