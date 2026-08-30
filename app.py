@@ -1459,5 +1459,146 @@ def admin_tax_overview():
                            filters={'status': status_f})
 
 
+
+# ══════════════════════════════════════════════════════════════════
+# Phase 8 — Nondi (Register) Views  [READ-ONLY, admin only]
+# ══════════════════════════════════════════════════════════════════
+
+def _parse_register_filters():
+    """Extract ward, date_from, date_to from query params. Returns a dict."""
+    return {
+        'ward':      request.args.get('ward', '').strip(),
+        'date_from': request.args.get('date_from', '').strip(),
+        'date_to':   request.args.get('date_to',   '').strip(),
+    }
+
+
+def _build_cert_register_query(sub_type, filters):
+    """Return (query_str, params) for birth/death certificate registers."""
+    query = '''
+        SELECT sr.*, u.full_name AS filer_name
+        FROM service_requests sr
+        JOIN users u ON sr.user_id = u.id
+        WHERE sr.service_type = 'CERTIFICATE'
+          AND sr.sub_type = ?
+          AND sr.status = 'APPROVED'
+    '''
+    params = [sub_type]
+    if filters['ward']:
+        query += ' AND sr.ward = ?'
+        params.append(filters['ward'])
+    if filters['date_from']:
+        query += " AND DATE(sr.updated_at) >= ?"
+        params.append(filters['date_from'])
+    if filters['date_to']:
+        query += " AND DATE(sr.updated_at) <= ?"
+        params.append(filters['date_to'])
+    query += ' ORDER BY sr.created_at DESC'
+    return query, params
+
+
+def _build_property_register_query(filters):
+    """Return (query_str, params) for the property (Malmatta) register."""
+    query = '''
+        SELECT p.*, u.full_name AS owner_name
+        FROM properties p
+        JOIN users u ON p.owner_id = u.id
+        WHERE 1=1
+    '''
+    params = []
+    if filters['ward']:
+        query += ' AND p.ward = ?'
+        params.append(filters['ward'])
+    if filters['date_from']:
+        query += " AND DATE(p.registered_at) >= ?"
+        params.append(filters['date_from'])
+    if filters['date_to']:
+        query += " AND DATE(p.registered_at) <= ?"
+        params.append(filters['date_to'])
+    query += ' ORDER BY p.property_no ASC'
+    return query, params
+
+
+@app.route('/admin/registers/birth')
+@admin_required
+def admin_register_birth():
+    """Birth Register (Janma Nondi) — APPROVED birth certificate requests."""
+    db      = get_db()
+    filters = _parse_register_filters()
+    query, params = _build_cert_register_query('BIRTH', filters)
+    rows = db.execute(query, params).fetchall()
+    # Parse form_data_json per row to surface date_of_birth for display
+    records = []
+    for r in rows:
+        fd = json.loads(r['form_data_json']) if r['form_data_json'] else {}
+        records.append({**dict(r), 'form_data': fd})
+    return render_template('admin/register_birth.html',
+                           records=records, filters=filters, wards=WARDS)
+
+
+@app.route('/admin/registers/death')
+@admin_required
+def admin_register_death():
+    """Death Register (Mrutyu Nondi) — APPROVED death certificate requests."""
+    db      = get_db()
+    filters = _parse_register_filters()
+    query, params = _build_cert_register_query('DEATH', filters)
+    rows = db.execute(query, params).fetchall()
+    records = []
+    for r in rows:
+        fd = json.loads(r['form_data_json']) if r['form_data_json'] else {}
+        records.append({**dict(r), 'form_data': fd})
+    return render_template('admin/register_death.html',
+                           records=records, filters=filters, wards=WARDS)
+
+
+@app.route('/admin/registers/property')
+@admin_required
+def admin_register_property_nondi():
+    """Property Register (Malmatta Nondi) — all registered properties."""
+    db      = get_db()
+    filters = _parse_register_filters()
+    query, params = _build_property_register_query(filters)
+    rows    = db.execute(query, params).fetchall()
+    records = [dict(r) for r in rows]
+    return render_template('admin/register_property.html',
+                           records=records, filters=filters, wards=WARDS)
+
+
+@app.route('/admin/registers/<register_type>/print')
+@admin_required
+def admin_register_print(register_type):
+    """Print view for all three registers — standalone page, no base.html."""
+    if register_type not in ('birth', 'death', 'property'):
+        flash('Invalid register type.', 'danger')
+        return redirect(url_for('admin_register_birth'))
+    db      = get_db()
+    filters = _parse_register_filters()
+    records = []
+    if register_type in ('birth', 'death'):
+        sub_type = register_type.upper()
+        query, params = _build_cert_register_query(sub_type, filters)
+        rows = db.execute(query, params).fetchall()
+        for r in rows:
+            fd = json.loads(r['form_data_json']) if r['form_data_json'] else {}
+            records.append({**dict(r), 'form_data': fd})
+    else:
+        query, params = _build_property_register_query(filters)
+        rows = db.execute(query, params).fetchall()
+        records = [dict(r) for r in rows]
+    type_labels = {
+        'birth':    ('Janma Nondi', 'Birth Register'),
+        'death':    ('Mrutyu Nondi', 'Death Register'),
+        'property': ('Malmatta Nondi', 'Property Register'),
+    }
+    label_mr, label_en = type_labels[register_type]
+    printed_on = datetime.now().strftime('%d %B %Y')
+    return render_template('admin/register_print.html',
+                           records=records, filters=filters,
+                           register_type=register_type,
+                           label_mr=label_mr, label_en=label_en,
+                           printed_on=printed_on)
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5050)

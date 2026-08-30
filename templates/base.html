@@ -75,8 +75,13 @@
             <li><a href="{{ url_for('admin_properties') }}" {% if request.endpoint in ('admin_properties','admin_property_detail','admin_register_property','admin_tax_overview') %}class="active"{% endif %}>Properties</a></li>
             <li><a href="{{ url_for('admin_reports') }}" {% if request.endpoint == 'admin_reports' %}class="active"{% endif %}>Reports</a></li>
             <li><a href="{{ url_for('admin_notices') }}" {% if request.endpoint == 'admin_notices' %}class="active"{% endif %}>Notice Board</a></li>
+            <li class="nav-section-label">Registers</li>
+            <li><a href="{{ url_for('admin_register_birth') }}" {% if request.endpoint == 'admin_register_birth' %}class="active"{% endif %}>Janma Nondi</a></li>
+            <li><a href="{{ url_for('admin_register_death') }}" {% if request.endpoint == 'admin_register_death' %}class="active"{% endif %}>Mrutyu Nondi</a></li>
+            <li><a href="{{ url_for('admin_register_property_nondi') }}" {% if request.endpoint in ('admin_register_property_nondi','admin_register_print') %}class="active"{% endif %}>Malmatta Nondi</a></li>
           {% endif %}
         </ul>
+
 
         <div class="nav-user">
       {% if session.get("role") != "admin" %}

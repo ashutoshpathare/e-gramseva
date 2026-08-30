@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ label_en }} &mdash; Print View</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: A4 landscape; margin: 10mm 12mm; }
+
+    body {
+      font-family: 'Noto Sans', Arial, sans-serif;
+      font-size: 11px;
+      color: #1a1a1a;
+      background: #e0e0e0;
+    }
+
+    .reg-page {
+      width: 100%;
+      min-height: 180mm;
+      margin: 16px auto;
+      background: #fff;
+      border: 2px solid #1a3a5c;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .reg-page { margin: 0; border: none; box-shadow: none; }
+      .no-print { display: none !important; }
+    }
+
+    /* Decorative border — same as certificate.html */
+    .reg-border {
+      position: absolute;
+      inset: 5px;
+      border: 1.5px solid #8b1a1a;
+      pointer-events: none;
+    }
+    .reg-border-inner {
+      position: absolute;
+      inset: 8px;
+      border: 0.5px solid #d4c8a8;
+      pointer-events: none;
+    }
+
+    .reg-content {
+      position: relative;
+      z-index: 1;
+      padding: 14mm 14mm 12mm;
+    }
+
+    /* Header — same letterhead as certificate.html */
+    .reg-header {
+      text-align: center;
+      border-bottom: 2px solid #1a3a5c;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .reg-header-devanagari {
+      font-size: 16px;
+      font-weight: 700;
+      color: #8b1a1a;
+      letter-spacing: 0.04em;
+    }
+    .reg-header-english {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a3a5c;
+      margin-top: 2px;
+    }
+    .reg-header-sub {
+      font-size: 9px;
+      color: #666;
+      margin-top: 3px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Register title */
+    .reg-type-title {
+      text-align: center;
+      font-family: 'Noto Serif', Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #1a3a5c;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 10px 0 4px;
+    }
+    .reg-meta {
+      text-align: center;
+      font-size: 9px;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    /* Register table */
+    .reg-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 10px;
+    }
+    .reg-table th {
+      background: #1a3a5c;
+      color: #fff;
+      text-align: left;
+      padding: 5px 8px;
+      font-weight: 600;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .reg-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+    }
+    .reg-table tr:nth-child(even) td { background: #f8f7f4; }
+    .reg-table td.reg-sr { text-align: center; color: #666; width: 32px; }
+
+    /* Status badge */
+    .reg-badge {
+      display: inline-block;
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      letter-spacing: 0.04em;
+    }
+    .reg-badge-approved { background: #d1fae5; color: #065f46; }
+    .reg-badge-active   { background: #d1fae5; color: #065f46; }
+    .reg-badge-disputed { background: #fce7e7; color: #8b1a1a; }
+
+    /* Signature block */
+    .reg-signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 8px;
+    }
+    .sig-block { text-align: center; min-width: 120px; }
+    .sig-line { border-top: 1px solid #333; width: 110px; margin: 0 auto 4px; }
+    .sig-title { font-size: 9px; font-weight: 700; color: #1a3a5c; text-transform: uppercase; }
+    .sig-sub   { font-size: 8px; color: #888; }
+
+    /* Footer */
+    .reg-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 16px;
+      padding-top: 8px;
+      border-top: 1px solid #ddd;
+      font-size: 9px;
+      color: #888;
+    }
+
+    /* Print button */
+    .print-bar {
+      text-align: center;
+      padding: 12px;
+    }
+    .print-bar button {
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 24px;
+      background: #1a3a5c;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .print-bar button:hover { background: #0f2640; }
+    .print-bar .btn-close-tab {
+      font-family: 'Noto Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 20px;
+      background: transparent;
+      color: #5a5a5a;
+      border: 1px solid #c5c5c0;
+      cursor: pointer;
+      border-radius: 2px;
+      margin-left: 8px;
+    }
+
+    .filter-summary {
+      font-size: 9.5px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .empty-note {
+      text-align: center;
+      padding: 40px 0;
+      color: #666;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print / close controls (hidden on print) -->
+  <div class="print-bar no-print">
+    <button onclick="window.print()" id="btn-do-print">Print / Save as PDF</button>
+    <button class="btn-close-tab" onclick="window.close()" id="btn-close-print">Close</button>
+  </div>
+
+  <div class="reg-page">
+    <div class="reg-border"></div>
+    <div class="reg-border-inner"></div>
+
+    <div class="reg-content">
+
+      <!-- Letterhead header — same pattern as certificate.html -->
+      <div class="reg-header">
+        <div class="reg-header-devanagari">ग्राम पंचायत &mdash; इ-ग्रामसेवा</div>
+        <div class="reg-header-english">Gram Panchayat &mdash; e-gramSeva</div>
+        <div class="reg-header-sub">Citizen Services Portal &bull; Official Register</div>
+      </div>
+
+      <!-- Register title -->
+      <div class="reg-type-title">{{ label_mr }} &mdash; {{ label_en }}</div>
+      <div class="reg-meta">
+        Printed On: {{ printed_on }}
+        {% if filters.ward %} &bull; Ward: {{ filters.ward }}{% endif %}
+        {% if filters.date_from %} &bull; From: {{ filters.date_from }}{% endif %}
+        {% if filters.date_to %} &bull; To: {{ filters.date_to }}{% endif %}
+        &bull; Total Records: {{ records | length }}
+      </div>
+
+      <!-- Table -->
+      {% if records %}
+      <table class="reg-table" id="tbl-print-register">
+        <thead>
+          <tr>
+            <th style="width:32px;">Sr.</th>
+            {% if register_type == 'birth' %}
+              <th>Request No.</th>
+              <th>Applicant Name</th>
+              <th>Ward</th>
+              <th>Date of Birth</th>
+              <th>Approved On</th>
+              <th>Status</th>
+            {% elif register_type == 'death' %}
+              <th>Request No.</th>
+              <th>Applicant Name</th>
+              <th>Ward</th>
+              <th>Date of Death</th>
+              <th>Approved On</th>
+              <th>Status</th>
+            {% else %}
+              <th>Property No.</th>
+              <th>Owner Name</th>
+              <th>Ward</th>
+              <th>Type</th>
+              <th>Area (sq ft)</th>
+              <th>Assessed Value</th>
+              <th>Registered On</th>
+              <th>Status</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for rec in records %}
+          <tr>
+            <td class="reg-sr">{{ loop.index }}</td>
+            {% if register_type == 'birth' %}
+              <td>{{ rec['request_no'] }}</td>
+              <td>{{ rec['applicant_name'] }}</td>
+              <td>{{ rec['ward'] }}</td>
+              <td>{{ rec['form_data'].get('date_of_birth', '—') }}</td>
+              <td>{{ rec['updated_at'][:10] }}</td>
+              <td><span class="reg-badge reg-badge-approved">APPROVED</span></td>
+            {% elif register_type == 'death' %}
+              <td>{{ rec['request_no'] }}</td>
+              <td>{{ rec['applicant_name'] }}</td>
+              <td>{{ rec['ward'] }}</td>
+              <td>{{ rec['form_data'].get('date_of_death', '—') }}</td>
+              <td>{{ rec['updated_at'][:10] }}</td>
+              <td><span class="reg-badge reg-badge-approved">APPROVED</span></td>
+            {% else %}
+              <td>{{ rec['property_no'] }}</td>
+              <td>{{ rec['owner_name'] }}</td>
+              <td>{{ rec['ward'] }}</td>
+              <td>{{ rec['property_type'].replace('_', ' ').title() }}</td>
+              <td>{{ rec['area_sqft'] | int }}</td>
+              <td>&#8377;{{ '{:,.0f}'.format(rec['assessed_value']) }}</td>
+              <td>{{ rec['registered_at'][:10] }}</td>
+              <td>
+                <span class="reg-badge {% if rec['status'] == 'ACTIVE' %}reg-badge-active{% elif rec['status'] == 'DISPUTED' %}reg-badge-disputed{% else %}reg-badge-approved{% endif %}">
+                  {{ rec['status'] }}
+                </span>
+              </td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-note">No records found for the selected filters.</div>
+      {% endif %}
+
+      <!-- Signature block — same pattern as certificate.html -->
+      <div class="reg-signatures">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Gram Sevak</div>
+          <div class="sig-sub">Village Level Worker</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-title">Sarpanch</div>
+          <div class="sig-sub">Gram Panchayat</div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="reg-footer">
+        <span>Generated by e-gramSeva &bull; {{ label_en }}</span>
+        <span>This is a computer-generated official register. Printed: {{ printed_on }}</span>
+      </div>
+
+    </div><!-- reg-content -->
+  </div><!-- reg-page -->
+
+  <script>
+    // Auto-trigger print dialog when opened in new tab
+    window.addEventListener('load', function () {
+      window.print();
+    });
+  </script>
+</body>
+</html>

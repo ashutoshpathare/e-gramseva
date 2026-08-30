@@ -1246,3 +1246,67 @@ a:hover { color: var(--maroon); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ================================================================
+   Phase 8: Nondi (Register) views
+   ================================================================ */
+
+/* Nav section separator — "Registers" label in admin nav */
+.nav-links li.nav-section-label {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Register page header strip */
+.register-page-header {
+  border-top: 3px solid var(--navy);
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  padding: 14px 20px 12px;
+  margin-bottom: 18px;
+}
+
+.register-page-header .register-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+
+.register-page-header .register-subtitle {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Register count pill */
+.register-count-pill {
+  display: inline-block;
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* Serial number column */
+.register-sr {
+  width: 44px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
