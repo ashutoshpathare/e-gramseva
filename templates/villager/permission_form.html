@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% set type_labels = {'BUILDING': 'Building Permission', 'WATER': 'Water Connection Permission'} %}
+
+{% block title %}Apply: {{ type_labels[sub_type] }}{% endblock %}
+{% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="form-page-wrap">
+
+    <div class="pt-2 mb-2">
+      <a href="{{ url_for('permission_services') }}" class="back-link">
+        <i class="bi bi-arrow-left me-1"></i>Back to Permission Services
+      </a>
+    </div>
+
+    <div class="form-page-header">
+      <h1 class="page-title">{{ type_labels[sub_type] }} &mdash; Application</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
+        A unique request number will be generated on submission.
+      </p>
+    </div>
+
+    <form method="post"
+          action="{{ url_for('permission_apply', sub_type=sub_type.lower()) }}"
+          enctype="multipart/form-data" novalidate>
+
+      <!-- Section 1: Applicant Details -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">1</span> Applicant Details
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="applicant_name" class="form-label">
+              Applicant Name <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="applicant_name" name="applicant_name" class="form-control"
+                   value="{{ form.get('applicant_name', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="ward" class="form-label">
+              Ward <span class="required-mark">*</span>
+            </label>
+            <select id="ward" name="ward" class="form-select" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
+                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
+                  {{ w }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Permission-specific details -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">2</span> {{ type_labels[sub_type] }} Details
+        </div>
+
+        {% if sub_type == 'BUILDING' %}
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="plot_no" class="form-label">
+              Plot / Survey Number <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="plot_no" name="plot_no" class="form-control"
+                   placeholder="e.g. Plot 45-A, Survey No. 123"
+                   value="{{ form.get('plot_no', '') }}" required>
+          </div>
+          <div class="col-md-4">
+            <label for="plot_area_sqft" class="form-label">Plot Area (sq ft)</label>
+            <input type="number" id="plot_area_sqft" name="plot_area_sqft" class="form-control"
+                   step="1" min="1" placeholder="e.g. 1200"
+                   value="{{ form.get('plot_area_sqft', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label for="construction_type" class="form-label">
+              Construction Type <span class="required-mark">*</span>
+            </label>
+            <select id="construction_type" name="construction_type" class="form-select" required>
+              <option value="" disabled {% if not form.get('construction_type') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              <option value="Residential"
+                {% if form.get('construction_type') == 'Residential' %}selected{% endif %}>
+                Residential
+              </option>
+              <option value="Commercial"
+                {% if form.get('construction_type') == 'Commercial' %}selected{% endif %}>
+                Commercial
+              </option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="building_height_m" class="form-label">Proposed Height (metres)</label>
+            <input type="number" id="building_height_m" name="building_height_m" class="form-control"
+                   step="0.1" min="0" placeholder="e.g. 7.5"
+                   value="{{ form.get('building_height_m', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label for="architect_name" class="form-label">Architect / Engineer Name</label>
+            <input type="text" id="architect_name" name="architect_name" class="form-control"
+                   placeholder="Licensed architect or engineer"
+                   value="{{ form.get('architect_name', '') }}">
+          </div>
+          <div class="col-md-4">
+            <label for="estimated_cost" class="form-label">Estimated Cost (&#8377;)</label>
+            <input type="number" id="estimated_cost" name="estimated_cost" class="form-control"
+                   step="1" min="0" placeholder="e.g. 500000"
+                   value="{{ form.get('estimated_cost', '') }}">
+          </div>
+        </div>
+
+        {% elif sub_type == 'WATER' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="property_no" class="form-label">Property Number (if registered)</label>
+            <input type="text" id="property_no" name="property_no" class="form-control"
+                   placeholder="e.g. EGS-PROP-2026-0001 (optional)"
+                   value="{{ form.get('property_no', '') }}">
+            <div class="form-text">Leave blank if not yet registered in the property records.</div>
+          </div>
+          <div class="col-md-3">
+            <label for="connection_type" class="form-label">
+              Connection Type <span class="required-mark">*</span>
+            </label>
+            <select id="connection_type" name="connection_type" class="form-select" required>
+              <option value="" disabled {% if not form.get('connection_type') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              <option value="Domestic"
+                {% if form.get('connection_type') == 'Domestic' %}selected{% endif %}>
+                Domestic
+              </option>
+              <option value="Commercial"
+                {% if form.get('connection_type') == 'Commercial' %}selected{% endif %}>
+                Commercial
+              </option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label for="pipe_size_inch" class="form-label">Pipe Size</label>
+            <select id="pipe_size_inch" name="pipe_size_inch" class="form-select">
+              <option value="" {% if not form.get('pipe_size_inch') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for size in ['15mm (0.5 inch)', '20mm (0.75 inch)', '25mm (1 inch)', '32mm (1.25 inch)'] %}
+                <option value="{{ size }}"
+                  {% if form.get('pipe_size_inch') == size %}selected{% endif %}>
+                  {{ size }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-12">
+            <label for="purpose_description" class="form-label">Purpose / Description</label>
+            <textarea id="purpose_description" name="purpose_description"
+                      class="form-control" rows="3"
+                      placeholder="Briefly describe the intended use (e.g. new household, commercial kitchen, irrigation)">{{ form.get('purpose_description', '') }}</textarea>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Section 3: Document Upload -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">3</span> Supporting Document
+          <span class="section-optional">(recommended)</span>
+        </div>
+        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
+          {% if sub_type == 'BUILDING' %}
+            Upload a site plan, architectural drawing, or identity proof.
+          {% else %}
+            Upload ownership proof, identity proof, or any supporting document.
+          {% endif %}
+          Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+        </p>
+        <input type="file" id="document" name="document" class="form-control"
+               accept=".jpg,.jpeg,.png,.webp,.pdf" style="max-width:400px;">
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit-bar">
+        <button type="submit" id="submit-permission-btn" class="btn btn-primary">
+          <i class="bi bi-send me-1"></i>Submit Application
+        </button>
+        <a href="{{ url_for('permission_services') }}" class="btn btn-outline-secondary ms-2">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

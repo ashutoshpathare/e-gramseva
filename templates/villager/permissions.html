@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Permission Services{% endblock %}
+{% block description %}Apply for Building or Water Connection permissions from the Gram Panchayat.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-4">
+    <h1 class="page-title">Permission Services</h1>
+    <p class="text-muted mb-0" style="font-size:0.875rem;">
+      Apply for official Gram Panchayat permissions online. Upload your documents and track your application status.
+    </p>
+  </div>
+
+  <div class="row g-3">
+
+    <!-- Building Permission -->
+    <div class="col-md-6">
+      <div class="service-card">
+        <div class="service-card-icon" style="background:var(--navy);">
+          <i class="bi bi-building"></i>
+        </div>
+        <h3 class="service-card-title">Building Permission</h3>
+        <p class="service-card-desc">
+          Official Gram Panchayat construction permission for new buildings, extensions, or renovations.
+          Required before commencing any construction work on residential or commercial plots.
+        </p>
+        <ul class="service-card-docs">
+          <li>Site plan / architectural drawing (PDF or image)</li>
+          <li>Applicant's identity proof (Aadhaar / Voter ID)</li>
+          <li>Proof of plot ownership</li>
+        </ul>
+        <a href="{{ url_for('permission_apply', sub_type='building') }}"
+           class="btn btn-primary w-100" id="btn-apply-building">
+          <i class="bi bi-pencil-square me-1"></i>Apply Now
+        </a>
+      </div>
+    </div>
+
+    <!-- Water Connection -->
+    <div class="col-md-6">
+      <div class="service-card">
+        <div class="service-card-icon" style="background:#0f766e;">
+          <i class="bi bi-droplet-half"></i>
+        </div>
+        <h3 class="service-card-title">Water Connection Permission</h3>
+        <p class="service-card-desc">
+          New domestic or commercial water connection from the Gram Panchayat supply network.
+          Required for first-time connections and pipe-size upgrades.
+        </p>
+        <ul class="service-card-docs">
+          <li>Property ownership proof / rent agreement</li>
+          <li>Applicant's identity proof (Aadhaar / Voter ID)</li>
+        </ul>
+        <a href="{{ url_for('permission_apply', sub_type='water') }}"
+           class="btn btn-primary w-100" id="btn-apply-water">
+          <i class="bi bi-pencil-square me-1"></i>Apply Now
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

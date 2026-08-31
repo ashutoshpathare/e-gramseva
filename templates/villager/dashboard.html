@@ -141,8 +141,14 @@
                   <i class="bi bi-person-heart me-1" style="color:#065f46;"></i>Birth
                 {% elif sr['sub_type'] == 'DEATH' %}
                   <i class="bi bi-journal-medical me-1" style="color:#7c2d12;"></i>Death
-                {% else %}
+                {% elif sr['sub_type'] == 'RESIDENCE' %}
                   <i class="bi bi-house-check me-1" style="color:#1e3a8a;"></i>Residence
+                {% elif sr['sub_type'] == 'BUILDING' %}
+                  <i class="bi bi-building me-1" style="color:var(--navy);"></i>Building Permission
+                {% elif sr['sub_type'] == 'WATER' %}
+                  <i class="bi bi-droplet-half me-1" style="color:#0f766e;"></i>Water Connection
+                {% else %}
+                  {{ sr['sub_type'].title() }}
                 {% endif %}
               </td>
               <td>{{ sr['applicant_name'] }}</td>
@@ -154,11 +160,13 @@
               </td>
               <td>{{ sr['created_at'][:10] }}</td>
               <td>
-                {% if sr['status'] == 'APPROVED' %}
+                {% if sr['status'] == 'APPROVED' and sr['service_type'] == 'CERTIFICATE' %}
                   <a href="{{ url_for('certificate_download', request_no=sr['request_no']) }}"
                      class="btn btn-sm btn-success">
                     <i class="bi bi-download me-1"></i>Download
                   </a>
+                {% elif sr['status'] == 'APPROVED' %}
+                  <span class="status-badge svc-status-approved" style="font-size:0.75rem;">Approved</span>
                 {% elif sr['status'] == 'REJECTED' %}
                   <span class="text-muted" style="font-size:0.8rem;">Rejected</span>
                 {% else %}
@@ -173,9 +181,12 @@
       {% else %}
       <div class="empty-state">
         <i class="bi bi-file-earmark d-block mb-2" style="font-size:2.5rem;"></i>
-        <p class="mb-3">No certificate applications yet.</p>
-        <a href="{{ url_for('certificate_services') }}" class="btn btn-primary">
+        <p class="mb-3">No applications yet.</p>
+        <a href="{{ url_for('certificate_services') }}" class="btn btn-primary me-2">
           <i class="bi bi-pencil-square me-1"></i>Apply for a Certificate
+        </a>
+        <a href="{{ url_for('permission_services') }}" class="btn btn-outline-primary">
+          <i class="bi bi-building me-1"></i>Apply for a Permission
         </a>
       </div>
       {% endif %}

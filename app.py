@@ -33,6 +33,7 @@ WARDS               = [f'Ward {i}' for i in range(1, 11)]
 STATUSES            = ['Pending', 'In Progress', 'Resolved', 'Rejected']
 SERVICE_STATUSES    = ['PENDING', 'VERIFIED', 'APPROVED', 'REJECTED']
 CERTIFICATE_TYPES   = ['BIRTH', 'DEATH', 'RESIDENCE']
+PERMISSION_TYPES    = ['BUILDING', 'WATER']
 PROPERTY_TYPES      = ['RESIDENTIAL', 'COMMERCIAL', 'AGRICULTURAL']
 PROPERTY_STATUSES   = ['ACTIVE', 'DISPUTED', 'TRANSFERRED']
 TAX_TYPES           = ['PROPERTY_TAX', 'WATER_TAX']
@@ -787,8 +788,91 @@ def certificate_download(request_no):
     return render_template('certificate.html', sr=sr, form_data=form_data)
 
 
+
 # ══════════════════════════════════════════════════════════════════
-# Admin: Complaint Master List
+# Villager: Permission Services (Phase 9.1)
+# ══════════════════════════════════════════════════════════════════
+
+
+@app.route('/permissions')
+@login_required
+def permission_services():
+    """Landing page — choose Building or Water Connection permission."""
+    return render_template('villager/permissions.html')
+
+
+@app.route('/permissions/apply/<sub_type>', methods=['GET', 'POST'])
+@login_required
+def permission_apply(sub_type):
+    """Apply for a Building or Water Connection permission."""
+    sub_type = sub_type.upper()
+    if sub_type not in PERMISSION_TYPES:
+        flash('Invalid permission type.', 'danger')
+        return redirect(url_for('permission_services'))
+
+    if request.method == 'POST':
+        applicant_name = request.form.get('applicant_name', '').strip()
+        ward           = request.form.get('ward', '')
+        error = None
+        if not applicant_name:
+            error = 'Applicant name is required.'
+        elif ward not in WARDS:
+            error = 'Please select a valid ward.'
+
+        # Build form_data_json from sub-type–specific fields
+        form_data = {}
+        if sub_type == 'BUILDING':
+            form_data['plot_no']           = request.form.get('plot_no', '').strip()
+            form_data['plot_area_sqft']    = request.form.get('plot_area_sqft', '').strip()
+            form_data['construction_type'] = request.form.get('construction_type', '')
+            form_data['building_height_m'] = request.form.get('building_height_m', '').strip()
+            form_data['architect_name']    = request.form.get('architect_name', '').strip()
+            form_data['estimated_cost']    = request.form.get('estimated_cost', '').strip()
+            if not form_data['plot_no']:
+                error = error or 'Plot number is required.'
+            if form_data['construction_type'] not in ('Residential', 'Commercial'):
+                error = error or 'Please select a valid construction type.'
+        elif sub_type == 'WATER':
+            form_data['property_no']        = request.form.get('property_no', '').strip()
+            form_data['connection_type']    = request.form.get('connection_type', '')
+            form_data['pipe_size_inch']     = request.form.get('pipe_size_inch', '')
+            form_data['purpose_description'] = request.form.get('purpose_description', '').strip()
+            if form_data['connection_type'] not in ('Domestic', 'Commercial'):
+                error = error or 'Please select a valid connection type.'
+
+        # Document upload — reuse existing handler identically
+        doc_filename = None
+        doc_file = request.files.get('document')
+        if doc_file and doc_file.filename:
+            if allowed_doc(doc_file.filename):
+                doc_filename = save_document(doc_file)
+            else:
+                error = error or 'Only JPG, PNG, WebP, or PDF documents are accepted.'
+
+        if error:
+            flash(error, 'danger')
+            return render_template('villager/permission_form.html',
+                                   sub_type=sub_type, form=request.form)
+
+        db  = get_db()
+        rno = generate_request_no(db)
+        db.execute('''
+            INSERT INTO service_requests
+              (request_no, user_id, service_type, sub_type, applicant_name,
+               ward, form_data_json, document_path, status)
+            VALUES (?, ?, 'PERMISSION', ?, ?, ?, ?, ?, 'PENDING')
+        ''', (rno, session['user_id'], sub_type, applicant_name, ward,
+              json.dumps(form_data), doc_filename))
+        db.commit()
+        flash(f'Permission application {rno} submitted successfully.', 'success')
+        return redirect(url_for('villager_dashboard'))
+
+    return render_template('villager/permission_form.html',
+                           sub_type=sub_type,
+                           form={'ward': session.get('ward', ''),
+                                 'applicant_name': session.get('full_name', '')})
+
+
 # ══════════════════════════════════════════════════════════════════
 
 @app.route('/admin/dashboard')
