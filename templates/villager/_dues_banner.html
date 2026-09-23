@@ -1,0 +1,64 @@
+{# ── Outstanding-dues warning banner ─────────────────────────────────────────
+   Include this partial in any service-application form that participates in
+   the Tax Clearance Gate.  The calling template must pass `unpaid_dues` (list
+   of dicts: property_no, tax_type, financial_year, amount_due).
+   ─────────────────────────────────────────────────────────────────────────── #}
+{% if unpaid_dues %}
+<div id="dues-warning-banner" role="alert"
+     style="
+       background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+       border: 1px solid #fca5a5;
+       border-radius: 12px;
+       padding: 18px 22px;
+       margin-bottom: 24px;
+       color: #fff;
+       box-shadow: 0 4px 18px rgba(127,29,29,.35);
+       animation: bannerSlideIn .35s ease;
+     ">
+  <div style="display:flex; align-items:flex-start; gap:14px;">
+    <span style="font-size:1.6rem; line-height:1; flex-shrink:0;">&#9888;&#65039;</span>
+    <div style="flex:1;">
+      <p style="margin:0 0 6px; font-weight:700; font-size:1rem; letter-spacing:.01em;">
+        Submission Blocked &mdash; Outstanding Tax Dues
+      </p>
+      <p style="margin:0 0 12px; font-size:0.85rem; color:#fecaca; line-height:1.5;">
+        You cannot submit this application while you have unpaid property-tax dues.
+        Clear every due listed below, then return to apply.
+      </p>
+      <table style="width:100%; border-collapse:collapse; font-size:0.825rem; color:#fff;">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.25);">
+            <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Property&nbsp;No.</th>
+            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Tax Type</th>
+            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Financial Year</th>
+            <th style="padding:5px 0 5px 10px; text-align:right; font-weight:600; color:#fecaca; white-space:nowrap;">Amount Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in unpaid_dues %}
+          <tr style="border-bottom:1px solid rgba(255,255,255,.1);">
+            <td style="padding:5px 10px 5px 0; font-family:monospace; font-size:0.8rem;">{{ d.property_no }}</td>
+            <td style="padding:5px 10px;">{{ d.tax_type.replace('_', ' ').title() }}</td>
+            <td style="padding:5px 10px;">{{ d.financial_year }}</td>
+            <td style="padding:5px 0 5px 10px; text-align:right; font-weight:600; font-variant-numeric:tabular-nums;">&#8377;{{ '{:,.0f}'.format(d.amount_due) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div style="margin-top:14px;">
+        <a href="{{ url_for('villager_property_tax') }}"
+           style="
+             display:inline-flex; align-items:center; gap:6px;
+             background:#fff; color:#7f1d1d;
+             padding:8px 18px; border-radius:8px;
+             font-weight:700; font-size:0.85rem; text-decoration:none;
+             transition:opacity .2s;
+           "
+           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          <i class="bi bi-credit-card-2-front"></i> Pay Dues Now
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

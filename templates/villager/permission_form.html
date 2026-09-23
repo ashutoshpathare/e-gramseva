@@ -23,6 +23,10 @@
       </p>
     </div>
 
+    {# ── Outstanding-dues warning banner (shared partial, Phase 9.2) ── #}
+    {% include 'villager/_dues_banner.html' %}
+    {# ──────────────────────────────────────────────────────────────── #}
+
     <form method="post"
           action="{{ url_for('permission_apply', sub_type=sub_type.lower()) }}"
           enctype="multipart/form-data" novalidate>
@@ -190,9 +194,18 @@
 
       <!-- Submit -->
       <div class="form-submit-bar">
+        {% if unpaid_dues %}
+        {# Phase 9.2 — UX block: dues present, submit is disabled. Backend gate in permission_apply() enforces this on POST. #}
+        <button type="submit" id="submit-permission-btn" class="btn btn-primary" disabled
+                title="Clear your outstanding tax dues before submitting"
+                style="opacity:.45; cursor:not-allowed;">
+          <i class="bi bi-lock me-1"></i>Blocked &mdash; Clear Dues First
+        </button>
+        {% else %}
         <button type="submit" id="submit-permission-btn" class="btn btn-primary">
           <i class="bi bi-send me-1"></i>Submit Application
         </button>
+        {% endif %}
         <a href="{{ url_for('permission_services') }}" class="btn btn-outline-secondary ms-2">
           Cancel
         </a>

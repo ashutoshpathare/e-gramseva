@@ -147,6 +147,12 @@
                   <i class="bi bi-building me-1" style="color:var(--navy);"></i>Building Permission
                 {% elif sr['sub_type'] == 'WATER' %}
                   <i class="bi bi-droplet-half me-1" style="color:#0f766e;"></i>Water Connection
+                {% elif sr['sub_type'] == 'pmay' %}
+                  <i class="bi bi-house-fill me-1" style="color:var(--navy);"></i>PM Awas Yojana
+                {% elif sr['sub_type'] == 'ujjwala' %}
+                  <i class="bi bi-fire me-1" style="color:#92400e;"></i>Ujjwala Yojana
+                {% elif sr['sub_type'] == 'kisan_samman' %}
+                  <i class="bi bi-tree-fill me-1" style="color:#065f46;"></i>Kisan Samman Nidhi
                 {% else %}
                   {{ sr['sub_type'].title() }}
                 {% endif %}
@@ -185,8 +191,11 @@
         <a href="{{ url_for('certificate_services') }}" class="btn btn-primary me-2">
           <i class="bi bi-pencil-square me-1"></i>Apply for a Certificate
         </a>
-        <a href="{{ url_for('permission_services') }}" class="btn btn-outline-primary">
+        <a href="{{ url_for('permission_services') }}" class="btn btn-outline-primary me-2">
           <i class="bi bi-building me-1"></i>Apply for a Permission
+        </a>
+        <a href="{{ url_for('scheme_services') }}" class="btn btn-outline-primary">
+          <i class="bi bi-star me-1"></i>Apply for a Scheme
         </a>
       </div>
       {% endif %}

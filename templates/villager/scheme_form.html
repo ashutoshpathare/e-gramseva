@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply: {{ scheme.label }}{% endblock %}
+{% block description %}Application form for {{ scheme.label }} ({{ scheme.subtitle }}) through the Gram Panchayat.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+  <div class="form-page-wrap">
+
+    <div class="pt-2 mb-2">
+      <a href="{{ url_for('scheme_services') }}" class="back-link">
+        <i class="bi bi-arrow-left me-1"></i>Back to Government Schemes
+      </a>
+    </div>
+
+    <div class="form-page-header">
+      <h1 class="page-title">{{ scheme.label }} — Application</h1>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">
+        <strong>{{ scheme.subtitle }}</strong> &mdash;
+        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
+        A unique request number will be generated on submission.
+      </p>
+    </div>
+
+    {# ── Outstanding-dues warning banner (shared partial, Phase 10.2) ── #}
+    {% if unpaid_dues %}
+    {% include 'villager/_dues_banner.html' %}
+    {% endif %}
+    {# ──────────────────────────────────────────────────────────────── #}
+
+    <form method="post"
+          action="{{ url_for('scheme_apply', sub_type=sub_type) }}"
+          enctype="multipart/form-data" novalidate>
+
+      <!-- Section 1: Applicant Info -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">1</span> Applicant Details
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="applicant_name" class="form-label">
+              Applicant Name <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="applicant_name" name="applicant_name" class="form-control"
+                   value="{{ form.get('applicant_name', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="ward" class="form-label">
+              Ward <span class="required-mark">*</span>
+            </label>
+            <select id="ward" name="ward" class="form-select" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
+                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
+                  {{ w }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Scheme-specific fields -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">2</span> {{ scheme.label }} Details
+        </div>
+
+        {% if sub_type == 'pmay' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="family_income_annual" class="form-label">
+              Annual Family Income (&#8377;) <span class="required-mark">*</span>
+            </label>
+            <input type="number" id="family_income_annual" name="family_income_annual"
+                   class="form-control" min="0" step="1"
+                   placeholder="e.g. 120000"
+                   value="{{ form.get('family_income_annual', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="house_status" class="form-label">
+              Current House Status <span class="required-mark">*</span>
+            </label>
+            <select id="house_status" name="house_status" class="form-select" required>
+              <option value="" disabled {% if not form.get('house_status') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              {% for hs in ['Kachha', 'Pucca', 'None'] %}
+                <option value="{{ hs }}" {% if form.get('house_status') == hs %}selected{% endif %}>
+                  {{ hs }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="aadhaar_last4" class="form-label">Aadhaar Last 4 Digits</label>
+            <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="form-control"
+                   placeholder="e.g. 5678" maxlength="4"
+                   value="{{ form.get('aadhaar_last4', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="bank_account_no" class="form-label">Bank Account Number</label>
+            <input type="text" id="bank_account_no" name="bank_account_no" class="form-control"
+                   placeholder="e.g. 0123456789012"
+                   value="{{ form.get('bank_account_no', '') }}">
+          </div>
+        </div>
+
+        {% elif sub_type == 'ujjwala' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="family_income_annual" class="form-label">
+              Annual Family Income (&#8377;) <span class="required-mark">*</span>
+            </label>
+            <input type="number" id="family_income_annual" name="family_income_annual"
+                   class="form-control" min="0" step="1"
+                   placeholder="e.g. 80000"
+                   value="{{ form.get('family_income_annual', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="existing_lpg_connection" class="form-label">
+              Existing LPG Connection? <span class="required-mark">*</span>
+            </label>
+            <select id="existing_lpg_connection" name="existing_lpg_connection"
+                    class="form-select" required>
+              <option value="" disabled
+                      {% if not form.get('existing_lpg_connection') %}selected{% endif %}>
+                &mdash; Select &mdash;
+              </option>
+              <option value="No"
+                      {% if form.get('existing_lpg_connection') == 'No' %}selected{% endif %}>
+                No
+              </option>
+              <option value="Yes"
+                      {% if form.get('existing_lpg_connection') == 'Yes' %}selected{% endif %}>
+                Yes
+              </option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="aadhaar_last4" class="form-label">Aadhaar Last 4 Digits</label>
+            <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="form-control"
+                   placeholder="e.g. 1234" maxlength="4"
+                   value="{{ form.get('aadhaar_last4', '') }}">
+          </div>
+        </div>
+
+        {% elif sub_type == 'kisan_samman' %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="land_survey_no" class="form-label">
+              Land Survey / Gat Number <span class="required-mark">*</span>
+            </label>
+            <input type="text" id="land_survey_no" name="land_survey_no" class="form-control"
+                   placeholder="e.g. 123/A"
+                   value="{{ form.get('land_survey_no', '') }}" required>
+          </div>
+          <div class="col-md-6">
+            <label for="land_area_acres" class="form-label">Land Area (Acres)</label>
+            <input type="number" id="land_area_acres" name="land_area_acres"
+                   class="form-control" min="0" step="0.01"
+                   placeholder="e.g. 1.50"
+                   value="{{ form.get('land_area_acres', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="aadhaar_last4" class="form-label">Aadhaar Last 4 Digits</label>
+            <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="form-control"
+                   placeholder="e.g. 9012" maxlength="4"
+                   value="{{ form.get('aadhaar_last4', '') }}">
+          </div>
+          <div class="col-md-6">
+            <label for="bank_account_no" class="form-label">Bank Account Number</label>
+            <input type="text" id="bank_account_no" name="bank_account_no" class="form-control"
+                   placeholder="e.g. 0123456789012"
+                   value="{{ form.get('bank_account_no', '') }}">
+          </div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- Section 3: Document Upload -->
+      <div class="form-section">
+        <div class="form-section-heading">
+          <span class="section-num">3</span> Supporting Document
+          <span class="section-optional">(recommended)</span>
+        </div>
+        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
+          {{ scheme.doc_hint }}
+          Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+        </p>
+        <input type="file" id="document" name="document" class="form-control"
+               accept=".jpg,.jpeg,.png,.webp,.pdf" style="max-width:420px;">
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit-bar">
+        {% if unpaid_dues %}
+        {# Phase 10.2 — UX block: dues present, submit is disabled. Backend gate enforces on POST. #}
+        <button type="submit" id="submit-scheme-btn" class="btn btn-primary" disabled
+                title="Clear your outstanding tax dues before submitting"
+                style="opacity:.45; cursor:not-allowed;">
+          <i class="bi bi-lock me-1"></i>Blocked &mdash; Clear Dues First
+        </button>
+        {% else %}
+        <button type="submit" id="submit-scheme-btn" class="btn btn-primary">
+          <i class="bi bi-send me-1"></i>Submit Application
+        </button>
+        {% endif %}
+        <a href="{{ url_for('scheme_services') }}" class="btn btn-outline-secondary ms-2">
+          Cancel
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

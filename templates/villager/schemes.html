@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Government Schemes{% endblock %}
+{% block description %}Apply for government welfare schemes through the Gram Panchayat — PM Awas Yojana, Ujjwala Yojana, Kisan Samman Nidhi, and more.{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-md-4">
+
+  <div class="pt-2 mb-4">
+    <h1 class="page-title">Government Schemes</h1>
+    <p class="text-muted mb-0" style="font-size:0.875rem;">
+      Apply for central and state government welfare schemes through the Gram Panchayat.
+      Upload your documents and track your application status online.
+    </p>
+  </div>
+
+  <div class="row g-3">
+
+    {% for slug, sch in schemes.items() %}
+    <div class="col-md-4">
+      <div class="service-card" style="display:flex; flex-direction:column; height:100%;">
+        <div class="service-card-icon" style="background:{{ sch.icon_color }};">
+          <i class="bi {{ sch.icon }}"></i>
+        </div>
+        <h3 class="service-card-title">{{ sch.label }}</h3>
+        <p class="text-muted mb-1" style="font-size:0.78rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase;">
+          {{ sch.subtitle }}
+        </p>
+        <p class="service-card-desc" style="flex:1;">{{ sch.eligibility }}</p>
+        <ul class="service-card-docs">
+          <li>{{ sch.doc_hint }}</li>
+        </ul>
+        <a href="{{ url_for('scheme_apply', sub_type=slug) }}" class="btn btn-primary w-100">
+          <i class="bi bi-pencil-square me-1"></i>Apply Now
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+</div>
+{% endblock %}

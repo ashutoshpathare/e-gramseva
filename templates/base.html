@@ -64,6 +64,7 @@
             <li><a href="{{ url_for('new_complaint') }}" {% if request.endpoint == 'new_complaint' %}class="active"{% endif %}>{{ _('File a Complaint') }}</a></li>
             <li><a href="{{ url_for('certificate_services') }}" {% if request.endpoint in ('certificate_services','certificate_apply') %}class="active"{% endif %}>{{ _('Certificates') }}</a></li>
             <li><a href="{{ url_for('permission_services') }}" {% if request.endpoint in ('permission_services','permission_apply') %}class="active"{% endif %}>Permissions</a></li>
+            <li><a href="{{ url_for('scheme_services') }}" {% if request.endpoint in ('scheme_services','scheme_apply') %}class="active"{% endif %}>Schemes</a></li>
             <li><a href="{{ url_for('villager_property_tax') }}" {% if request.endpoint == 'villager_property_tax' %}class="active"{% endif %}>Property &amp; Tax</a></li>
           {% elif session.get('role') == 'admin' %}
             <li>

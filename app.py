@@ -34,11 +34,50 @@ STATUSES            = ['Pending', 'In Progress', 'Resolved', 'Rejected']
 SERVICE_STATUSES    = ['PENDING', 'VERIFIED', 'APPROVED', 'REJECTED']
 CERTIFICATE_TYPES   = ['BIRTH', 'DEATH', 'RESIDENCE']
 PERMISSION_TYPES    = ['BUILDING', 'WATER']
+SCHEME_TYPES        = ['pmay', 'ujjwala', 'kisan_samman']
 PROPERTY_TYPES      = ['RESIDENTIAL', 'COMMERCIAL', 'AGRICULTURAL']
 PROPERTY_STATUSES   = ['ACTIVE', 'DISPUTED', 'TRANSFERRED']
 TAX_TYPES           = ['PROPERTY_TAX', 'WATER_TAX']
 TAX_STATUSES        = ['UNPAID', 'PAID', 'OVERDUE', 'WAIVED']
 PAYMENT_STATUSES    = ['CREATED', 'SUCCESS', 'FAILED']
+
+# ── Government Schemes catalog (static reference data) ───────────
+# Keyed by sub_type slug; consumed by scheme_services() and scheme_apply().
+SCHEMES = {
+    'pmay': {
+        'label':       'PM Awas Yojana',
+        'subtitle':    'Housing Assistance Scheme',
+        'icon':        'bi-house-fill',
+        'icon_color':  'var(--navy)',
+        'eligibility': (
+            'Below Poverty Line (BPL) families or those without a pucca house. '
+            'Annual household income below \u20b93 lakh for rural beneficiaries.'
+        ),
+        'doc_hint':    'Income certificate, Aadhaar card, bank passbook copy.',
+    },
+    'ujjwala': {
+        'label':       'Ujjwala Yojana',
+        'subtitle':    'LPG Connection Scheme',
+        'icon':        'bi-fire',
+        'icon_color':  '#92400e',
+        'eligibility': (
+            'Women from BPL households who do not already hold an LPG connection. '
+            'Identification via Aadhaar and ration card.'
+        ),
+        'doc_hint':    'Aadhaar card, ration card, BPL certificate (if available).',
+    },
+    'kisan_samman': {
+        'label':       'Kisan Samman Nidhi',
+        'subtitle':    'Farmer Income Support Scheme',
+        'icon':        'bi-tree-fill',
+        'icon_color':  '#065f46',
+        'eligibility': (
+            'Small and marginal farmers owning cultivable land up to 2 hectares. '
+            'Must be linked to Aadhaar and hold an active bank account.'
+        ),
+        'doc_hint':    'Land record / 7-12 extract, Aadhaar card, bank passbook copy.',
+    },
+}
 
 # ── i18n translation table ────────────────────────────────────────
 TRANSLATIONS = {
@@ -854,7 +893,26 @@ def permission_apply(sub_type):
             return render_template('villager/permission_form.html',
                                    sub_type=sub_type, form=request.form)
 
-        db  = get_db()
+        db = get_db()
+
+        # ── Tax Clearance Gate (Phase 9.2) ──────────────────────────────
+        unpaid = get_unpaid_dues(db, session['user_id'])
+        if unpaid:
+            dues_detail = '; '.join(
+                f"{d['property_no']} — {d['tax_type'].replace('_', ' ').title()} "
+                f"{d['financial_year']} (₹{d['amount_due']:,.0f})"
+                for d in unpaid
+            )
+            flash(
+                f'Permission application blocked: you have outstanding tax dues. '
+                f'Please clear all dues before applying. Pending: {dues_detail}',
+                'danger'
+            )
+            return render_template('villager/permission_form.html',
+                                   sub_type=sub_type, form=request.form,
+                                   unpaid_dues=unpaid)
+        # ────────────────────────────────────────────────────────
+
         rno = generate_request_no(db)
         db.execute('''
             INSERT INTO service_requests
@@ -867,8 +925,102 @@ def permission_apply(sub_type):
         flash(f'Permission application {rno} submitted successfully.', 'success')
         return redirect(url_for('villager_dashboard'))
 
+    # GET: pass unpaid_dues to template so banner and disabled button render.
+    db = get_db()
+    unpaid_dues = get_unpaid_dues(db, session['user_id'])
     return render_template('villager/permission_form.html',
                            sub_type=sub_type,
+                           unpaid_dues=unpaid_dues,
+                           form={'ward': session.get('ward', ''),
+                                 'applicant_name': session.get('full_name', '')})
+
+
+
+# ══════════════════════════════════════════════════════════════════
+# Villager: Government Schemes (Phase 10.1)
+# ══════════════════════════════════════════════════════════════════
+
+
+@app.route('/schemes')
+@login_required
+def scheme_services():
+    """Catalog landing page — list all available government schemes."""
+    return render_template('villager/schemes.html', schemes=SCHEMES)
+
+
+@app.route('/schemes/apply/<sub_type>', methods=['GET', 'POST'])
+@login_required
+def scheme_apply(sub_type):
+    """Apply for a government scheme (pmay / ujjwala / kisan_samman)."""
+    sub_type = sub_type.lower()
+    if sub_type not in SCHEME_TYPES:
+        flash('Invalid scheme type.', 'danger')
+        return redirect(url_for('scheme_services'))
+
+    scheme = SCHEMES[sub_type]
+
+    if request.method == 'POST':
+        applicant_name = request.form.get('applicant_name', '').strip()
+        ward           = request.form.get('ward', '')
+        error = None
+        if not applicant_name:
+            error = 'Applicant name is required.'
+        elif ward not in WARDS:
+            error = 'Please select a valid ward.'
+
+        # Build form_data_json from scheme-specific fields
+        form_data = {}
+        if sub_type == 'pmay':
+            form_data['family_income_annual'] = request.form.get('family_income_annual', '').strip()
+            form_data['house_status']         = request.form.get('house_status', '')
+            form_data['aadhaar_last4']        = request.form.get('aadhaar_last4', '').strip()
+            form_data['bank_account_no']      = request.form.get('bank_account_no', '').strip()
+            if form_data['house_status'] not in ('Kachha', 'Pucca', 'None'):
+                error = error or 'Please select a valid house status.'
+        elif sub_type == 'ujjwala':
+            form_data['family_income_annual']    = request.form.get('family_income_annual', '').strip()
+            form_data['existing_lpg_connection'] = request.form.get('existing_lpg_connection', '')
+            form_data['aadhaar_last4']           = request.form.get('aadhaar_last4', '').strip()
+            if form_data['existing_lpg_connection'] not in ('Yes', 'No'):
+                error = error or 'Please indicate whether an LPG connection already exists.'
+        elif sub_type == 'kisan_samman':
+            form_data['land_area_acres'] = request.form.get('land_area_acres', '').strip()
+            form_data['land_survey_no']  = request.form.get('land_survey_no', '').strip()
+            form_data['aadhaar_last4']   = request.form.get('aadhaar_last4', '').strip()
+            form_data['bank_account_no'] = request.form.get('bank_account_no', '').strip()
+            if not form_data['land_survey_no']:
+                error = error or 'Land survey number is required.'
+
+        # Document upload — reuse existing handler identically
+        doc_filename = None
+        doc_file = request.files.get('document')
+        if doc_file and doc_file.filename:
+            if allowed_doc(doc_file.filename):
+                doc_filename = save_document(doc_file)
+            else:
+                error = error or 'Only JPG, PNG, WebP, or PDF documents are accepted.'
+
+        if error:
+            flash(error, 'danger')
+            return render_template('villager/scheme_form.html',
+                                   sub_type=sub_type, scheme=scheme, form=request.form)
+
+        db  = get_db()
+        rno = generate_request_no(db)
+        db.execute('''
+            INSERT INTO service_requests
+              (request_no, user_id, service_type, sub_type, applicant_name,
+               ward, form_data_json, document_path, status)
+            VALUES (?, ?, 'SCHEME', ?, ?, ?, ?, ?, 'PENDING')
+        ''', (rno, session['user_id'], sub_type, applicant_name, ward,
+              json.dumps(form_data), doc_filename))
+        db.commit()
+        flash(f'Scheme application {rno} submitted successfully.', 'success')
+        return redirect(url_for('villager_dashboard'))
+
+    return render_template('villager/scheme_form.html',
+                           sub_type=sub_type,
+                           scheme=scheme,
                            form={'ward': session.get('ward', ''),
                                  'applicant_name': session.get('full_name', '')})
 
@@ -1088,7 +1240,7 @@ def admin_service_requests():
     return render_template('admin/service_requests.html',
                            requests=requests_list, stats=stats,
                            service_statuses=SERVICE_STATUSES,
-                           certificate_types=CERTIFICATE_TYPES,
+                           all_sub_types=CERTIFICATE_TYPES + PERMISSION_TYPES,
                            filters={'status': status_f, 'sub_type': type_f})
 
 

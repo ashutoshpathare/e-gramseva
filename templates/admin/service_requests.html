@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}Admin — Service Requests{% endblock %}
-{% block description %}Review and manage certificate and service applications.{% endblock %}
+{% block description %}Review and manage certificate and permission applications from residents.{% endblock %}
+
+{# Human-friendly labels for every sub_type across all service types #}
+{% set sub_type_labels = {
+  'BIRTH':      'Birth Certificate',
+  'DEATH':      'Death Certificate',
+  'RESIDENCE':  'Residence Certificate',
+  'BUILDING':   'Permission — Building',
+  'WATER':      'Permission — Water Connection'
+} %}
 
 {% block content %}
 <div class="container-fluid px-3 px-md-4">
@@ -9,7 +18,7 @@
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
     <div>
       <h1 class="page-title">Service Requests</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate and service applications from residents</p>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate and permission applications from residents</p>
     </div>
     <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
       <i class="bi bi-arrow-left me-1"></i>Complaints Dashboard
@@ -38,8 +47,10 @@
       <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
       <select name="sub_type" class="form-select form-select-sm" onchange="this.form.submit()">
         <option value="">All Types</option>
-        {% for t in certificate_types %}
-          <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>{{ t }}</option>
+        {% for t in all_sub_types %}
+          <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>
+            {{ sub_type_labels.get(t, t) }}
+          </option>
         {% endfor %}
       </select>
       <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
@@ -76,7 +87,7 @@
         {% for sr in requests %}
         <tr>
           <td class="cid-cell">{{ sr['request_no'] }}</td>
-          <td>{{ sr['sub_type'] }}</td>
+          <td>{{ sub_type_labels.get(sr['sub_type'], sr['sub_type'].replace('_',' ').title()) }}</td>
           <td>{{ sr['applicant_name'] }}</td>
           <td>{{ sr['ward'] }}</td>
           <td>{{ sr['filer_name'] }}</td>
