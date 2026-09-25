@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
 
 {% block title %}Admin — Service Requests{% endblock %}
-{% block description %}Review and manage certificate and permission applications from residents.{% endblock %}
+{% block description %}Review and manage certificate, permission, and scheme applications from residents.{% endblock %}
 
 {# Human-friendly labels for every sub_type across all service types #}
 {% set sub_type_labels = {
-  'BIRTH':      'Birth Certificate',
-  'DEATH':      'Death Certificate',
-  'RESIDENCE':  'Residence Certificate',
-  'BUILDING':   'Permission — Building',
-  'WATER':      'Permission — Water Connection'
+  'BIRTH':        'Birth Certificate',
+  'DEATH':        'Death Certificate',
+  'RESIDENCE':    'Residence Certificate',
+  'BUILDING':     'Permission — Building',
+  'WATER':        'Permission — Water Connection',
+  'pmay':         'Scheme — PM Awas Yojana',
+  'ujjwala':      'Scheme — Ujjwala Yojana',
+  'kisan_samman': 'Scheme — Kisan Samman Nidhi'
 } %}
 
 {% block content %}
@@ -18,7 +21,7 @@
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
     <div>
       <h1 class="page-title">Service Requests</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate and permission applications from residents</p>
+      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate, permission, and scheme applications from residents</p>
     </div>
     <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
       <i class="bi bi-arrow-left me-1"></i>Complaints Dashboard

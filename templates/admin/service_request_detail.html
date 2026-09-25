@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% set type_labels = {
-  'BIRTH':      'Birth Certificate',
-  'DEATH':      'Death Certificate',
-  'RESIDENCE':  'Residence Certificate',
-  'BUILDING':   'Permission — Building',
-  'WATER':      'Permission — Water Connection'
+  'BIRTH':        'Birth Certificate',
+  'DEATH':        'Death Certificate',
+  'RESIDENCE':    'Residence Certificate',
+  'BUILDING':     'Permission — Building',
+  'WATER':        'Permission — Water Connection',
+  'pmay':         'Scheme — PM Awas Yojana',
+  'ujjwala':      'Scheme — Ujjwala Yojana',
+  'kisan_samman': 'Scheme — Kisan Samman Nidhi'
 } %}
 
 {% block title %}Admin: {{ sr['request_no'] }}{% endblock %}
@@ -145,7 +148,7 @@
           <i class="bi bi-check-circle-fill me-1"></i>Application Approved
         </div>
         <p style="font-size:0.875rem; margin-bottom:0;">
-          This permission application has been approved. The applicant will be notified.
+          This application has been approved. The applicant will be notified.
         </p>
       </div>
       {% endif %}

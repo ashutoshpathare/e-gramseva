@@ -937,7 +937,7 @@ def permission_apply(sub_type):
 
 
 # ══════════════════════════════════════════════════════════════════
-# Villager: Government Schemes (Phase 10.1)
+# Villager: Government Schemes (Phase 10.1 / 10.2)
 # ══════════════════════════════════════════════════════════════════
 
 
@@ -1005,7 +1005,26 @@ def scheme_apply(sub_type):
             return render_template('villager/scheme_form.html',
                                    sub_type=sub_type, scheme=scheme, form=request.form)
 
-        db  = get_db()
+        db = get_db()
+
+        # ── Tax Clearance Gate (Phase 10.2) ──────────────────────────────
+        unpaid = get_unpaid_dues(db, session['user_id'])
+        if unpaid:
+            dues_detail = '; '.join(
+                f"{d['property_no']} — {d['tax_type'].replace('_', ' ').title()} "
+                f"{d['financial_year']} (₹{d['amount_due']:,.0f})"
+                for d in unpaid
+            )
+            flash(
+                f'Scheme application blocked: you have outstanding tax dues. '
+                f'Please clear all dues before applying. Pending: {dues_detail}',
+                'danger'
+            )
+            return render_template('villager/scheme_form.html',
+                                   sub_type=sub_type, scheme=scheme,
+                                   form=request.form, unpaid_dues=unpaid)
+        # ────────────────────────────────────────────────────────────────
+
         rno = generate_request_no(db)
         db.execute('''
             INSERT INTO service_requests
@@ -1018,9 +1037,13 @@ def scheme_apply(sub_type):
         flash(f'Scheme application {rno} submitted successfully.', 'success')
         return redirect(url_for('villager_dashboard'))
 
+    # GET: pass unpaid_dues to template so banner and disabled button render.
+    db = get_db()
+    unpaid_dues = get_unpaid_dues(db, session['user_id'])
     return render_template('villager/scheme_form.html',
                            sub_type=sub_type,
                            scheme=scheme,
+                           unpaid_dues=unpaid_dues,
                            form={'ward': session.get('ward', ''),
                                  'applicant_name': session.get('full_name', '')})
 
@@ -1240,7 +1263,7 @@ def admin_service_requests():
     return render_template('admin/service_requests.html',
                            requests=requests_list, stats=stats,
                            service_statuses=SERVICE_STATUSES,
-                           all_sub_types=CERTIFICATE_TYPES + PERMISSION_TYPES,
+                           all_sub_types=CERTIFICATE_TYPES + PERMISSION_TYPES + SCHEME_TYPES,
                            filters={'status': status_f, 'sub_type': type_f})
 
 
