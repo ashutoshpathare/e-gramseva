@@ -1,133 +1,207 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin — All Complaints{% endblock %}
 {% block description %}Gram Panchayat administration — manage all citizen complaints.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
-
-  <!-- Page header -->
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
-    <div>
-      <h1 class="page-title">All Complaints</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Gram Panchayat — Administration View</p>
+<div class="flex flex-col gap-space-xl w-full">
+  
+  <!-- Top Breadcrumb & Executive Title Bar -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+    <div class="flex flex-col gap-space-xs">
+      <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+        <span class="hover:text-primary transition-colors cursor-pointer">Administration</span>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-primary font-semibold">Officer Control Center</span>
+      </div>
+      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">All Complaints</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Gram Panchayat — Administration View</p>
     </div>
-    <a href="{{ url_for('admin_reports') }}" class="btn btn-outline-secondary btn-sm">
-      <i class="bi bi-bar-chart-line me-1"></i>View Reports
-    </a>
-  </div>
-
-  <!-- Stats bar -->
-  <div class="admin-stats-bar mb-3">
-    <div class="admin-stat-item">
-      <span class="admin-stat-value">{{ stats.total }}</span>
-      <span class="admin-stat-label">Total</span>
-    </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:#92400e;">{{ stats.pending }}</span>
-      <span class="admin-stat-label">Pending</span>
-    </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--maroon);">{{ stats.high_priority }}</span>
-      <span class="admin-stat-label">High Priority</span>
-    </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--green);">{{ stats.resolved }}</span>
-      <span class="admin-stat-label">Resolved</span>
+    <div class="flex items-center gap-space-sm">
+      <a href="{{ url_for('admin_reports') }}" class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low transition-all">
+        <span class="material-symbols-outlined text-[18px]">bar_chart</span>
+        <span>View Reports</span>
+      </a>
     </div>
   </div>
 
-  <!-- Filter bar -->
-  <form method="get" action="{{ url_for('admin_dashboard') }}">
-    <div class="filter-bar mb-3">
-      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
-      <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Categories</option>
-        {% for cat in categories %}
-          <option value="{{ cat }}" {% if filters.category == cat %}selected{% endif %}>{{ cat }}</option>
-        {% endfor %}
-      </select>
-      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Statuses</option>
-        {% for s in statuses %}
-          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
-        {% endfor %}
-      </select>
-      <select name="ward" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Wards</option>
-        {% for w in wards %}
-          <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
-        {% endfor %}
-      </select>
-      {% if filters.category or filters.status or filters.ward %}
-        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-x-circle me-1"></i>Clear
-        </a>
-        <span style="font-size:0.8125rem; color:var(--muted);">
-          {{ complaints | length }} result{{ 's' if complaints | length != 1 else '' }}
-        </span>
-      {% endif %}
+  <!-- 4 Prominent Stat Cards Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md lg:gap-space-lg w-full">
+    <!-- Card 1: Total Complaints -->
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Total Complaints</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">{{ stats.total }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low text-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">folder_shared</span>
+        </div>
+      </div>
     </div>
-  </form>
+    <!-- Card 2: Pending -->
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Pending Review</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight" style="color: #d97706;">{{ stats.pending }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">hourglass_top</span>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3: High Priority -->
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">High Priority</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight text-error">{{ stats.high_priority }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-error-container text-on-error-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">priority_high</span>
+        </div>
+      </div>
+    </div>
+    <!-- Card 4: Resolved -->
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Resolved</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight text-secondary">{{ stats.resolved }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">check_circle</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- Complaints table -->
-  {% if complaints %}
-  <div class="table-wrap">
-    <table class="table table-bordered complaints-table mb-0">
-      <thead>
-        <tr>
-          <th>Complaint ID</th>
-          <th>Category</th>
-          <th>Ward</th>
-          <th>Filed By</th>
-          <th>Status</th>
-          <th>Priority</th>
-          <th>Assigned To</th>
-          <th>Filed On</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for c in complaints %}
-        <tr class="{% if c['priority'] == 'High' %}high-priority-row{% endif %}">
-          <td class="cid-cell">{{ c['complaint_id'] }}</td>
-          <td>{{ c['category'] }}</td>
-          <td>{{ c['ward'] }}</td>
-          <td>{{ c['filer_name'] }}</td>
-          <td>
-            <span class="status-badge status-{{ c['status'].replace(' ', '-').lower() }}">
-              {{ c['status'] }}
-            </span>
-          </td>
-          <td>
-            {% if c['priority'] == 'High' %}
-              <span style="color:var(--maroon); font-weight:700; font-size:0.8rem;">
-                <i class="bi bi-exclamation-triangle-fill"></i> High
+  <!-- Main Section: Complaints Table -->
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+    <!-- Section Header & Filters Toolbar -->
+    <div class="flex flex-col gap-space-md">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+        <div>
+          <h2 class="font-title-lg text-title-lg text-primary font-bold">Recent Complaints</h2>
+          <p class="font-body-sm text-body-sm text-on-surface-variant">Manage citizen complaints submitted via the portal.</p>
+        </div>
+        <div class="flex items-center gap-space-xs">
+          <span class="font-label-sm text-label-sm text-on-surface font-semibold">{{ complaints | length }} result(s)</span>
+        </div>
+      </div>
+      
+      <!-- Filter Controls Bar -->
+      <form method="get" action="{{ url_for('admin_dashboard') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-space-sm">
+        <div class="lg:col-span-3 relative">
+          <select name="category" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}" {% if filters.category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+        <div class="lg:col-span-3 relative">
+          <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            {% for s in statuses %}
+              <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+        <div class="lg:col-span-3 relative">
+          <select name="ward" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Wards</option>
+            {% for w in wards %}
+              <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+        <div class="lg:col-span-3 flex items-center gap-2">
+          {% if filters.category or filters.status or filters.ward %}
+            <a href="{{ url_for('admin_dashboard') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 transition-colors">
+              Clear
+            </a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+
+    <!-- Data Table -->
+    {% if complaints %}
+    <div class="overflow-x-auto -mx-space-lg px-space-lg">
+      <table class="w-full text-left min-w-[900px]">
+        <thead>
+          <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
+            <th class="py-3 px-space-md rounded-l-lg">Complaint ID</th>
+            <th class="py-3 px-space-md">Category & Priority</th>
+            <th class="py-3 px-space-md">Applicant & Ward</th>
+            <th class="py-3 px-space-md">Assigned To</th>
+            <th class="py-3 px-space-md">Filed On</th>
+            <th class="py-3 px-space-md">Status</th>
+            <th class="py-3 px-space-md text-right rounded-r-lg">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+          {% for c in complaints %}
+          <tr class="hover:bg-surface-container-low/70 transition-colors group {% if c['priority'] == 'High' %}bg-error-container/10{% endif %}">
+            <td class="py-space-md px-space-md">
+              <div class="flex items-center gap-1.5">
+                <span class="font-semibold text-primary font-mono text-xs">{{ c['complaint_id'] }}</span>
+              </div>
+            </td>
+            <td class="py-space-md px-space-md">
+              <div class="font-medium text-primary">{{ c['category'] }}</div>
+              {% if c['priority'] == 'High' %}
+                <div class="font-label-sm text-label-sm text-error flex items-center gap-1 mt-1">
+                  <span class="material-symbols-outlined text-[14px]">warning</span> High Priority
+                </div>
+              {% else %}
+                <div class="font-label-sm text-label-sm text-on-surface-variant mt-1">Normal</div>
+              {% endif %}
+            </td>
+            <td class="py-space-md px-space-md">
+              <div class="font-medium text-on-surface">{{ c['filer_name'] }}</div>
+              <div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
+                <span class="material-symbols-outlined text-[14px]">location_on</span> {{ c['ward'] }}
+              </div>
+            </td>
+            <td class="py-space-md px-space-md text-on-surface-variant">
+              {{ c['assigned_to'] if c['assigned_to'] else '—' }}
+            </td>
+            <td class="py-space-md px-space-md font-medium">
+              {{ c['created_at'][:10] }}
+            </td>
+            <td class="py-space-md px-space-md">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
+                {% if c['status'] == 'Resolved' %}bg-secondary-fixed text-on-secondary-fixed
+                {% elif c['status'] == 'In Progress' %}bg-tertiary-fixed text-on-tertiary-fixed
+                {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+                <span class="w-1.5 h-1.5 rounded-full {% if c['status'] == 'Resolved' %}bg-secondary{% elif c['status'] == 'In Progress' %}bg-tertiary{% else %}bg-outline{% endif %}"></span>
+                {{ c['status'] }}
               </span>
-            {% else %}
-              <span style="color:var(--muted); font-size:0.8rem;">Normal</span>
-            {% endif %}
-          </td>
-          <td style="font-size:0.875rem; color:var(--muted);">
-            {{ c['assigned_to'] if c['assigned_to'] else '—' }}
-          </td>
-          <td style="white-space:nowrap; font-size:0.875rem;">{{ c['created_at'][:10] }}</td>
-          <td>
-            <a href="{{ url_for('admin_complaint_detail', complaint_id=c['complaint_id']) }}"
-               class="btn btn-sm btn-outline-primary">Manage</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+            </td>
+            <td class="py-space-md px-space-md text-right">
+              <a href="{{ url_for('admin_complaint_detail', complaint_id=c['complaint_id']) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all">
+                <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                <span>Manage</span>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4">
+      <span class="material-symbols-outlined text-[48px] opacity-50">inbox</span>
+      <p class="font-body-md text-body-md">No complaints found for the selected filters.</p>
+    </div>
+    {% endif %}
   </div>
-
-  {% else %}
-  <div class="empty-state">
-    <i class="bi bi-inbox d-block mb-2" style="font-size:2.5rem;"></i>
-    <p class="mb-0">No complaints found for the selected filters.</p>
-  </div>
-  {% endif %}
 
 </div>
 {% endblock %}

@@ -1,104 +1,102 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin — Register Property{% endblock %}
 {% block description %}Register a new property in the Gram Panchayat records.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
-  <div class="form-page-wrap">
+<div class="flex flex-col gap-space-xl w-full max-w-[800px]">
 
-    <div class="pt-2 mb-2">
-      <a href="{{ url_for('admin_properties') }}" class="back-link">
-        <i class="bi bi-arrow-left me-1"></i>Back to Properties
-      </a>
-    </div>
+  <!-- Back Link -->
+  <div class="pt-2">
+    <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span>Back to Properties</span>
+    </a>
+  </div>
 
-    <div class="form-page-header">
-      <h1 class="page-title">Register New Property</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">
-        A unique property number (EGS-PROP-XXXX) will be auto-generated on submission.
-      </p>
-    </div>
+  <div class="flex flex-col gap-1">
+    <h1 class="font-headline-md text-headline-md text-primary tracking-tight">Register New Property</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">A unique property number (EGS-PROP-XXXX) will be auto-generated on submission.</p>
+  </div>
 
-    <form method="post" action="{{ url_for('admin_register_property') }}" novalidate>
+  <form method="post" action="{{ url_for('admin_register_property') }}" novalidate class="flex flex-col gap-space-lg">
 
-      <!-- Owner lookup -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">1</span> Property Owner
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="owner_mobile" class="form-label">
-              Owner's Mobile Number <span class="required-mark">*</span>
-            </label>
-            <input type="text" id="owner_mobile" name="owner_mobile" class="form-control"
-                   placeholder="10-digit registered mobile number"
-                   value="{{ form.get('owner_mobile', '') }}" required>
-            <div class="form-text">Must be a registered villager account.</div>
-          </div>
+    <!-- Owner lookup -->
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+      <h2 class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2 border-b border-outline-variant/30 pb-3">
+        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-bold text-xs">1</span>
+        Property Owner
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+        <div>
+          <label for="owner_mobile" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">
+            Owner's Mobile Number <span class="text-error">*</span>
+          </label>
+          <input type="text" id="owner_mobile" name="owner_mobile" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="10-digit registered mobile number" value="{{ form.get('owner_mobile', '') }}" required>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Must be a registered villager account.</p>
         </div>
       </div>
+    </div>
 
-      <!-- Property details -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">2</span> Property Details
-        </div>
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label for="ward" class="form-label">Ward <span class="required-mark">*</span></label>
-            <select id="ward" name="ward" class="form-select" required>
-              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
+    <!-- Property details -->
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+      <h2 class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2 border-b border-outline-variant/30 pb-3">
+        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-bold text-xs">2</span>
+        Property Details
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md">
+        <div class="md:col-span-4">
+          <label for="ward" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Ward <span class="text-error">*</span></label>
+          <div class="relative">
+            <select id="ward" name="ward" class="w-full appearance-none px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" required>
+              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>— Select —</option>
               {% for w in wards %}
                 <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
               {% endfor %}
             </select>
-          </div>
-          <div class="col-md-4">
-            <label for="property_type" class="form-label">Type <span class="required-mark">*</span></label>
-            <select id="property_type" name="property_type" class="form-select" required>
-              <option value="" disabled {% if not form.get('property_type') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for t in property_types %}
-                <option value="{{ t }}" {% if form.get('property_type') == t %}selected{% endif %}>
-                  {{ t.replace('_', ' ').title() }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="area_sqft" class="form-label">Area (sq ft) <span class="required-mark">*</span></label>
-            <input type="number" id="area_sqft" name="area_sqft" class="form-control"
-                   step="0.01" min="1" value="{{ form.get('area_sqft', '') }}" required>
-          </div>
-          <div class="col-12">
-            <label for="address" class="form-label">Full Address <span class="required-mark">*</span></label>
-            <input type="text" id="address" name="address" class="form-control"
-                   placeholder="House/Plot No., Street, Locality, Ward"
-                   value="{{ form.get('address', '') }}" required>
-          </div>
-          <div class="col-md-4">
-            <label for="assessed_value" class="form-label">Assessed Value (₹) <span class="required-mark">*</span></label>
-            <input type="number" id="assessed_value" name="assessed_value" class="form-control"
-                   step="0.01" min="0" value="{{ form.get('assessed_value', '') }}" required>
-            <div class="form-text">Market value for tax calculation.</div>
+            <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
           </div>
         </div>
+        <div class="md:col-span-4">
+          <label for="property_type" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Type <span class="text-error">*</span></label>
+          <div class="relative">
+            <select id="property_type" name="property_type" class="w-full appearance-none px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" required>
+              <option value="" disabled {% if not form.get('property_type') %}selected{% endif %}>— Select —</option>
+              {% for t in property_types %}
+                <option value="{{ t }}" {% if form.get('property_type') == t %}selected{% endif %}>{{ t.replace('_', ' ').title() }}</option>
+              {% endfor %}
+            </select>
+            <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+          </div>
+        </div>
+        <div class="md:col-span-4">
+          <label for="area_sqft" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Area (sq ft) <span class="text-error">*</span></label>
+          <input type="number" id="area_sqft" name="area_sqft" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" step="0.01" min="1" value="{{ form.get('area_sqft', '') }}" required>
+        </div>
+        <div class="md:col-span-12">
+          <label for="address" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Full Address <span class="text-error">*</span></label>
+          <input type="text" id="address" name="address" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="House/Plot No., Street, Locality, Ward" value="{{ form.get('address', '') }}" required>
+        </div>
+        <div class="md:col-span-4">
+          <label for="assessed_value" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Assessed Value (₹) <span class="text-error">*</span></label>
+          <input type="number" id="assessed_value" name="assessed_value" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" step="0.01" min="0" value="{{ form.get('assessed_value', '') }}" required>
+          <p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Market value for tax calculation.</p>
+        </div>
       </div>
+    </div>
 
-      <!-- Submit -->
-      <div class="form-submit-bar">
-        <button type="submit" class="btn btn-primary">
-          <i class="bi bi-check-circle me-1"></i>Register Property
-        </button>
-        <a href="{{ url_for('admin_properties') }}" class="btn btn-outline-secondary ms-2">Cancel</a>
-      </div>
+    <!-- Submit -->
+    <div class="flex items-center gap-3 pt-2">
+      <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary text-on-primary font-label-lg shadow-sm hover:bg-primary-container transition-all">
+        <span class="material-symbols-outlined text-[20px]">check_circle</span>
+        <span>Register Property</span>
+      </button>
+      <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-outline-variant/50 text-on-surface hover:bg-surface-container font-label-lg transition-colors">
+        Cancel
+      </a>
+    </div>
 
-    </form>
-  </div>
+  </form>
+
 </div>
 {% endblock %}

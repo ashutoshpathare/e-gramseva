@@ -1,116 +1,304 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
-{% block description %}Log in to the Village Complaint Management System to file and track your civic complaints.{% endblock %}
+{% block title %}Login — e-gramSeva{% endblock %}
+{% block description %}Log in to e-gramSeva to file complaints, apply for certificates, permissions, and government schemes online.{% endblock %}
+
+{# ── Tailwind scoped to this page only (Material Symbols already in base.html) ── #}
+{% block head_extra %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      "primary":                  "#022448",
+      "primary-container":        "#1e3a5f",
+      "on-primary":               "#ffffff",
+      "on-primary-container":     "#8aa4cf",
+      "secondary":                "#006c4a",
+      "on-secondary":             "#ffffff",
+      "error":                    "#ba1a1a",
+      "surface":                  "#f8f9ff",
+      "on-surface":               "#0b1c30",
+      "on-surface-variant":       "#43474e",
+      "surface-container-lowest": "#ffffff",
+      "surface-container-low":    "#eff4ff",
+      "surface-container":        "#e5eeff",
+      "surface-container-high":   "#dce9ff",
+      "surface-container-highest":"#d3e4fe",
+      "outline":                  "#74777f",
+      "outline-variant":          "#c4c6cf",
+      "on-primary-fixed-variant": "#2d486d",
+      "primary-fixed":            "#d5e3ff",
+    },
+    borderRadius: {
+      DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem",
+      "2xl": "1rem", "3xl": "1.5rem", full: "9999px"
+    },
+  }}
+};
+</script>
+<style>
+  .login-page { font-family: 'Inter', 'Noto Sans', sans-serif; }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
-  <div class="login-wrap">
-    <div class="row g-0">
+<div class="login-page bg-surface min-h-screen pb-12">
+<div class="max-w-7xl mx-auto px-4 md:px-8 py-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
-      <!-- Left: information panel -->
-      <div class="col-md-5">
-        <div class="login-info-panel h-100">
-          <h2><i class="bi bi-building me-2"></i>Citizen Services</h2>
-          <p style="font-size:0.9rem;">
-            The VCMS allows village residents to register civic complaints and
-            track their resolution in real time.
-          </p>
-          <ul>
-            <li>File complaints 24 hours a day, 7 days a week</li>
-            <li>Track status with your unique complaint ID</li>
-            <li>Get notified when your issue is addressed</li>
-            <li>Rate the quality of resolution</li>
-          </ul>
-          <hr class="divider">
-          <p class="mb-0" style="font-size:0.85rem;">
-            New resident?
-            <a href="{{ url_for('register') }}" class="register-link">
-              Create an account &rarr;
-            </a>
-          </p>
+  {# ══════════════════════════════════════════════════════════════════
+     LEFT — Civic identity, SVG illustration, trust badges
+  ══════════════════════════════════════════════════════════════════ #}
+  <div class="lg:col-span-6 flex flex-col gap-8 pr-0 lg:pr-8">
+
+    {# Gov initiative pill #}
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container shadow-sm w-fit">
+      <span class="w-2 h-2 rounded-full bg-secondary"></span>
+      <span class="text-xs font-bold uppercase tracking-widest text-primary">Government of India &bull; MoPR Initiative</span>
+    </div>
+
+    {# Main heading #}
+    <div class="space-y-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-primary tracking-tight leading-tight">
+        Empowering Rural Governance Through Digital Access
+      </h1>
+      <p class="text-base text-on-surface-variant leading-relaxed max-w-xl">
+        Direct, transparent, and expedited access to Gram Panchayat civil certificates,
+        land and property assessments, localized welfare benefits, and citizen grievance tracking.
+      </p>
+    </div>
+
+    {# Architectural SVG illustration #}
+    <div class="w-full bg-surface-container-low rounded-2xl p-6 shadow-sm relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary-fixed/30 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="flex items-center justify-between mb-3 text-on-surface-variant">
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-primary-fixed-variant">Gram Panchayat Architectural Node</span>
+        <span class="text-xs font-semibold text-secondary flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Live Node
+        </span>
+      </div>
+      <svg class="w-full h-44 text-primary-container" fill="none" stroke="currentColor" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+        <line stroke-linecap="round" stroke-width="1.75" x1="20" x2="620" y1="195" y2="195"></line>
+        <line opacity="0.4" stroke-dasharray="6 4" stroke-width="1" x1="40" x2="600" y1="202" y2="202"></line>
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+          <path d="M90 195 V130 C90 115 75 105 60 95 C50 88 50 78 50 70"></path>
+          <path d="M100 195 V125 C100 110 110 98 120 88 C130 78 135 70 135 60"></path>
+          <path d="M95 140 C95 110 102 95 95 80"></path>
+          <path d="M72 195 V145 C72 135 78 128 85 122" opacity="0.6"></path>
+          <path d="M118 195 V150 C118 140 110 132 105 125" opacity="0.6"></path>
+          <path d="M40 90 C25 80 28 55 45 50 C55 35 80 32 95 42 C110 30 135 32 148 48 C165 52 170 75 155 90 C140 105 125 108 115 100 C100 112 75 110 65 98 C55 102 45 98 40 90 Z" fill="currentColor" fill-opacity="0.04" stroke-width="1.75"></path>
+        </g>
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75">
+          <path d="M210 195 H430"></path><path d="M220 190 H420"></path><path d="M230 185 H410"></path>
+          <rect fill="currentColor" fill-opacity="0.03" height="40" width="170" x="235" y="145"></rect>
+          <line stroke-width="2" x1="250" x2="250" y1="185" y2="120"></line>
+          <line stroke-width="1.5" x1="285" x2="285" y1="185" y2="120"></line>
+          <line stroke-width="1.5" x1="320" x2="320" y1="185" y2="120"></line>
+          <line stroke-width="1.5" x1="355" x2="355" y1="185" y2="120"></line>
+          <line stroke-width="2" x1="390" x2="390" y1="185" y2="120"></line>
+          <rect fill="currentColor" fill-opacity="0.08" height="8" width="180" x="230" y="112"></rect>
+          <path d="M220 112 L320 70 L420 112 Z" fill="currentColor" fill-opacity="0.05"></path>
+          <circle cx="320" cy="94" r="9" stroke-width="1.25"></circle>
+          <circle cx="320" cy="94" r="3" stroke-width="1"></circle>
+          <line stroke-width="0.75" x1="320" x2="320" y1="85" y2="103"></line>
+          <line stroke-width="0.75" x1="311" x2="329" y1="94" y2="94"></line>
+          <path d="M305 185 V142 C305 134 335 134 335 142 V185"></path>
+          <line stroke-dasharray="3 3" x1="320" x2="320" y1="135" y2="185"></line>
+          <rect height="25" rx="2" stroke-width="1.25" width="18" x="260" y="140"></rect>
+          <line stroke-width="0.75" x1="269" x2="269" y1="140" y2="165"></line>
+          <rect height="25" rx="2" stroke-width="1.25" width="18" x="362" y="140"></rect>
+          <line stroke-width="0.75" x1="371" x2="371" y1="140" y2="165"></line>
+          <path d="M350 78 L390 68 L415 88 L375 98 Z" fill="currentColor" fill-opacity="0.05" stroke-width="1.25"></path>
+          <line stroke-width="0.75" x1="370" x2="395" y1="73" y2="93"></line>
+          <line stroke-width="0.75" x1="363" x2="403" y1="88" y2="78"></line>
+        </g>
+        <g stroke-linecap="round" stroke-width="1.5">
+          <rect height="4" stroke-width="1" width="20" x="180" y="191"></rect>
+          <rect height="4" stroke-width="1" width="12" x="184" y="187"></rect>
+          <line stroke-width="1.75" x1="190" x2="190" y1="187" y2="35"></line>
+          <circle cx="190" cy="33" fill="currentColor" r="2.5"></circle>
+          <path d="M190 38 C202 34 212 44 226 40 C234 38 238 42 242 41 V62 C236 63 230 59 222 61 C210 65 200 55 190 59 Z" fill="currentColor" fill-opacity="0.08" stroke-width="1.5"></path>
+          <line stroke-width="0.75" x1="190" x2="238" y1="46" y2="48"></line>
+          <line stroke-width="0.75" x1="190" x2="232" y1="54" y2="55"></line>
+          <circle cx="210" cy="51" r="2.5" stroke-width="0.75"></circle>
+        </g>
+        <g stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+          <path d="M510 195 L514 180 H518 L522 195" stroke-width="1"></path>
+          <line stroke-width="1.75" x1="516" x2="516" y1="180" y2="60"></line>
+          <path d="M516 68 C516 48 535 44 548 44 H558"></path>
+          <line stroke-width="2.5" x1="504" x2="532" y1="54" y2="40"></line>
+          <path d="M545 44 L556 44 L552 52 H548 Z" fill="currentColor"></path>
+          <line opacity="0.6" stroke-dasharray="2 3" stroke-width="1" x1="544" x2="538" y1="58" y2="68"></line>
+          <line opacity="0.6" stroke-dasharray="2 3" stroke-width="1" x1="550" x2="550" y1="58" y2="70"></line>
+          <line opacity="0.6" stroke-dasharray="2 3" stroke-width="1" x1="556" x2="562" y1="58" y2="68"></line>
+        </g>
+        <path d="M465 195 Q470 185 475 195 Q480 182 485 195" opacity="0.5" stroke-width="1.25"></path>
+        <path d="M580 195 Q585 187 590 195 Q595 184 600 195" opacity="0.5" stroke-width="1.25"></path>
+      </svg>
+    </div>
+
+    {# Trust badge trio #}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-primary" style="font-size:20px;">description</span>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-primary truncate">100% Paperless</p>
+          <p class="text-xs text-on-surface-variant truncate">Instant e-Records</p>
         </div>
       </div>
-
-      <!-- Right: login form -->
-      <div class="col-md-7">
-        <div class="login-form-panel h-100">
-          <h3><i class="bi bi-person-lock me-2"></i>Resident Login</h3>
-
-          <form method="post" action="{{ url_for('login') }}" novalidate>
-            <div class="mb-3">
-              <label for="mobile" class="form-label">Mobile Number</label>
-              <input
-                type="tel"
-                id="mobile"
-                name="mobile"
-                class="form-control"
-                placeholder="10-digit mobile number"
-                maxlength="10"
-                inputmode="numeric"
-                autofocus
-                required
-              >
-            </div>
-
-            <div class="mb-4">
-              <label for="password" class="form-label">Password</label>
-              <div class="input-group">
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  class="form-control"
-                  placeholder="Enter your password"
-                  required
-                >
-                <button
-                  class="btn btn-outline-secondary"
-                  type="button"
-                  id="toggle-pwd"
-                  title="Show / hide password"
-                  style="border-radius:0 3px 3px 0 !important;"
-                >
-                  <i class="bi bi-eye" id="pwd-icon"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="d-grid">
-              <button type="submit" class="btn btn-primary" id="btn-login">
-                <i class="bi bi-box-arrow-in-right me-1"></i>Login
-              </button>
-            </div>
-          </form>
-
-          <hr class="my-4">
-
-          <p class="mb-1" style="font-size:0.85rem; color:var(--muted);">
-            <strong>Gram Panchayat staff?</strong> Use your official credentials above.
-            There is no separate admin login page.
-          </p>
-          <p class="mb-0" style="font-size:0.85rem;">
-            Not registered? <a href="{{ url_for('register') }}">Register here</a>.
-          </p>
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-secondary" style="font-size:20px;">payments</span>
         </div>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-primary truncate">Direct Benefit</p>
+          <p class="text-xs text-on-surface-variant truncate">Zero-Leakage DBT</p>
+        </div>
+      </div>
+      <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-primary" style="font-size:20px;">verified</span>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-primary truncate">e-Sign Certified</p>
+          <p class="text-xs text-on-surface-variant truncate">Statutory Validity</p>
+        </div>
+      </div>
+    </div>
+
+  </div>{# end left col #}
+
+  {# ══════════════════════════════════════════════════════════════════
+     RIGHT — Elevated login card
+  ══════════════════════════════════════════════════════════════════ #}
+  <div class="lg:col-span-6 flex justify-center lg:justify-end">
+    <div class="w-full max-w-lg bg-surface-container-lowest rounded-2xl p-8 shadow-xl relative">
+
+      {# Card header #}
+      <div class="mb-6">
+        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold mb-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          <span>Citizen &bull; Sarpanch &bull; Sachiv</span>
+        </div>
+        <h2 class="text-2xl font-bold text-primary">Welcome Back</h2>
+        <p class="text-sm text-on-surface-variant mt-1">
+          Login with your registered mobile number and password.
+        </p>
+      </div>
+
+      {# ── THE REAL FORM — action, names, method all preserved ── #}
+      <form method="post" action="{{ url_for('login') }}" novalidate class="space-y-5">
+
+        {# Mobile number field — name="mobile" preserved #}
+        <div>
+          <label for="mobile" class="block text-sm font-bold text-on-surface mb-1.5">
+            Mobile Number <span class="text-error">*</span>
+          </label>
+          <div class="flex items-center rounded-xl bg-surface-container-low shadow-sm focus-within:shadow-md transition-shadow border border-outline-variant/40 focus-within:border-primary/30">
+            <span class="px-4 py-3 text-sm font-semibold text-on-surface-variant select-none border-r border-outline-variant/40">+91</span>
+            <input
+              type="tel"
+              id="mobile"
+              name="mobile"
+              class="w-full bg-transparent py-3 px-4 text-sm text-on-surface placeholder-outline focus:outline-none"
+              placeholder="10-digit mobile number"
+              maxlength="10"
+              inputmode="numeric"
+              autofocus
+              required
+            >
+          </div>
+        </div>
+
+        {# Password field — name="password" preserved #}
+        <div>
+          <label for="password" class="block text-sm font-bold text-on-surface mb-1.5">
+            Password <span class="text-error">*</span>
+          </label>
+          <div class="relative flex items-center rounded-xl bg-surface-container-low shadow-sm focus-within:shadow-md transition-shadow border border-outline-variant/40 focus-within:border-primary/30">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="w-full bg-transparent py-3 pl-4 pr-12 text-sm text-on-surface placeholder-outline focus:outline-none"
+              placeholder="Enter your password"
+              required
+            >
+            <button
+              type="button"
+              id="toggle-pwd"
+              aria-label="Toggle password visibility"
+              class="absolute right-0 pr-4 flex items-center text-on-surface-variant hover:text-primary transition-colors"
+            >
+              <span class="material-symbols-outlined" id="pwd-icon" style="font-size:20px;">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        {# Submit button #}
+        <button
+          type="submit"
+          id="btn-login"
+          class="w-full bg-primary-container text-on-primary py-3.5 px-4 rounded-xl text-sm font-bold tracking-wide shadow-md hover:bg-primary transition-all flex items-center justify-center gap-2 active:scale-[0.99]"
+        >
+          <span>Sign In to Portal</span>
+          <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+        </button>
+
+        {# Divider #}
+        <div class="relative flex items-center justify-center my-1">
+          <div class="w-full h-px bg-surface-container-high"></div>
+          <span class="absolute bg-surface-container-lowest px-3 text-xs uppercase text-outline tracking-wider font-semibold">
+            Or continue as
+          </span>
+        </div>
+
+        {# Panchayat staff note #}
+        <p class="text-xs text-center text-on-surface-variant">
+          <strong class="text-on-surface">Gram Panchayat staff?</strong>
+          Use your official credentials above — there is no separate admin login page.
+        </p>
+
+      </form>
+
+      {# Registration link — url_for('register') preserved #}
+      <div class="mt-6 text-center text-sm text-on-surface-variant">
+        Don't have an account?
+        <a href="{{ url_for('register') }}" class="font-bold text-primary hover:underline ml-1">
+          Register as New Villager
+        </a>
+      </div>
+
+      {# Security tag #}
+      <div class="mt-5 flex items-center justify-center gap-2 text-on-surface-variant bg-surface-container-low/60 rounded-xl py-3 px-4">
+        <span class="material-symbols-outlined text-secondary" style="font-size:16px;">lock</span>
+        <span class="text-xs text-center">Protected by National Informatics Infrastructure &bull; 256-bit SSL</span>
       </div>
 
     </div>
-  </div>
+  </div>{# end right col #}
+
+</div>
+</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+  // Password show/hide — adapted to Material Symbols (visibility / visibility_off)
   document.getElementById('toggle-pwd').addEventListener('click', function () {
     var pwd  = document.getElementById('password');
     var icon = document.getElementById('pwd-icon');
     if (pwd.type === 'password') {
-      pwd.type       = 'text';
-      icon.className = 'bi bi-eye-slash';
+      pwd.type          = 'text';
+      icon.textContent  = 'visibility_off';
     } else {
-      pwd.type       = 'password';
-      icon.className = 'bi bi-eye';
+      pwd.type          = 'password';
+      icon.textContent  = 'visibility';
     }
   });
 </script>

@@ -1,107 +1,128 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin — Properties{% endblock %}
 {% block description %}Manage registered properties across all wards.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full pt-2">
     <div>
-      <h1 class="page-title">Properties</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Registered properties in the Gram Panchayat</p>
+      <h1 class="font-headline-md text-headline-md text-primary tracking-tight">Properties</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Registered properties in the Gram Panchayat</p>
     </div>
-    <div class="d-flex gap-2">
-      <a href="{{ url_for('admin_tax_overview') }}" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-receipt me-1"></i>Tax Overview
+    <div class="flex items-center gap-2">
+      <a href="{{ url_for('admin_tax_overview') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md transition-colors">
+        <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+        <span>Tax Overview</span>
       </a>
-      <a href="{{ url_for('admin_register_property') }}" class="btn btn-primary btn-sm">
-        <i class="bi bi-plus-circle me-1"></i>Register Property
+      <a href="{{ url_for('admin_register_property') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-sm transition-all">
+        <span class="material-symbols-outlined text-[18px]">add_circle</span>
+        <span>Register Property</span>
       </a>
     </div>
   </div>
 
   <!-- Stats -->
-  <div class="admin-stats-bar mb-3">
-    <div class="admin-stat-item">
-      <span class="admin-stat-value">{{ stats.total }}</span>
-      <span class="admin-stat-label">Total</span>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md w-full">
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-lg text-headline-lg font-bold text-on-surface">{{ stats.total }}</div>
+      <div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--green);">{{ stats.active }}</span>
-      <span class="admin-stat-label">Active</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-lg text-headline-lg font-bold text-secondary">{{ stats.active }}</div>
+      <div class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Active</div>
     </div>
   </div>
 
-  <!-- Filters -->
-  <form method="get" action="{{ url_for('admin_properties') }}">
-    <div class="filter-bar mb-3">
-      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
-      <select name="ward" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Wards</option>
-        {% for w in wards %}
-          <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
-        {% endfor %}
-      </select>
-      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Statuses</option>
-        {% for s in property_statuses %}
-          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
-        {% endfor %}
-      </select>
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+    <!-- Filters -->
+    <form method="get" action="{{ url_for('admin_properties') }}" class="flex flex-wrap items-end gap-space-sm w-full">
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Filter Ward</span>
+        <div class="relative w-48">
+          <select name="ward" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Wards</option>
+            {% for w in wards %}
+              <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Status</span>
+        <div class="relative w-48">
+          <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            {% for s in property_statuses %}
+              <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+      </div>
       {% if filters.ward or filters.status %}
-        <a href="{{ url_for('admin_properties') }}" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-x-circle me-1"></i>Clear
-        </a>
+        <div class="flex items-center pb-0.5">
+          <a href="{{ url_for('admin_properties') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors">
+            Clear
+          </a>
+        </div>
       {% endif %}
-    </div>
-  </form>
+    </form>
 
-  <!-- Table -->
-  {% if properties %}
-  <div class="table-wrap">
-    <table class="table table-bordered complaints-table mb-0">
-      <thead>
-        <tr>
-          <th>Property No.</th>
-          <th>Owner</th>
-          <th>Ward</th>
-          <th>Type</th>
-          <th>Area</th>
-          <th>Assessed Value</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for p in properties %}
-        <tr>
-          <td class="cid-cell">{{ p['property_no'] }}</td>
-          <td>{{ p['owner_name'] }}</td>
-          <td>{{ p['ward'] }}</td>
-          <td>{{ p['property_type'].replace('_', ' ').title() }}</td>
-          <td>{{ p['area_sqft'] | int }} sq ft</td>
-          <td style="font-weight:600;">₹{{ '{:,.0f}'.format(p['assessed_value']) }}</td>
-          <td>
-            <span class="status-badge svc-status-{{ 'approved' if p['status'] == 'ACTIVE' else 'rejected' if p['status'] == 'DISPUTED' else 'verified' }}">
-              {{ p['status'] }}
-            </span>
-          </td>
-          <td>
-            <a href="{{ url_for('admin_property_detail', property_no=p['property_no']) }}"
-               class="btn btn-sm btn-outline-primary">Manage</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <!-- Table -->
+    {% if properties %}
+    <div class="overflow-x-auto -mx-space-lg px-space-lg">
+      <table class="w-full text-left min-w-[900px]">
+        <thead>
+          <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
+            <th class="py-3 px-space-md rounded-l-lg">Property No.</th>
+            <th class="py-3 px-space-md">Owner</th>
+            <th class="py-3 px-space-md">Ward</th>
+            <th class="py-3 px-space-md">Type</th>
+            <th class="py-3 px-space-md">Area</th>
+            <th class="py-3 px-space-md">Assessed Value</th>
+            <th class="py-3 px-space-md">Status</th>
+            <th class="py-3 px-space-md rounded-r-lg"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+          {% for p in properties %}
+          <tr class="hover:bg-surface-container-low/70 transition-colors">
+            <td class="py-space-md px-space-md">
+              <span class="font-semibold text-primary font-mono text-xs">{{ p['property_no'] }}</span>
+            </td>
+            <td class="py-space-md px-space-md font-medium text-on-surface">{{ p['owner_name'] }}</td>
+            <td class="py-space-md px-space-md">{{ p['ward'] }}</td>
+            <td class="py-space-md px-space-md">{{ p['property_type'].replace('_', ' ').title() }}</td>
+            <td class="py-space-md px-space-md">{{ p['area_sqft'] | int }} sq ft</td>
+            <td class="py-space-md px-space-md font-semibold">₹{{ '{:,.0f}'.format(p['assessed_value']) }}</td>
+            <td class="py-space-md px-space-md">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
+                {% if p['status'] == 'ACTIVE' %}bg-secondary-fixed text-on-secondary-fixed
+                {% elif p['status'] == 'DISPUTED' %}bg-error-container text-on-error-container
+                {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
+                <span class="w-1.5 h-1.5 rounded-full {% if p['status'] == 'ACTIVE' %}bg-secondary{% elif p['status'] == 'DISPUTED' %}bg-error{% else %}bg-on-tertiary-container{% endif %}"></span>
+                {{ p['status'] }}
+              </span>
+            </td>
+            <td class="py-space-md px-space-md text-right">
+              <a href="{{ url_for('admin_property_detail', property_no=p['property_no']) }}" class="inline-block px-3 py-1.5 rounded text-primary hover:bg-primary/10 font-label-sm text-label-sm font-semibold transition-colors">Manage</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4">
+      <span class="material-symbols-outlined text-[48px] opacity-50">house</span>
+      <p class="font-body-md text-body-md">No properties found.</p>
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="empty-state">
-    <i class="bi bi-house d-block mb-2" style="font-size:2.5rem;"></i>
-    <p class="mb-0">No properties found.</p>
-  </div>
-  {% endif %}
 
 </div>
 {% endblock %}

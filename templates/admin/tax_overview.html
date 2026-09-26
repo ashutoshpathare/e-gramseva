@@ -1,114 +1,128 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin — Tax Overview{% endblock %}
 {% block description %}Tax collection overview across all properties.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full pt-2">
     <div>
-      <h1 class="page-title">Tax Overview</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Tax collection status across all properties</p>
+      <h1 class="font-headline-md text-headline-md text-primary tracking-tight">Tax Overview</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Tax collection status across all properties</p>
     </div>
-    <a href="{{ url_for('admin_properties') }}" class="btn btn-outline-secondary btn-sm">
-      <i class="bi bi-arrow-left me-1"></i>Properties
+    <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md transition-colors">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span>Properties</span>
     </a>
   </div>
 
   <!-- Stats -->
-  <div class="admin-stats-bar mb-3">
-    <div class="admin-stat-item">
-      <span class="admin-stat-value">{{ stats.total }}</span>
-      <span class="admin-stat-label">Total Records</span>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-md w-full">
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-on-surface">{{ stats.total }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Records</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:#92400e;">{{ stats.unpaid }}</span>
-      <span class="admin-stat-label">Unpaid</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-[#d97706]">{{ stats.unpaid }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Unpaid</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--maroon);">{{ stats.overdue }}</span>
-      <span class="admin-stat-label">Overdue</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-error">{{ stats.overdue }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Overdue</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--green);">{{ stats.paid }}</span>
-      <span class="admin-stat-label">Paid</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-secondary">{{ stats.paid }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Paid</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--maroon);">₹{{ '{:,.0f}'.format(stats.total_due) }}</span>
-      <span class="admin-stat-label">Outstanding</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-error">₹{{ '{:,.0f}'.format(stats.total_due) }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Outstanding</div>
     </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--green);">₹{{ '{:,.0f}'.format(stats.total_collected) }}</span>
-      <span class="admin-stat-label">Collected</span>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
+      <div class="font-headline-sm text-headline-sm font-bold text-secondary">₹{{ '{:,.0f}'.format(stats.total_collected) }}</div>
+      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Collected</div>
     </div>
   </div>
 
-  <!-- Filters -->
-  <form method="get" action="{{ url_for('admin_tax_overview') }}">
-    <div class="filter-bar mb-3">
-      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
-      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Statuses</option>
-        {% for s in tax_statuses %}
-          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
-        {% endfor %}
-      </select>
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+    <!-- Filters -->
+    <form method="get" action="{{ url_for('admin_tax_overview') }}" class="flex flex-wrap items-end gap-space-sm w-full">
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Filter Status</span>
+        <div class="relative w-48">
+          <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+            <option value="">All Statuses</option>
+            {% for s in tax_statuses %}
+              <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+      </div>
       {% if filters.status %}
-        <a href="{{ url_for('admin_tax_overview') }}" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-x-circle me-1"></i>Clear
-        </a>
+        <div class="flex items-center pb-0.5">
+          <a href="{{ url_for('admin_tax_overview') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors">
+            Clear
+          </a>
+        </div>
       {% endif %}
-    </div>
-  </form>
+    </form>
 
-  <!-- Table -->
-  {% if records %}
-  <div class="table-wrap">
-    <table class="table table-bordered complaints-table mb-0">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Owner</th>
-          <th>Ward</th>
-          <th>Tax Type</th>
-          <th>F.Y.</th>
-          <th>Amount Due</th>
-          <th>Due Date</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for r in records %}
-        <tr>
-          <td class="cid-cell">{{ r['property_no'] }}</td>
-          <td>{{ r['owner_name'] }}</td>
-          <td>{{ r['ward'] }}</td>
-          <td>{{ r['tax_type'].replace('_', ' ').title() }}</td>
-          <td>{{ r['financial_year'] }}</td>
-          <td style="font-weight:600;">₹{{ '{:,.0f}'.format(r['amount_due']) }}</td>
-          <td style="white-space:nowrap; font-size:0.875rem;">{{ r['due_date'] }}</td>
-          <td>
-            <span class="status-badge tax-status-{{ r['status'].lower() }}">
-              {{ r['status'] }}
-            </span>
-          </td>
-          <td>
-            <a href="{{ url_for('admin_property_detail', property_no=r['property_no']) }}"
-               class="btn btn-sm btn-outline-primary">View</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <!-- Table -->
+    {% if records %}
+    <div class="overflow-x-auto -mx-space-lg px-space-lg">
+      <table class="w-full text-left min-w-[900px]">
+        <thead>
+          <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
+            <th class="py-3 px-space-md rounded-l-lg">Property</th>
+            <th class="py-3 px-space-md">Owner</th>
+            <th class="py-3 px-space-md">Ward</th>
+            <th class="py-3 px-space-md">Tax Type</th>
+            <th class="py-3 px-space-md">F.Y.</th>
+            <th class="py-3 px-space-md">Amount Due</th>
+            <th class="py-3 px-space-md">Due Date</th>
+            <th class="py-3 px-space-md">Status</th>
+            <th class="py-3 px-space-md rounded-r-lg"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+          {% for r in records %}
+          <tr class="hover:bg-surface-container-low/70 transition-colors">
+            <td class="py-space-md px-space-md">
+              <span class="font-semibold text-primary font-mono text-xs">{{ r['property_no'] }}</span>
+            </td>
+            <td class="py-space-md px-space-md font-medium text-on-surface">{{ r['owner_name'] }}</td>
+            <td class="py-space-md px-space-md">{{ r['ward'] }}</td>
+            <td class="py-space-md px-space-md">{{ r['tax_type'].replace('_', ' ').title() }}</td>
+            <td class="py-space-md px-space-md">{{ r['financial_year'] }}</td>
+            <td class="py-space-md px-space-md font-semibold">₹{{ '{:,.0f}'.format(r['amount_due']) }}</td>
+            <td class="py-space-md px-space-md whitespace-nowrap">{{ r['due_date'] }}</td>
+            <td class="py-space-md px-space-md">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
+                {% if r['status'] == 'PAID' %}bg-secondary-fixed text-on-secondary-fixed
+                {% elif r['status'] == 'OVERDUE' %}bg-error-container text-on-error-container
+                {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
+                <span class="w-1.5 h-1.5 rounded-full {% if r['status'] == 'PAID' %}bg-secondary{% elif r['status'] == 'OVERDUE' %}bg-error{% else %}bg-on-tertiary-container{% endif %}"></span>
+                {{ r['status'] }}
+              </span>
+            </td>
+            <td class="py-space-md px-space-md text-right">
+              <a href="{{ url_for('admin_property_detail', property_no=r['property_no']) }}" class="inline-block px-3 py-1.5 rounded text-primary hover:bg-primary/10 font-label-sm text-label-sm font-semibold transition-colors">View</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4">
+      <span class="material-symbols-outlined text-[48px] opacity-50">receipt_long</span>
+      <p class="font-body-md text-body-md">No tax records found.</p>
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="empty-state">
-    <i class="bi bi-receipt d-block mb-2" style="font-size:2.5rem;"></i>
-    <p class="mb-0">No tax records found.</p>
-  </div>
-  {% endif %}
 
 </div>
 {% endblock %}

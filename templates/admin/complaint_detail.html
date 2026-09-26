@@ -1,140 +1,160 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin: {{ complaint['complaint_id'] }}{% endblock %}
 {% block description %}Admin view and management for complaint {{ complaint['complaint_id'] }}.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <div class="pt-2 mb-2">
-    <a href="{{ url_for('admin_dashboard') }}" class="back-link">
-      <i class="bi bi-arrow-left me-1"></i>Back to All Complaints
+  <!-- Back Link -->
+  <div>
+    <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span>Back to All Complaints</span>
     </a>
   </div>
 
   <!-- Header -->
-  <div class="detail-header">
-    <div>
-      <h1 class="page-title mb-1">{{ complaint['complaint_id'] }}</h1>
-      <span class="category-label"><i class="bi bi-tag me-1"></i>{{ complaint['category'] }}</span>
-      &nbsp;&mdash;&nbsp;
-      <span style="font-size:0.875rem; color:var(--muted);">{{ complaint['ward'] }}</span>
-      &nbsp;&mdash;&nbsp;
-      <span style="font-size:0.875rem;">
-        Filed by <strong>{{ complaint['filer_name'] }}</strong>
-        {% if complaint['filer_mobile'] %}
-          &nbsp;<a href="tel:{{ complaint['filer_mobile'] }}"
-                   style="font-size:0.8125rem; color:var(--muted);">{{ complaint['filer_mobile'] }}</a>
-        {% endif %}
-      </span>
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full">
+    <div class="flex flex-col gap-2">
+      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-mono">{{ complaint['complaint_id'] }}</h1>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-on-surface-variant font-body-sm text-body-sm">
+        <span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">sell</span>
+          {{ complaint['category'] }}
+        </span>
+        <span class="hidden sm:block text-outline-variant">•</span>
+        <span>{{ complaint['ward'] }}</span>
+        <span class="hidden sm:block text-outline-variant">•</span>
+        <span>
+          Filed by <strong class="text-on-surface">{{ complaint['filer_name'] }}</strong>
+          {% if complaint['filer_mobile'] %}
+            <a href="tel:{{ complaint['filer_mobile'] }}" class="text-primary hover:underline ml-1">{{ complaint['filer_mobile'] }}</a>
+          {% endif %}
+        </span>
+      </div>
     </div>
-    <span class="status-badge status-badge-lg status-{{ complaint['status'].replace(' ', '-').lower() }}">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-label-md text-label-md font-semibold
+      {% if complaint['status'] == 'Resolved' %}bg-secondary-fixed text-on-secondary-fixed
+      {% elif complaint['status'] == 'Rejected' %}bg-error-container text-on-error-container
+      {% elif complaint['status'] == 'In Progress' %}bg-primary-container text-on-primary-container
+      {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
+      <span class="w-2 h-2 rounded-full {% if complaint['status'] == 'Resolved' %}bg-secondary{% elif complaint['status'] == 'Rejected' %}bg-error{% elif complaint['status'] == 'In Progress' %}bg-primary{% else %}bg-on-tertiary-container{% endif %}"></span>
       {{ complaint['status'] }}
     </span>
   </div>
 
-  <div class="row g-3 mt-0">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full">
 
     <!-- LEFT: Info + Update Form -->
-    <div class="col-lg-7">
+    <div class="lg:col-span-7 flex flex-col gap-space-lg">
 
       <!-- Complaint Info -->
-      <div class="detail-card">
-        <div class="detail-card-title">Complaint Information</div>
-        <table class="detail-table">
-          <tr>
-            <th>Filed On</th>
-            <td>{{ complaint['created_at'][:16].replace('T', ' ') }}</td>
-          </tr>
-          <tr><th>Ward</th><td>{{ complaint['ward'] }}</td></tr>
-          {% if complaint['address_detail'] %}
-          <tr><th>Address</th><td>{{ complaint['address_detail'] }}</td></tr>
-          {% endif %}
-          <tr>
-            <th>Priority</th>
-            <td>
-              {% if complaint['priority'] == 'High' %}
-                <span class="priority-high">
-                  <i class="bi bi-exclamation-triangle-fill me-1"></i>High
-                </span>
-              {% else %}Normal{% endif %}
-            </td>
-          </tr>
-          {% if complaint['assigned_to'] %}
-          <tr><th>Assigned To</th><td>{{ complaint['assigned_to'] }}</td></tr>
-          {% endif %}
-          {% if complaint['resolved_at'] %}
-          <tr><th>Resolved On</th><td>{{ complaint['resolved_at'][:16].replace('T', ' ') }}</td></tr>
-          {% endif %}
-        </table>
-        <div class="description-block">
-          <strong style="font-size:0.8125rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;">
-            Description
-          </strong>
-          <p class="mt-1 mb-0">{{ complaint['description'] }}</p>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+        <div class="px-space-lg py-space-md bg-surface-container-low border-b border-outline-variant/30">
+          <h2 class="font-title-md text-title-md text-on-surface font-semibold">Complaint Information</h2>
+        </div>
+        <div class="p-0">
+          <table class="w-full text-left text-body-sm">
+            <tbody class="divide-y divide-surface-container">
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Filed On</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ complaint['created_at'][:16].replace('T', ' ') }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Ward</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ complaint['ward'] }}</td>
+              </tr>
+              {% if complaint['address_detail'] %}
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Address</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ complaint['address_detail'] }}</td>
+              </tr>
+              {% endif %}
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Priority</th>
+                <td class="py-3 px-space-lg text-on-surface">
+                  {% if complaint['priority'] == 'High' %}
+                    <span class="inline-flex items-center gap-1 text-error font-semibold">
+                      <span class="material-symbols-outlined text-[16px]">warning</span>High
+                    </span>
+                  {% else %}Normal{% endif %}
+                </td>
+              </tr>
+              {% if complaint['assigned_to'] %}
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Assigned To</th>
+                <td class="py-3 px-space-lg text-on-surface font-medium">{{ complaint['assigned_to'] }}</td>
+              </tr>
+              {% endif %}
+              {% if complaint['resolved_at'] %}
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Resolved On</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ complaint['resolved_at'][:16].replace('T', ' ') }}</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+        <div class="px-space-lg py-space-md border-t border-outline-variant/30 bg-surface-container-lowest">
+          <strong class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Description</strong>
+          <p class="font-body-md text-body-md text-on-surface whitespace-pre-wrap">{{ complaint['description'] }}</p>
         </div>
       </div>
 
       <!-- Resident's complaint photo -->
       {% if complaint['photo_path'] %}
-      <div class="detail-card">
-        <div class="detail-card-title">Resident's Complaint Photo</div>
-        <img src="{{ url_for('static', filename='uploads/' + complaint['photo_path']) }}"
-             alt="Resident complaint photo" class="complaint-photo">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+        <h2 class="font-title-md text-title-md text-on-surface font-semibold">Resident's Complaint Photo</h2>
+        <div class="rounded-lg overflow-hidden border border-outline-variant/30 max-w-full">
+          <img src="{{ url_for('static', filename='uploads/' + complaint['photo_path']) }}" alt="Resident complaint photo" class="w-full h-auto max-h-[600px] object-contain bg-surface-container-lowest">
+        </div>
       </div>
       {% endif %}
 
       <!-- Management Form -->
-      <div class="admin-manage-card">
-        <h4><i class="bi bi-pencil-square me-2"></i>Update This Complaint</h4>
-        <form method="post"
-              action="{{ url_for('admin_update_complaint', complaint_id=complaint['complaint_id']) }}"
-              enctype="multipart/form-data">
-
-          <div class="row g-3 mb-3">
-            <div class="col-sm-6">
-              <label for="status" class="form-label">Status</label>
-              <select id="status" name="status" class="form-select" required>
-                {% for s in statuses %}
-                  <option value="{{ s }}" {% if complaint['status'] == s %}selected{% endif %}>
-                    {{ s }}
-                  </option>
-                {% endfor %}
-              </select>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-primary/20 p-space-lg flex flex-col gap-space-md bg-gradient-to-br from-surface-container-lowest to-surface-container-low/30">
+        <h2 class="font-title-md text-title-md text-primary font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">edit_square</span>
+          Update This Complaint
+        </h2>
+        <form method="post" action="{{ url_for('admin_update_complaint', complaint_id=complaint['complaint_id']) }}" enctype="multipart/form-data" class="flex flex-col gap-space-md">
+          <div class="flex flex-col sm:flex-row gap-space-md">
+            <div class="w-full sm:w-1/2">
+              <label for="status" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Status</label>
+              <div class="relative">
+                <select id="status" name="status" class="w-full appearance-none px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" required>
+                  {% for s in statuses %}
+                    <option value="{{ s }}" {% if complaint['status'] == s %}selected{% endif %}>{{ s }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+              </div>
             </div>
-            <div class="col-sm-6">
-              <label for="assigned_to" class="form-label">Assign Worker</label>
-              <input type="text" id="assigned_to" name="assigned_to" class="form-control"
-                     placeholder="Worker's full name"
-                     value="{{ complaint['assigned_to'] or '' }}">
+            <div class="w-full sm:w-1/2">
+              <label for="assigned_to" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Assign Worker</label>
+              <input type="text" id="assigned_to" name="assigned_to" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="Worker's full name" value="{{ complaint['assigned_to'] or '' }}">
             </div>
           </div>
-
-          <div class="mb-3">
-            <label for="note" class="form-label">Progress Note</label>
-            <textarea id="note" name="note" class="form-control" rows="3"
-                      placeholder="Describe the action taken, reason for update, or instructions to the worker"></textarea>
+          <div>
+            <label for="note" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Progress Note</label>
+            <textarea id="note" name="note" rows="3" class="w-full px-4 py-3 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="Describe the action taken, reason for update, or instructions to the worker"></textarea>
           </div>
-
-          <div class="mb-4">
-            <label for="resolution_photo" class="form-label">
-              Resolution Photo
-              <span style="font-weight:400; color:var(--muted);">(optional — for Resolved status)</span>
+          <div>
+            <label for="resolution_photo" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">
+              Resolution Photo <span class="font-normal text-outline-variant">(optional — for Resolved status)</span>
             </label>
-            <input type="file" id="resolution_photo" name="resolution_photo"
-                   class="form-control" accept=".jpg,.jpeg,.png,.webp">
+            <input type="file" id="resolution_photo" name="resolution_photo" class="w-full px-4 py-2 bg-surface border border-outline-variant/50 rounded-lg font-body-sm text-body-sm text-on-surface file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" accept=".jpg,.jpeg,.png,.webp">
             {% if complaint['resolution_photo_path'] %}
-            <div class="mt-2">
-              <small class="text-muted">Current resolution photo:</small><br>
-              <img src="{{ url_for('static', filename='uploads/' + complaint['resolution_photo_path']) }}"
-                   alt="Resolution photo"
-                   style="max-height:120px; margin-top:6px; display:block; border:1px solid var(--border);">
+            <div class="mt-3">
+              <span class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Current resolution photo:</span>
+              <img src="{{ url_for('static', filename='uploads/' + complaint['resolution_photo_path']) }}" alt="Resolution photo" class="max-h-32 object-contain rounded-lg border border-outline-variant/30 bg-surface">
             </div>
             {% endif %}
           </div>
-
-          <button type="submit" class="btn btn-primary" id="btn-admin-update">
-            <i class="bi bi-check-circle me-1"></i>Save Changes
+          <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-on-primary font-label-lg shadow-sm hover:bg-primary-container transition-all self-start mt-2" id="btn-admin-update">
+            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+            <span>Save Changes</span>
           </button>
         </form>
       </div>
@@ -142,41 +162,46 @@
     </div>
 
     <!-- RIGHT: Audit Trail + Feedback -->
-    <div class="col-lg-5">
+    <div class="lg:col-span-5 flex flex-col gap-space-lg">
 
-      <div class="detail-card">
-        <div class="detail-card-title">Audit Trail — Complete History</div>
-        <div class="timeline">
+      <!-- Audit Trail -->
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+        <h2 class="font-title-md text-title-md text-on-surface font-semibold mb-2">Audit Trail — Complete History</h2>
+        <div class="relative pl-6 border-l-2 border-outline-variant/30 space-y-6">
           {% for log in logs %}
-          <div class="timeline-item {% if loop.last %}timeline-item-last{% endif %}">
-            <div class="timeline-marker">
-              <div class="timeline-dot timeline-dot-{{ log['new_status'].replace(' ', '-').lower() }}"></div>
-              {% if not loop.last %}<div class="timeline-line"></div>{% endif %}
-            </div>
-            <div class="timeline-content">
-              <div class="timeline-status">
+          <div class="relative">
+            <!-- Timeline dot -->
+            <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full border-2 border-surface-container-lowest
+              {% if log['new_status'] == 'Resolved' %}bg-secondary
+              {% elif log['new_status'] == 'Rejected' %}bg-error
+              {% elif log['new_status'] == 'In Progress' %}bg-primary
+              {% else %}bg-tertiary-fixed{% endif %}"></div>
+            
+            <div class="flex flex-col gap-1">
+              <div class="flex flex-wrap items-center gap-2 font-label-sm text-label-sm">
                 {% if log['old_status'] %}
-                  <span class="status-badge status-{{ log['old_status'].replace(' ', '-').lower() }}">
-                    {{ log['old_status'] }}
-                  </span>
-                  <i class="bi bi-arrow-right status-arrow"></i>
+                  <span class="px-2 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-medium">{{ log['old_status'] }}</span>
+                  <span class="material-symbols-outlined text-[14px] text-outline-variant">arrow_right_alt</span>
                 {% endif %}
-                <span class="status-badge status-{{ log['new_status'].replace(' ', '-').lower() }}">
-                  {{ log['new_status'] }}
-                </span>
+                <span class="px-2 py-0.5 rounded-md font-medium
+                  {% if log['new_status'] == 'Resolved' %}bg-secondary-fixed text-on-secondary-fixed
+                  {% elif log['new_status'] == 'Rejected' %}bg-error-container text-on-error-container
+                  {% elif log['new_status'] == 'In Progress' %}bg-primary-container text-on-primary-container
+                  {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">{{ log['new_status'] }}</span>
               </div>
-              <div class="timeline-date">
-                {{ log['changed_at'][:16].replace('T', ' ') }}
-                &nbsp;&mdash;&nbsp;
-                <span style="color:var(--muted);">{{ log['changed_by_name'] }}</span>
+              
+              <div class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+                {{ log['changed_at'][:16].replace('T', ' ') }} <span class="mx-1">•</span>
+                <span class="text-on-surface">{{ log['changed_by_name'] }}</span>
                 {% if log['changed_by_role'] == 'admin' %}
-                  <span style="font-size:0.7rem; color:var(--maroon); font-weight:600;">(Admin)</span>
+                  <span class="text-error font-semibold text-xs ml-1">(Admin)</span>
                 {% else %}
-                  <span style="font-size:0.7rem; color:var(--muted);">(Resident)</span>
+                  <span class="text-outline-variant text-xs ml-1">(Resident)</span>
                 {% endif %}
               </div>
+              
               {% if log['note'] %}
-                <div class="timeline-note">{{ log['note'] }}</div>
+                <div class="mt-2 p-3 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface">{{ log['note'] }}</div>
               {% endif %}
             </div>
           </div>
@@ -184,29 +209,29 @@
         </div>
       </div>
 
-
-      <!-- QR code card (for sharing / printing) -->
-      <div class="qr-card">
-        <div class="qr-card-title">QR Code — Scan to Track</div>
-        <img src="{{ url_for('complaint_qr', complaint_id=complaint['complaint_id']) }}"
-             alt="QR code for {{ complaint['complaint_id'] }}"
-             width="120" height="120" class="qr-img" loading="lazy">
-        <div class="qr-label">{{ complaint['complaint_id'] }}</div>
+      <!-- QR Code -->
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col items-center justify-center text-center gap-3">
+        <h2 class="font-title-md text-title-md text-on-surface font-semibold">QR Code — Scan to Track</h2>
+        <div class="p-2 bg-white rounded-lg border border-outline-variant/20 inline-block shadow-sm">
+          <img src="{{ url_for('complaint_qr', complaint_id=complaint['complaint_id']) }}" alt="QR code for {{ complaint['complaint_id'] }}" width="120" height="120" loading="lazy">
+        </div>
+        <div class="font-label-lg text-label-lg font-mono text-on-surface-variant mt-1">{{ complaint['complaint_id'] }}</div>
       </div>
 
+      <!-- Feedback -->
       {% if feedback_row %}
-      <div class="detail-card">
-        <div class="detail-card-title">Resident Feedback</div>
-        <div class="stars-display mb-2">
-          {% for i in range(1, 6) %}
-            <i class="bi bi-star-fill {% if i <= feedback_row['rating'] %}star-filled{% else %}star-empty{% endif %}"></i>
-          {% endfor %}
-          <span class="ms-2" style="font-size:0.875rem; color:var(--muted);">
-            {{ feedback_row['rating'] }} / 5
-          </span>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-sm">
+        <h2 class="font-title-md text-title-md text-on-surface font-semibold">Resident Feedback</h2>
+        <div class="flex items-center gap-2 mb-1">
+          <div class="flex text-amber-500 text-lg">
+            {% for i in range(1, 6) %}
+              <span class="material-symbols-outlined {% if i <= feedback_row['rating'] %}font-variation-settings-'FILL' 1{% endif %}">star</span>
+            {% endfor %}
+          </div>
+          <span class="font-label-md text-label-md text-on-surface-variant">{{ feedback_row['rating'] }} / 5</span>
         </div>
         {% if feedback_row['comment'] %}
-        <p class="mb-0" style="font-size:0.875rem; color:var(--muted);">
+        <p class="font-body-md text-body-md text-on-surface italic px-3 py-2 border-l-4 border-outline-variant/30 bg-surface-container-lowest">
           &ldquo;{{ feedback_row['comment'] }}&rdquo;
         </p>
         {% endif %}

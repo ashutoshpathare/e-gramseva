@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>{% block title %}Admin Dashboard{% endblock %} — e-gramSeva</title>
+  <meta name="description" content="{% block description %}Gram Panchayat administration.{% endblock %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <style>
+    @layer base{
+      html,body{margin:0;padding:0;}
+      body{overscroll-behavior:none;}
+      main>:first-child{margin-top:0!important;}
+      main>:last-child{margin-bottom:0!important;}
+    }
+    ::-webkit-scrollbar{display:none;}
+  </style>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-secondary-container":"#00714e","surface-bright":"#f8f9ff","on-background":"#0b1c30","error":"#ba1a1a","on-secondary-fixed":"#002114","primary-container":"#1e3a5f","on-primary-fixed-variant":"#2d486d","surface-variant":"#d3e4fe","inverse-on-surface":"#eaf1ff","on-tertiary-fixed":"#2f1500","secondary-fixed-dim":"#68dba9","surface":"#f8f9ff","primary-fixed":"#d5e3ff","secondary-fixed":"#85f8c4","surface-container-low":"#eff4ff","on-secondary-fixed-variant":"#005137","on-surface-variant":"#43474e","outline":"#74777f","on-error-container":"#93000a","secondary-container":"#82f5c1","primary":"#022448","on-secondary":"#ffffff","outline-variant":"#c4c6cf","on-tertiary-container":"#f08921","on-primary-fixed":"#001c3b","secondary":"#006c4a","surface-container-lowest":"#ffffff","surface-tint":"#455f87","tertiary":"#3b1c00","inverse-primary":"#adc8f5","inverse-surface":"#213145","on-error":"#ffffff","error-container":"#ffdad6","surface-container":"#e5eeff","on-tertiary-fixed-variant":"#6e3900","on-surface":"#0b1c30","tertiary-fixed":"#ffdcc3","surface-container-highest":"#d3e4fe","tertiary-container":"#5a2e00","background":"#f8f9ff","on-primary-container":"#8aa4cf","surface-container-high":"#dce9ff","tertiary-fixed-dim":"#ffb77d","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-dim":"#cbdbf5","primary-fixed-dim":"#adc8f5"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-md":"1rem","space-xl":"2rem","margin-mobile":"1rem","gutter":"1.5rem","space-sm":"0.5rem","space-2xl":"3rem","space-lg":"1.5rem","margin":"2rem","gutter-mobile":"1rem","space-xs":"0.25rem"},"fontFamily":{"body-md":["Inter"],"display":["Inter"],"label-md":["Inter"],"body-sm":["Inter"],"label-sm":["Inter"],"body-lg":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"title-md":["Inter"],"headline-sm":["Inter"],"label-lg":["Inter"],"title-lg":["Inter"],"display-mobile":["Inter"]},"fontSize":{"body-md":["0.9375rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"display":["3rem",{"lineHeight":"3.5rem","letterSpacing":"-0.02em","fontWeight":"700"}],"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}],"body-sm":["0.8125rem",{"lineHeight":"1.25rem","fontWeight":"400"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.04em","fontWeight":"500"}],"body-lg":["1.125rem",{"lineHeight":"1.75rem","fontWeight":"400"}],"headline-lg":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["1.75rem",{"lineHeight":"2.25rem","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-md":["1.5rem",{"lineHeight":"2rem","letterSpacing":"-0.01em","fontWeight":"600"}],"title-md":["1rem",{"lineHeight":"1.5rem","fontWeight":"500"}],"headline-sm":["1.25rem",{"lineHeight":"1.75rem","fontWeight":"600"}],"label-lg":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"600"}],"title-lg":["1.125rem",{"lineHeight":"1.625rem","fontWeight":"600"}],"display-mobile":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.015em","fontWeight":"700"}]}}}};</script>
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased">
+  
+  <!-- Flash messages logic mapped from base.html -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="fixed top-20 right-4 z-[9999] flex flex-col gap-2">
+        {% for category, message in messages %}
+          <!-- Simplified alert style -->
+          <div class="px-4 py-3 rounded-xl shadow-lg border border-outline-variant/30 text-on-surface font-body-sm flex justify-between items-center gap-4 {% if category == 'error' or category == 'danger' %}bg-error-container text-on-error-container{% else %}bg-surface-container-lowest{% endif %}" role="alert">
+            <span>{{ message }}</span>
+            <button type="button" class="text-outline-variant hover:text-on-surface" onclick="this.parentElement.remove()">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Sidebar -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-primary-container z-50 flex flex-col justify-between py-space-lg">
+    <div class="flex flex-col">
+      <div class="px-space-lg mb-space-xl flex items-center gap-space-sm">
+        <div class="w-8 h-8 rounded-lg bg-surface-container-lowest/10 flex items-center justify-center">
+          <span class="material-symbols-outlined text-secondary-fixed text-[20px]">account_balance</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-title-md text-title-md text-on-primary font-bold tracking-tight leading-tight">e-gramSeva</span>
+          <span class="font-label-sm text-label-sm text-on-primary-container tracking-wider uppercase">Panchayat Admin</span>
+        </div>
+      </div>
+      <div class="px-space-md mb-space-sm">
+        <span class="px-space-sm font-label-sm text-label-sm text-on-primary-container/70 uppercase tracking-wider font-semibold">Governance Menu</span>
+      </div>
+      <nav class="flex flex-col space-y-1 px-space-sm">
+        <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all {% if request.endpoint == 'admin_dashboard' %}bg-surface-container-lowest/15 text-on-primary font-title-md{% else %}text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary{% endif %}">
+          <span class="material-symbols-outlined text-[20px]">space_dashboard</span>
+          <span class="font-body-md text-body-md">Dashboard</span>
+        </a>
+        <a href="{{ url_for('admin_service_requests') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all {% if request.endpoint in ('admin_service_requests','admin_service_request_detail') %}bg-surface-container-lowest/15 text-on-primary font-title-md{% else %}text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary{% endif %}">
+          <span class="material-symbols-outlined text-[20px]">assignment</span>
+          <span class="font-body-md text-body-md">Service Requests</span>
+        </a>
+        <a href="{{ url_for('admin_properties') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all {% if request.endpoint in ('admin_properties','admin_property_detail','admin_register_property','admin_tax_overview') %}bg-surface-container-lowest/15 text-on-primary font-title-md{% else %}text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary{% endif %}">
+          <span class="material-symbols-outlined text-[20px]">home_work</span>
+          <span class="font-body-md text-body-md">Property &amp; Tax</span>
+        </a>
+        <a href="{{ url_for('admin_register_birth') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all {% if request.endpoint in ('admin_register_birth', 'admin_register_death', 'admin_register_property_nondi', 'admin_register_print') %}bg-surface-container-lowest/15 text-on-primary font-title-md{% else %}text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary{% endif %}">
+          <span class="material-symbols-outlined text-[20px]">menu_book</span>
+          <span class="font-body-md text-body-md">Registers</span>
+        </a>
+        <a href="{{ url_for('admin_notices') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg transition-all {% if request.endpoint == 'admin_notices' %}bg-surface-container-lowest/15 text-on-primary font-title-md{% else %}text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary{% endif %}">
+          <span class="material-symbols-outlined text-[20px]">campaign</span>
+          <span class="font-body-md text-body-md">Notices</span>
+        </a>
+      </nav>
+    </div>
+    <div class="px-space-sm pt-space-md flex flex-col gap-1">
+      <form method="post" action="{{ url_for('logout') }}" class="w-full">
+        <button type="submit" class="w-full flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-primary-container hover:bg-surface-container-lowest/10 hover:text-on-primary transition-all">
+          <span class="material-symbols-outlined text-[20px]">logout</span>
+          <span class="font-body-md text-body-md">Logout</span>
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="pl-64 min-h-screen bg-surface flex flex-col">
+    <header class="h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(15,23,42,0.05)] z-40 flex items-center justify-between px-space-xl">
+      <div class="flex items-center gap-space-lg flex-1">
+        <span class="font-title-md text-title-md text-primary font-bold">Officer Control Center</span>
+      </div>
+      <div class="flex items-center gap-space-lg">
+        <div class="hidden sm:flex items-center gap-space-xs text-on-surface-variant">
+          <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+          <span class="font-label-sm text-label-sm" id="admin-date-display"></span>
+        </div>
+        <div class="flex items-center gap-space-sm pl-space-sm">
+          <div class="hidden md:flex flex-col text-right">
+            <span class="font-label-md text-label-md text-on-surface font-semibold">{{ session.get('full_name', 'Admin') }}</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">Panchayat Admin</span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full flex-grow flex flex-col items-center">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      var d = document.getElementById('admin-date-display');
+      if(d) {
+        d.textContent = new Date().toLocaleDateString('en-IN', {
+          day: 'numeric', month: 'short', year: 'numeric'
+        }) + ' | ' + new Date().toLocaleTimeString('en-IN', {
+          hour: '2-digit', minute: '2-digit'
+        });
+      }
+    })();
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

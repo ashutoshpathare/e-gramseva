@@ -1,96 +1,111 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Mrutyu Nondi — Death Register{% endblock %}
 {% block description %}Official death register — approved death certificate records for the Gram Panchayat.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <!-- Page header -->
-  <div class="register-page-header mt-2">
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-      <div>
-        <div class="register-title">
-          <i class="bi bi-journal-text me-2" style="color:var(--navy);"></i>
-          मृत्यू नोंद &mdash; Mrutyu Nondi
-          <span class="register-count-pill">{{ records | length }}</span>
-        </div>
-        <div class="register-subtitle">Death Register &bull; Gram Panchayat &bull; Official Record (Read-only)</div>
+  <!-- Top Breadcrumb & Executive Title Bar -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+    <div class="flex flex-col gap-space-xs">
+      <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+        <span class="hover:text-primary transition-colors cursor-pointer">Administration</span>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-primary font-semibold">Mrutyu Nondi</span>
       </div>
-      <a href="{{ url_for('admin_register_print', register_type='death',
-                          ward=filters.ward, date_from=filters.date_from, date_to=filters.date_to) }}"
-         class="btn btn-outline-secondary btn-sm" target="_blank" id="btn-print-death">
-        <i class="bi bi-printer me-1"></i>Print Register
+      <div class="flex items-center gap-3">
+        <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">मृत्यू नोंद — Mrutyu Nondi</h1>
+        <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md font-bold">{{ records | length }}</span>
+      </div>
+      <p class="font-body-md text-body-md text-on-surface-variant">Death Register • Gram Panchayat • Official Record (Read-only)</p>
+    </div>
+    <div class="flex items-center gap-space-sm">
+      <a href="{{ url_for('admin_register_print', register_type='death', ward=filters.ward, date_from=filters.date_from, date_to=filters.date_to) }}" class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface border border-outline-variant/30 text-on-surface-variant font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low hover:text-on-surface transition-all" target="_blank" id="btn-print-death">
+        <span class="material-symbols-outlined text-[18px]">print</span>
+        <span>Print Register</span>
       </a>
     </div>
   </div>
 
-  <!-- Filter bar -->
-  <form method="get" action="{{ url_for('admin_register_death') }}" id="form-filter-death">
-    <div class="filter-bar mb-3">
-      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
-      <select name="ward" class="form-select form-select-sm" onchange="this.form.submit()" id="filter-ward-death">
-        <option value="">All Wards</option>
-        {% for w in wards %}
-          <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
-        {% endfor %}
-      </select>
-      <label style="font-size:0.8125rem; white-space:nowrap;">Approved from</label>
-      <input type="date" name="date_from" class="form-control form-control-sm"
-             style="width:auto;" value="{{ filters.date_from }}" id="filter-date-from-death">
-      <label style="font-size:0.8125rem; white-space:nowrap;">to</label>
-      <input type="date" name="date_to" class="form-control form-control-sm"
-             style="width:auto;" value="{{ filters.date_to }}" id="filter-date-to-death">
-      <button type="submit" class="btn btn-sm btn-primary" id="btn-apply-death">Apply</button>
-      {% if filters.ward or filters.date_from or filters.date_to %}
-        <a href="{{ url_for('admin_register_death') }}" class="btn btn-sm btn-outline-secondary" id="btn-clear-death">
-          <i class="bi bi-x-circle me-1"></i>Clear
-        </a>
-        <span style="font-size:0.8125rem; color:var(--muted);">
-          {{ records | length }} result{{ 's' if records | length != 1 else '' }}
-        </span>
-      {% endif %}
-    </div>
-  </form>
+  <!-- Main Section: Table -->
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+    <!-- Filter Controls Bar -->
+    <form method="get" action="{{ url_for('admin_register_death') }}" id="form-filter-death" class="flex flex-wrap items-end gap-space-sm w-full">
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Filter Ward</span>
+        <div class="relative w-48">
+          <select name="ward" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()" id="filter-ward-death">
+            <option value="">All Wards</option>
+            {% for w in wards %}
+              <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
+            {% endfor %}
+          </select>
+          <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Approved From</span>
+        <input type="date" name="date_from" class="pl-3 pr-3 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none border border-outline-variant/30 w-auto" value="{{ filters.date_from }}" id="filter-date-from-death">
+      </div>
+      <div class="flex flex-col gap-1">
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">To</span>
+        <input type="date" name="date_to" class="pl-3 pr-3 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none border border-outline-variant/30 w-auto" value="{{ filters.date_to }}" id="filter-date-to-death">
+      </div>
+      <div class="flex items-center gap-2 pb-0.5">
+        <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all" id="btn-apply-death">Apply</button>
+        {% if filters.ward or filters.date_from or filters.date_to %}
+          <a href="{{ url_for('admin_register_death') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors" id="btn-clear-death">
+            Clear
+          </a>
+        {% endif %}
+      </div>
+    </form>
 
-  <!-- Register table -->
-  {% if records %}
-  <div class="table-wrap">
-    <table class="table table-bordered complaints-table mb-0" id="tbl-death-register">
-      <thead>
-        <tr>
-          <th class="register-sr">Sr.</th>
-          <th>Request No.</th>
-          <th>Applicant Name</th>
-          <th>Ward</th>
-          <th>Date of Death</th>
-          <th>Approved On</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rec in records %}
-        <tr>
-          <td class="register-sr">{{ loop.index }}</td>
-          <td class="cid-cell">{{ rec['request_no'] }}</td>
-          <td>{{ rec['applicant_name'] }}</td>
-          <td>{{ rec['ward'] }}</td>
-          <td style="white-space:nowrap;">{{ rec['form_data'].get('date_of_death', '&mdash;') }}</td>
-          <td style="white-space:nowrap; font-size:0.875rem;">{{ rec['updated_at'][:10] }}</td>
-          <td>
-            <span class="status-badge svc-status-approved">APPROVED</span>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <!-- Data Table -->
+    {% if records %}
+    <div class="overflow-x-auto -mx-space-lg px-space-lg">
+      <table class="w-full text-left min-w-[900px]" id="tbl-death-register">
+        <thead>
+          <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
+            <th class="py-3 px-space-md rounded-l-lg w-16">Sr.</th>
+            <th class="py-3 px-space-md">Request No.</th>
+            <th class="py-3 px-space-md">Applicant Name</th>
+            <th class="py-3 px-space-md">Ward</th>
+            <th class="py-3 px-space-md">Date of Death</th>
+            <th class="py-3 px-space-md">Approved On</th>
+            <th class="py-3 px-space-md rounded-r-lg">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+          {% for rec in records %}
+          <tr class="hover:bg-surface-container-low/70 transition-colors">
+            <td class="py-space-md px-space-md text-on-surface-variant font-medium">{{ loop.index }}</td>
+            <td class="py-space-md px-space-md">
+              <span class="font-semibold text-primary font-mono text-xs">{{ rec['request_no'] }}</span>
+            </td>
+            <td class="py-space-md px-space-md font-medium text-on-surface">{{ rec['applicant_name'] }}</td>
+            <td class="py-space-md px-space-md">{{ rec['ward'] }}</td>
+            <td class="py-space-md px-space-md font-medium">{{ rec['form_data'].get('date_of_death', '—') }}</td>
+            <td class="py-space-md px-space-md">{{ rec['updated_at'][:10] }}</td>
+            <td class="py-space-md px-space-md">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold bg-secondary-fixed text-on-secondary-fixed">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                APPROVED
+              </span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4" id="death-empty-state">
+      <span class="material-symbols-outlined text-[48px] opacity-50">book</span>
+      <p class="font-body-md text-body-md">No approved death records found{% if filters.ward or filters.date_from or filters.date_to %} for the selected filters{% endif %}.</p>
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="empty-state" id="death-empty-state">
-    <i class="bi bi-journal-x d-block mb-2" style="font-size:2.5rem;"></i>
-    <p class="mb-0">No approved death records found{% if filters.ward or filters.date_from or filters.date_to %} for the selected filters{% endif %}.</p>
-  </div>
-  {% endif %}
 
 </div>
 {% endblock %}

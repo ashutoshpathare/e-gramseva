@@ -1,84 +1,124 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin: {{ prop['property_no'] }}{% endblock %}
 {% block description %}Manage property {{ prop['property_no'] }}.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <div class="pt-2 mb-2">
-    <a href="{{ url_for('admin_properties') }}" class="back-link">
-      <i class="bi bi-arrow-left me-1"></i>Back to Properties
+  <!-- Back Link -->
+  <div>
+    <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors">
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      <span>Back to Properties</span>
     </a>
   </div>
 
   <!-- Header -->
-  <div class="detail-header">
-    <div>
-      <h1 class="page-title mb-1">{{ prop['property_no'] }}</h1>
-      <span class="category-label">
-        <i class="bi bi-house me-1"></i>{{ prop['property_type'].replace('_', ' ').title() }}
-      </span>
-      &nbsp;&mdash;&nbsp;
-      <span style="font-size:0.875rem; color:var(--muted);">{{ prop['ward'] }}</span>
-      &nbsp;&mdash;&nbsp;
-      <span style="font-size:0.875rem;">
-        Owner: <strong>{{ prop['owner_name'] }}</strong>
-        {% if prop['owner_mobile'] %}
-          <a href="tel:{{ prop['owner_mobile'] }}" style="font-size:0.8125rem; color:var(--muted);">{{ prop['owner_mobile'] }}</a>
-        {% endif %}
-      </span>
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full">
+    <div class="flex flex-col gap-2">
+      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-mono">{{ prop['property_no'] }}</h1>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-on-surface-variant font-body-sm text-body-sm">
+        <span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">house</span>
+          {{ prop['property_type'].replace('_', ' ').title() }}
+        </span>
+        <span class="hidden sm:block text-outline-variant">•</span>
+        <span>{{ prop['ward'] }}</span>
+        <span class="hidden sm:block text-outline-variant">•</span>
+        <span>
+          Owner: <strong class="text-on-surface">{{ prop['owner_name'] }}</strong>
+          {% if prop['owner_mobile'] %}
+            <a href="tel:{{ prop['owner_mobile'] }}" class="text-primary hover:underline ml-1">{{ prop['owner_mobile'] }}</a>
+          {% endif %}
+        </span>
+      </div>
     </div>
-    <span class="status-badge status-badge-lg svc-status-{{ 'approved' if prop['status'] == 'ACTIVE' else 'rejected' if prop['status'] == 'DISPUTED' else 'verified' }}">
+    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full font-label-md text-label-md font-semibold
+      {% if prop['status'] == 'ACTIVE' %}bg-secondary-fixed text-on-secondary-fixed
+      {% elif prop['status'] == 'DISPUTED' %}bg-error-container text-on-error-container
+      {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
+      <span class="w-2 h-2 rounded-full {% if prop['status'] == 'ACTIVE' %}bg-secondary{% elif prop['status'] == 'DISPUTED' %}bg-error{% else %}bg-on-tertiary-container{% endif %}"></span>
       {{ prop['status'] }}
     </span>
   </div>
 
-  <div class="row g-3 mt-0">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full">
 
     <!-- LEFT: Property details + Tax records + Payments -->
-    <div class="col-lg-7">
+    <div class="lg:col-span-7 flex flex-col gap-space-lg">
 
       <!-- Property Info -->
-      <div class="detail-card">
-        <div class="detail-card-title">Property Details</div>
-        <table class="detail-table">
-          <tr><th>Property No.</th><td>{{ prop['property_no'] }}</td></tr>
-          <tr><th>Address</th><td>{{ prop['address'] }}</td></tr>
-          <tr><th>Ward</th><td>{{ prop['ward'] }}</td></tr>
-          <tr><th>Type</th><td>{{ prop['property_type'].replace('_', ' ').title() }}</td></tr>
-          <tr><th>Area</th><td>{{ prop['area_sqft'] | int }} sq ft</td></tr>
-          <tr><th>Assessed Value</th><td>₹{{ '{:,.0f}'.format(prop['assessed_value']) }}</td></tr>
-          <tr><th>Registered</th><td>{{ prop['registered_at'][:10] if prop['registered_at'] else '—' }}</td></tr>
-        </table>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
+        <div class="px-space-lg py-space-md bg-surface-container-low border-b border-outline-variant/30">
+          <h2 class="font-title-md text-title-md text-on-surface font-semibold">Property Details</h2>
+        </div>
+        <div class="p-0">
+          <table class="w-full text-left text-body-sm">
+            <tbody class="divide-y divide-surface-container">
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Property No.</th>
+                <td class="py-3 px-space-lg text-on-surface font-mono">{{ prop['property_no'] }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Address</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ prop['address'] }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Ward</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ prop['ward'] }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Type</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ prop['property_type'].replace('_', ' ').title() }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Area</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ prop['area_sqft'] | int }} sq ft</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Assessed Value</th>
+                <td class="py-3 px-space-lg text-on-surface font-semibold">₹{{ '{:,.0f}'.format(prop['assessed_value']) }}</td>
+              </tr>
+              <tr class="hover:bg-surface-container-low/30 transition-colors">
+                <th class="py-3 px-space-lg font-semibold text-on-surface-variant w-1/3">Registered</th>
+                <td class="py-3 px-space-lg text-on-surface">{{ prop['registered_at'][:10] if prop['registered_at'] else '—' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Tax Records -->
-      <div class="detail-card">
-        <div class="detail-card-title">
-          <i class="bi bi-receipt-cutoff me-1"></i>Tax Records
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 flex flex-col overflow-hidden">
+        <div class="px-space-lg py-space-md border-b border-outline-variant/30 bg-surface-container-low flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px] text-on-surface-variant">receipt_long</span>
+          <h2 class="font-title-md text-title-md text-on-surface font-semibold">Tax Records</h2>
         </div>
         {% if tax_records %}
-        <div class="table-wrap">
-          <table class="table table-bordered complaints-table mb-0">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left font-body-sm text-body-sm min-w-[500px]">
             <thead>
-              <tr>
-                <th>Tax Type</th>
-                <th>F.Y.</th>
-                <th>Amount Due</th>
-                <th>Due Date</th>
-                <th>Status</th>
+              <tr class="text-on-surface-variant font-semibold border-b border-surface-container">
+                <th class="py-3 px-space-md pl-space-lg">Tax Type</th>
+                <th class="py-3 px-space-md">F.Y.</th>
+                <th class="py-3 px-space-md">Amount Due</th>
+                <th class="py-3 px-space-md">Due Date</th>
+                <th class="py-3 px-space-md pr-space-lg">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-surface-container text-on-surface">
               {% for tr in tax_records %}
-              <tr>
-                <td>{{ tr['tax_type'].replace('_', ' ').title() }}</td>
-                <td>{{ tr['financial_year'] }}</td>
-                <td style="font-weight:600;">₹{{ '{:,.0f}'.format(tr['amount_due']) }}</td>
-                <td style="white-space:nowrap; font-size:0.875rem;">{{ tr['due_date'] }}</td>
-                <td>
-                  <span class="status-badge tax-status-{{ tr['status'].lower() }}">
+              <tr class="hover:bg-surface-container-low/50">
+                <td class="py-3 px-space-md pl-space-lg">{{ tr['tax_type'].replace('_', ' ').title() }}</td>
+                <td class="py-3 px-space-md">{{ tr['financial_year'] }}</td>
+                <td class="py-3 px-space-md font-semibold">₹{{ '{:,.0f}'.format(tr['amount_due']) }}</td>
+                <td class="py-3 px-space-md whitespace-nowrap">{{ tr['due_date'] }}</td>
+                <td class="py-3 px-space-md pr-space-lg">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold
+                    {% if tr['status'] == 'PAID' %}bg-secondary/10 text-secondary
+                    {% elif tr['status'] == 'OVERDUE' %}bg-error/10 text-error
+                    {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
                     {{ tr['status'] }}
                   </span>
                 </td>
@@ -88,43 +128,49 @@
           </table>
         </div>
         {% else %}
-        <p class="text-muted mb-0" style="font-size:0.875rem;">No tax records yet.</p>
+        <div class="p-space-lg text-on-surface-variant font-body-sm text-body-sm">
+          No tax records yet.
+        </div>
         {% endif %}
       </div>
 
       <!-- Payment History -->
       {% if payments %}
-      <div class="detail-card">
-        <div class="detail-card-title">
-          <i class="bi bi-wallet2 me-1"></i>Payment History
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 flex flex-col overflow-hidden">
+        <div class="px-space-lg py-space-md border-b border-outline-variant/30 bg-surface-container-low flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px] text-on-surface-variant">account_balance_wallet</span>
+          <h2 class="font-title-md text-title-md text-on-surface font-semibold">Payment History</h2>
         </div>
-        <div class="table-wrap">
-          <table class="table table-bordered complaints-table mb-0">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left font-body-sm text-body-sm min-w-[600px]">
             <thead>
-              <tr>
-                <th>Receipt No.</th>
-                <th>Tax</th>
-                <th>Year</th>
-                <th>Amount</th>
-                <th>Method</th>
-                <th>Status</th>
-                <th>Paid On</th>
+              <tr class="text-on-surface-variant font-semibold border-b border-surface-container">
+                <th class="py-3 px-space-md pl-space-lg">Receipt No.</th>
+                <th class="py-3 px-space-md">Tax</th>
+                <th class="py-3 px-space-md">Year</th>
+                <th class="py-3 px-space-md">Amount</th>
+                <th class="py-3 px-space-md">Method</th>
+                <th class="py-3 px-space-md">Status</th>
+                <th class="py-3 px-space-md pr-space-lg">Paid On</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-surface-container text-on-surface">
               {% for py in payments %}
-              <tr>
-                <td class="cid-cell">{{ py['receipt_no'] or '—' }}</td>
-                <td>{{ py['tax_type'].replace('_', ' ').title() }}</td>
-                <td>{{ py['financial_year'] }}</td>
-                <td style="font-weight:600;">₹{{ '{:,.0f}'.format(py['amount_paid']) }}</td>
-                <td style="font-size:0.8125rem;">{{ py['payment_method'] or '—' }}</td>
-                <td>
-                  <span class="status-badge svc-status-{{ 'approved' if py['payment_status'] == 'SUCCESS' else 'rejected' if py['payment_status'] == 'FAILED' else 'pending' }}">
+              <tr class="hover:bg-surface-container-low/50">
+                <td class="py-3 px-space-md pl-space-lg font-mono text-xs">{{ py['receipt_no'] or '—' }}</td>
+                <td class="py-3 px-space-md">{{ py['tax_type'].replace('_', ' ').title() }}</td>
+                <td class="py-3 px-space-md">{{ py['financial_year'] }}</td>
+                <td class="py-3 px-space-md font-semibold">₹{{ '{:,.0f}'.format(py['amount_paid']) }}</td>
+                <td class="py-3 px-space-md">{{ py['payment_method'] or '—' }}</td>
+                <td class="py-3 px-space-md">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold
+                    {% if py['payment_status'] == 'SUCCESS' %}bg-secondary/10 text-secondary
+                    {% elif py['payment_status'] == 'FAILED' %}bg-error/10 text-error
+                    {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
                     {{ py['payment_status'] }}
                   </span>
                 </td>
-                <td style="white-space:nowrap; font-size:0.875rem;">{{ py['paid_at'][:10] if py['paid_at'] else '—' }}</td>
+                <td class="py-3 px-space-md pr-space-lg whitespace-nowrap">{{ py['paid_at'][:10] if py['paid_at'] else '—' }}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -136,63 +182,76 @@
     </div>
 
     <!-- RIGHT: Admin actions -->
-    <div class="col-lg-5">
+    <div class="lg:col-span-5 flex flex-col gap-space-lg">
 
       <!-- Update property -->
-      <div class="admin-manage-card">
-        <h4><i class="bi bi-pencil-square me-2"></i>Update Property</h4>
-        <form method="post" action="{{ url_for('admin_update_property', property_no=prop['property_no']) }}">
-          <div class="row g-3 mb-3">
-            <div class="col-sm-6">
-              <label for="status" class="form-label">Status</label>
-              <select id="status" name="status" class="form-select">
-                {% for s in property_statuses %}
-                  <option value="{{ s }}" {% if prop['status'] == s %}selected{% endif %}>{{ s }}</option>
-                {% endfor %}
-              </select>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-primary/20 p-space-lg flex flex-col gap-space-md bg-gradient-to-br from-surface-container-lowest to-surface-container-low/30">
+        <h2 class="font-title-md text-title-md text-primary font-bold flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">edit_square</span>
+          Update Property
+        </h2>
+        <form method="post" action="{{ url_for('admin_update_property', property_no=prop['property_no']) }}" class="flex flex-col gap-space-md">
+          <div class="flex flex-col sm:flex-row gap-space-md">
+            <div class="w-full sm:w-1/2">
+              <label for="status" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Status</label>
+              <div class="relative">
+                <select id="status" name="status" class="w-full appearance-none px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer">
+                  {% for s in property_statuses %}
+                    <option value="{{ s }}" {% if prop['status'] == s %}selected{% endif %}>{{ s }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+              </div>
             </div>
-            <div class="col-sm-6">
-              <label for="assessed_value" class="form-label">Assessed Value (₹)</label>
-              <input type="number" id="assessed_value" name="assessed_value" class="form-control"
-                     step="0.01" value="{{ prop['assessed_value'] }}">
+            <div class="w-full sm:w-1/2">
+              <label for="assessed_value" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Assessed Value (₹)</label>
+              <input type="number" id="assessed_value" name="assessed_value" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" step="0.01" value="{{ prop['assessed_value'] }}">
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-check-circle me-1"></i>Save Changes
+          <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-on-primary font-label-lg shadow-sm hover:bg-primary-container transition-all self-start mt-2">
+            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+            <span>Save Changes</span>
           </button>
         </form>
       </div>
 
       <!-- Add tax record -->
-      <div class="admin-manage-card">
-        <h4><i class="bi bi-receipt me-2"></i>Add Tax Record</h4>
-        <form method="post" action="{{ url_for('admin_add_tax_record', property_no=prop['property_no']) }}">
-          <div class="row g-3 mb-3">
-            <div class="col-sm-6">
-              <label for="tax_type" class="form-label">Tax Type</label>
-              <select id="tax_type" name="tax_type" class="form-select" required>
-                {% for t in tax_types %}
-                  <option value="{{ t }}">{{ t.replace('_', ' ').title() }}</option>
-                {% endfor %}
-              </select>
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+        <h2 class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px] text-primary">receipt</span>
+          Add Tax Record
+        </h2>
+        <form method="post" action="{{ url_for('admin_add_tax_record', property_no=prop['property_no']) }}" class="flex flex-col gap-space-md">
+          <div class="flex flex-col sm:flex-row gap-space-md">
+            <div class="w-full sm:w-1/2">
+              <label for="tax_type" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Tax Type</label>
+              <div class="relative">
+                <select id="tax_type" name="tax_type" class="w-full appearance-none px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" required>
+                  {% for t in tax_types %}
+                    <option value="{{ t }}">{{ t.replace('_', ' ').title() }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+              </div>
             </div>
-            <div class="col-sm-6">
-              <label for="financial_year" class="form-label">Financial Year</label>
-              <input type="text" id="financial_year" name="financial_year" class="form-control"
-                     placeholder="e.g. 2026-27" required>
-            </div>
-            <div class="col-sm-6">
-              <label for="amount_due" class="form-label">Amount Due (₹)</label>
-              <input type="number" id="amount_due" name="amount_due" class="form-control"
-                     step="0.01" min="1" required>
-            </div>
-            <div class="col-sm-6">
-              <label for="due_date" class="form-label">Due Date</label>
-              <input type="date" id="due_date" name="due_date" class="form-control" required>
+            <div class="w-full sm:w-1/2">
+              <label for="financial_year" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Financial Year</label>
+              <input type="text" id="financial_year" name="financial_year" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="e.g. 2026-27" required>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i>Add Tax Record
+          <div class="flex flex-col sm:flex-row gap-space-md">
+            <div class="w-full sm:w-1/2">
+              <label for="amount_due" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Amount Due (₹)</label>
+              <input type="number" id="amount_due" name="amount_due" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" step="0.01" min="1" required>
+            </div>
+            <div class="w-full sm:w-1/2">
+              <label for="due_date" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">Due Date</label>
+              <input type="date" id="due_date" name="due_date" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" required>
+            </div>
+          </div>
+          <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg border border-outline-variant/50 hover:bg-surface-container font-label-lg text-on-surface transition-colors self-start mt-2">
+            <span class="material-symbols-outlined text-[20px]">add_circle</span>
+            <span>Add Tax Record</span>
           </button>
         </form>
       </div>

@@ -5,198 +5,287 @@
 {% block title %}Apply: {{ _(type_labels[sub_type]) }}{% endblock %}
 {% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
 
+{% block head_extra %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      "primary":                  "#022448",
+      "primary-container":        "#1e3a5f",
+      "on-primary":               "#ffffff",
+      "on-primary-container":     "#8aa4cf",
+      "secondary":                "#006c4a",
+      "on-secondary":             "#ffffff",
+      "secondary-container":      "#82f5c1",
+      "on-secondary-container":   "#00714e",
+      "error":                    "#ba1a1a",
+      "surface":                  "#f8f9ff",
+      "on-surface":               "#0b1c30",
+      "on-surface-variant":       "#43474e",
+      "surface-container-lowest": "#ffffff",
+      "surface-container-low":    "#eff4ff",
+      "surface-container":        "#e5eeff",
+      "surface-container-high":   "#dce9ff",
+      "surface-container-highest":"#d3e4fe",
+      "outline":                  "#74777f",
+      "outline-variant":          "#c4c6cf",
+      "on-primary-fixed-variant": "#2d486d",
+      "primary-fixed":            "#d5e3ff",
+      "secondary-fixed":          "#85f8c4",
+    },
+    borderRadius: {
+      DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem",
+      "2xl": "1rem", "3xl": "1.5rem", full: "9999px"
+    },
+  }}
+};
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
-  <div class="form-page-wrap">
+<div class="bg-surface min-h-screen font-sans text-on-surface pb-12">
+  <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-surface-container-high/40 blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+    
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm text-on-surface-variant">
+        <li>
+          <a href="{{ url_for('certificate_services') }}" class="hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Certificate Services
+          </a>
+        </li>
+      </ol>
+    </nav>
 
-    <div class="pt-2 mb-2">
-      <a href="{{ url_for('certificate_services') }}" class="back-link">
-        <i class="bi bi-arrow-left me-1"></i>Back to Certificate Services
-      </a>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-xs font-semibold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Statutory Civic Service
+        </div>
+        <h1 class="text-3xl font-bold text-primary tracking-tight">
+          {{ _(type_labels[sub_type]) }} &mdash; Application
+        </h1>
+        <p class="text-sm text-on-surface-variant flex items-center gap-2">
+          Fields marked <span class="text-error font-bold">*</span> are required. A unique request number will be generated on submission.
+        </p>
+      </div>
+      <div class="hidden sm:flex items-center gap-4 bg-surface-container-lowest shadow-sm rounded-xl p-3 px-4">
+        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[22px]">timer</span>
+        </div>
+        <div>
+          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Statutory SLA</span>
+          <span class="text-base font-bold text-on-surface">15 Working Days</span>
+        </div>
+      </div>
     </div>
 
-    <div class="form-page-header">
-      <h1 class="page-title">{{ _(type_labels[sub_type]) }} — Application</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">
-        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
-        A unique request number will be generated on submission.
-      </p>
-    </div>
-
-    {# ── Outstanding-dues warning banner (shared partial, Phase 7.2 / 9.2) ── #}
+    {# ── Outstanding-dues warning banner (shared partial) ── #}
     {% include 'villager/_dues_banner.html' %}
     {# ─────────────────────────────────────────────────────────────────────── #}
 
-    <form method="post"
-          action="{{ url_for('certificate_apply', sub_type=sub_type.lower()) }}"
-          enctype="multipart/form-data" novalidate>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
+      <form method="post" action="{{ url_for('certificate_apply', sub_type=sub_type.lower()) }}" enctype="multipart/form-data" novalidate class="lg:col-span-8 bg-surface-container-lowest shadow-sm rounded-2xl p-6 sm:p-8 space-y-8">
+        
+        <!-- SECTION 1 -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
+            <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
+            <h2 class="text-lg font-bold text-primary tracking-tight">Applicant Details</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">Applicant Name <span class="text-error">*</span></label>
+              <input type="text" id="applicant_name" name="applicant_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" value="{{ form.get('applicant_name', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">Ward <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                    <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <!-- Section 1: Applicant Info -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">1</span> Applicant Details
+        <!-- SECTION 2 -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
+            <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">2</span>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ _(type_labels[sub_type]) }} Details</h2>
+          </div>
+
+          {% if sub_type == 'BIRTH' %}
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <label for="date_of_birth" class="block text-sm text-on-surface-variant font-medium">Date of Birth <span class="text-error">*</span></label>
+              <input type="date" id="date_of_birth" name="date_of_birth" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('date_of_birth', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="place_of_birth" class="block text-sm text-on-surface-variant font-medium">Place of Birth</label>
+              <input type="text" id="place_of_birth" name="place_of_birth" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Shivaji Hospital" value="{{ form.get('place_of_birth', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="gender" class="block text-sm text-on-surface-variant font-medium">Gender</label>
+              <div class="relative">
+                <select id="gender" name="gender" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer">
+                  <option value="">—</option>
+                  <option value="Male" {% if form.get('gender')=='Male' %}selected{% endif %}>Male</option>
+                  <option value="Female" {% if form.get('gender')=='Female' %}selected{% endif %}>Female</option>
+                  <option value="Other" {% if form.get('gender')=='Other' %}selected{% endif %}>Other</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label for="father_name" class="block text-sm text-on-surface-variant font-medium">Father's Name</label>
+              <input type="text" id="father_name" name="father_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('father_name', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="mother_name" class="block text-sm text-on-surface-variant font-medium">Mother's Name</label>
+              <input type="text" id="mother_name" name="mother_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('mother_name', '') }}">
+            </div>
+          </div>
+
+          {% elif sub_type == 'DEATH' %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1 sm:col-span-2">
+              <label for="deceased_name" class="block text-sm text-on-surface-variant font-medium">Deceased's Full Name <span class="text-error">*</span></label>
+              <input type="text" id="deceased_name" name="deceased_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('deceased_name', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="date_of_death" class="block text-sm text-on-surface-variant font-medium">Date of Death <span class="text-error">*</span></label>
+              <input type="date" id="date_of_death" name="date_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('date_of_death', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="relation" class="block text-sm text-on-surface-variant font-medium">Relation to Deceased</label>
+              <input type="text" id="relation" name="relation" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Son, Daughter" value="{{ form.get('relation', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="place_of_death" class="block text-sm text-on-surface-variant font-medium">Place of Death</label>
+              <input type="text" id="place_of_death" name="place_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('place_of_death', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="cause_of_death" class="block text-sm text-on-surface-variant font-medium">Cause of Death</label>
+              <input type="text" id="cause_of_death" name="cause_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('cause_of_death', '') }}">
+            </div>
+          </div>
+
+          {% elif sub_type == 'RESIDENCE' %}
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+            <div class="space-y-1 sm:col-span-8">
+              <label for="full_address" class="block text-sm text-on-surface-variant font-medium">Full Residential Address <span class="text-error">*</span></label>
+              <input type="text" id="full_address" name="full_address" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="House No., Street, Village, Taluka, District" value="{{ form.get('full_address', '') }}" required>
+            </div>
+            <div class="space-y-1 sm:col-span-4">
+              <label for="resident_since" class="block text-sm text-on-surface-variant font-medium">Resident Since</label>
+              <input type="text" id="resident_since" name="resident_since" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 2005 or Birth" value="{{ form.get('resident_since', '') }}">
+            </div>
+            <div class="space-y-1 sm:col-span-6">
+              <label for="purpose" class="block text-sm text-on-surface-variant font-medium">Purpose of Certificate</label>
+              <input type="text" id="purpose" name="purpose" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. School admission, Employment" value="{{ form.get('purpose', '') }}">
+            </div>
+            <div class="space-y-1 sm:col-span-6">
+              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">Aadhaar Last 4 Digits</label>
+              <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 5678" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
+            </div>
+          </div>
+          {% endif %}
+        </section>
+
+        <!-- SECTION 3: Document Upload -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-surface-container">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
+              <h2 class="text-lg font-bold text-primary tracking-tight">Supporting Document</h2>
+            </div>
+            <span class="text-sm text-on-surface-variant font-medium">(optional)</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">
+            Upload a scanned copy of your identity proof (Aadhaar, Voter ID) or supporting document.
+            Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+          </p>
+          <div class="relative">
+            <input type="file" id="document" name="document" class="w-full bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-container hover:file:text-white transition-all cursor-pointer" accept=".jpg,.jpeg,.png,.webp,.pdf">
+          </div>
+        </section>
+
+        <!-- Submit Bar -->
+        <div class="pt-4 flex flex-col sm:flex-row gap-3">
+          {% if unpaid_dues %}
+          <button type="submit" id="submit-application-btn" class="flex-1 py-3.5 px-6 rounded-lg bg-outline text-white font-semibold flex items-center justify-center gap-2 cursor-not-allowed opacity-75" disabled title="Clear your outstanding tax dues before submitting">
+            <span class="material-symbols-outlined text-[20px]">lock</span>
+            Blocked — Clear Dues First
+          </button>
+          {% else %}
+          <button type="submit" id="submit-application-btn" class="flex-1 py-3.5 px-6 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.99]">
+            <span class="material-symbols-outlined text-[20px]">send</span>
+            Submit Application
+          </button>
+          {% endif %}
+          <a href="{{ url_for('certificate_services') }}" class="py-3.5 px-6 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold flex items-center justify-center text-center transition-all">
+            {{ _('Cancel') }}
+          </a>
         </div>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="applicant_name" class="form-label">
-              Applicant Name <span class="required-mark">*</span>
-            </label>
-            <input type="text" id="applicant_name" name="applicant_name" class="form-control"
-                   value="{{ form.get('applicant_name', '') }}" required>
-          </div>
-          <div class="col-md-6">
-            <label for="ward" class="form-label">
-              Ward <span class="required-mark">*</span>
-            </label>
-            <select id="ward" name="ward" class="form-select" required>
-              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
-                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
-                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
-                  {{ w }}
-                </option>
-              {% endfor %}
-            </select>
+      </form>
+
+      <!-- Contextual Sidebar -->
+      <aside class="hidden lg:block lg:col-span-4 space-y-6">
+        <div class="bg-surface-container-lowest shadow-sm rounded-2xl overflow-hidden border border-surface-container">
+          <div class="p-6 space-y-4">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="material-symbols-outlined text-primary text-[28px]">account_balance</span>
+              <h3 class="text-base font-bold text-primary">Gram Panchayat Helpdesk</h3>
+            </div>
+            <div class="space-y-3 text-sm text-on-surface-variant">
+              <div class="flex items-center justify-between">
+                <span>Timings:</span>
+                <span class="font-medium text-on-surface">10 AM to 5 PM</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span>Contact:</span>
+                <span class="font-medium text-on-surface">1800-233-4566</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Section 2: Sub-type specific fields -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">2</span> {{ type_labels[sub_type] }} Details
+        
+        <div class="bg-surface-container-lowest shadow-sm rounded-2xl p-6 space-y-4 border border-surface-container">
+          <h3 class="text-base font-bold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[22px]">checklist_rtl</span>
+            Before You Submit
+          </h3>
+          <ul class="space-y-3 text-sm text-on-surface-variant">
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
+              <span>Verify all spellings precisely match your Aadhaar card.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
+              <span>A valid phone number is required for SMS updates.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
+              <span>Ensure supporting documents are legible and under 5 MB.</span>
+            </li>
+          </ul>
         </div>
-
-        {% if sub_type == 'BIRTH' %}
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label for="date_of_birth" class="form-label">Date of Birth <span class="required-mark">*</span></label>
-            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control"
-                   value="{{ form.get('date_of_birth', '') }}" required>
-          </div>
-          <div class="col-md-4">
-            <label for="place_of_birth" class="form-label">Place of Birth</label>
-            <input type="text" id="place_of_birth" name="place_of_birth" class="form-control"
-                   placeholder="e.g. Shivaji Hospital, Pune"
-                   value="{{ form.get('place_of_birth', '') }}">
-          </div>
-          <div class="col-md-4">
-            <label for="gender" class="form-label">Gender</label>
-            <select id="gender" name="gender" class="form-select">
-              <option value="">—</option>
-              <option value="Male" {% if form.get('gender')=='Male' %}selected{% endif %}>Male</option>
-              <option value="Female" {% if form.get('gender')=='Female' %}selected{% endif %}>Female</option>
-              <option value="Other" {% if form.get('gender')=='Other' %}selected{% endif %}>Other</option>
-            </select>
-          </div>
-          <div class="col-md-6">
-            <label for="father_name" class="form-label">Father's Name</label>
-            <input type="text" id="father_name" name="father_name" class="form-control"
-                   value="{{ form.get('father_name', '') }}">
-          </div>
-          <div class="col-md-6">
-            <label for="mother_name" class="form-label">Mother's Name</label>
-            <input type="text" id="mother_name" name="mother_name" class="form-control"
-                   value="{{ form.get('mother_name', '') }}">
-          </div>
-        </div>
-
-        {% elif sub_type == 'DEATH' %}
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="deceased_name" class="form-label">Deceased's Full Name <span class="required-mark">*</span></label>
-            <input type="text" id="deceased_name" name="deceased_name" class="form-control"
-                   value="{{ form.get('deceased_name', '') }}" required>
-          </div>
-          <div class="col-md-3">
-            <label for="date_of_death" class="form-label">Date of Death <span class="required-mark">*</span></label>
-            <input type="date" id="date_of_death" name="date_of_death" class="form-control"
-                   value="{{ form.get('date_of_death', '') }}" required>
-          </div>
-          <div class="col-md-3">
-            <label for="relation" class="form-label">Relation to Deceased</label>
-            <input type="text" id="relation" name="relation" class="form-control"
-                   placeholder="e.g. Son, Daughter"
-                   value="{{ form.get('relation', '') }}">
-          </div>
-          <div class="col-md-6">
-            <label for="place_of_death" class="form-label">Place of Death</label>
-            <input type="text" id="place_of_death" name="place_of_death" class="form-control"
-                   value="{{ form.get('place_of_death', '') }}">
-          </div>
-          <div class="col-md-6">
-            <label for="cause_of_death" class="form-label">Cause of Death</label>
-            <input type="text" id="cause_of_death" name="cause_of_death" class="form-control"
-                   value="{{ form.get('cause_of_death', '') }}">
-          </div>
-        </div>
-
-        {% elif sub_type == 'RESIDENCE' %}
-        <div class="row g-3">
-          <div class="col-md-8">
-            <label for="full_address" class="form-label">Full Residential Address <span class="required-mark">*</span></label>
-            <input type="text" id="full_address" name="full_address" class="form-control"
-                   placeholder="House No., Street, Village, Taluka, District"
-                   value="{{ form.get('full_address', '') }}" required>
-          </div>
-          <div class="col-md-4">
-            <label for="resident_since" class="form-label">Resident Since</label>
-            <input type="text" id="resident_since" name="resident_since" class="form-control"
-                   placeholder="e.g. 2005 or Birth"
-                   value="{{ form.get('resident_since', '') }}">
-          </div>
-          <div class="col-md-6">
-            <label for="purpose" class="form-label">Purpose of Certificate</label>
-            <input type="text" id="purpose" name="purpose" class="form-control"
-                   placeholder="e.g. School admission, Employment"
-                   value="{{ form.get('purpose', '') }}">
-          </div>
-          <div class="col-md-6">
-            <label for="aadhaar_last4" class="form-label">Aadhaar Last 4 Digits</label>
-            <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="form-control"
-                   placeholder="e.g. 5678" maxlength="4"
-                   value="{{ form.get('aadhaar_last4', '') }}">
-          </div>
-        </div>
-        {% endif %}
-      </div>
-
-      <!-- Section 3: Document Upload -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">3</span> Supporting Document
-          <span class="section-optional">(recommended)</span>
-        </div>
-        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
-          Upload a scanned copy of your identity proof (Aadhaar, Voter ID) or supporting document.
-          Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
-        </p>
-        <input type="file" id="document" name="document" class="form-control"
-               accept=".jpg,.jpeg,.png,.webp,.pdf" style="max-width:400px;">
-      </div>
-
-      <!-- Submit -->
-      <div class="form-submit-bar">
-        {% if unpaid_dues %}
-        {# Phase 7.2 — UX block: dues present, submit is disabled. Backend gate in Phase 7.1 still enforces this on POST. #}
-        <button type="submit" id="submit-application-btn" class="btn btn-primary" disabled
-                title="Clear your outstanding tax dues before submitting"
-                style="opacity:.45; cursor:not-allowed;">
-          <i class="bi bi-lock me-1"></i>Blocked — Clear Dues First
-        </button>
-        {% else %}
-        <button type="submit" id="submit-application-btn" class="btn btn-primary">
-          <i class="bi bi-send me-1"></i>Submit Application
-        </button>
-        {% endif %}
-        <a href="{{ url_for('certificate_services') }}" class="btn btn-outline-secondary ms-2">
-          {{ _('Cancel') }}
-        </a>
-      </div>
-
-    </form>
+      </aside>
+    </div>
   </div>
 </div>
 {% endblock %}

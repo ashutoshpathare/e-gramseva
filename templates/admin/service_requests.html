@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin_base.html' %}
 
 {% block title %}Admin — Service Requests{% endblock %}
 {% block description %}Review and manage certificate, permission, and scheme applications from residents.{% endblock %}
@@ -16,105 +16,160 @@
 } %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full">
 
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-2 mb-3">
-    <div>
-      <h1 class="page-title">Service Requests</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">Certificate, permission, and scheme applications from residents</p>
+  <!-- Top Breadcrumb & Executive Title Bar -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+    <div class="flex flex-col gap-space-xs">
+      <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+        <span class="hover:text-primary transition-colors cursor-pointer">Administration</span>
+        <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        <span class="text-primary font-semibold">Service Requests</span>
+      </div>
+      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Service Requests</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">Certificate, permission, and scheme applications from residents</p>
     </div>
-    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary btn-sm">
-      <i class="bi bi-arrow-left me-1"></i>Complaints Dashboard
-    </a>
-  </div>
-
-  <!-- Stats -->
-  <div class="admin-stats-bar mb-3">
-    <div class="admin-stat-item">
-      <span class="admin-stat-value">{{ stats.total }}</span>
-      <span class="admin-stat-label">Total</span>
-    </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:#d97706;">{{ stats.pending }}</span>
-      <span class="admin-stat-label">Pending</span>
-    </div>
-    <div class="admin-stat-item">
-      <span class="admin-stat-value" style="color:var(--green);">{{ stats.approved }}</span>
-      <span class="admin-stat-label">Approved</span>
+    <div class="flex items-center gap-space-sm">
+      <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low transition-all border border-outline-variant/30">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span>Complaints Dashboard</span>
+      </a>
     </div>
   </div>
 
-  <!-- Filters -->
-  <form method="get" action="{{ url_for('admin_service_requests') }}">
-    <div class="filter-bar mb-3">
-      <span style="font-size:0.8125rem; font-weight:600; white-space:nowrap;">Filter:</span>
-      <select name="sub_type" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Types</option>
-        {% for t in all_sub_types %}
-          <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>
-            {{ sub_type_labels.get(t, t) }}
-          </option>
-        {% endfor %}
-      </select>
-      <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
-        <option value="">All Statuses</option>
-        {% for s in service_statuses %}
-          <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
-        {% endfor %}
-      </select>
-      {% if filters.status or filters.sub_type %}
-        <a href="{{ url_for('admin_service_requests') }}" class="btn btn-sm btn-outline-secondary">
-          <i class="bi bi-x-circle me-1"></i>Clear
-        </a>
-      {% endif %}
+  <!-- Stats Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md lg:gap-space-lg w-full">
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Total Requests</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">{{ stats.total }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-surface-container-low text-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">folder_shared</span>
+        </div>
+      </div>
     </div>
-  </form>
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Pending Review</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight" style="color: #d97706;">{{ stats.pending }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">hourglass_top</span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between">
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Approved</span>
+          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight text-secondary">{{ stats.approved }}</div>
+        </div>
+        <div class="w-11 h-11 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[24px]">check_circle</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- Table -->
-  {% if requests %}
-  <div class="table-wrap">
-    <table class="table table-bordered complaints-table mb-0">
-      <thead>
-        <tr>
-          <th>Request No.</th>
-          <th>Type</th>
-          <th>Applicant</th>
-          <th>Ward</th>
-          <th>Filed By</th>
-          <th>Status</th>
-          <th>Applied</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for sr in requests %}
-        <tr>
-          <td class="cid-cell">{{ sr['request_no'] }}</td>
-          <td>{{ sub_type_labels.get(sr['sub_type'], sr['sub_type'].replace('_',' ').title()) }}</td>
-          <td>{{ sr['applicant_name'] }}</td>
-          <td>{{ sr['ward'] }}</td>
-          <td>{{ sr['filer_name'] }}</td>
-          <td>
-            <span class="status-badge svc-status-{{ sr['status'].lower() }}">
-              {{ sr['status'] }}
-            </span>
-          </td>
-          <td style="white-space:nowrap; font-size:0.875rem;">{{ sr['created_at'][:10] }}</td>
-          <td>
-            <a href="{{ url_for('admin_service_request_detail', request_no=sr['request_no']) }}"
-               class="btn btn-sm btn-outline-primary">Review</a>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <!-- Main Section: Table -->
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+    <!-- Filter Controls Bar -->
+    <form method="get" action="{{ url_for('admin_service_requests') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-space-sm w-full">
+      <div class="lg:col-span-4 relative">
+        <select name="sub_type" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+          <option value="">All Types</option>
+          {% for t in all_sub_types %}
+            <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>
+              {{ sub_type_labels.get(t, t) }}
+            </option>
+          {% endfor %}
+        </select>
+        <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+      </div>
+      <div class="lg:col-span-3 relative">
+        <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
+          <option value="">All Statuses</option>
+          {% for s in service_statuses %}
+            <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+        <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
+      </div>
+      <div class="lg:col-span-3 flex items-center gap-2">
+        {% if filters.status or filters.sub_type %}
+          <a href="{{ url_for('admin_service_requests') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 transition-colors">
+            Clear
+          </a>
+        {% endif %}
+      </div>
+    </form>
+
+    <!-- Data Table -->
+    {% if requests %}
+    <div class="overflow-x-auto -mx-space-lg px-space-lg">
+      <table class="w-full text-left min-w-[900px]">
+        <thead>
+          <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
+            <th class="py-3 px-space-md rounded-l-lg">Request No.</th>
+            <th class="py-3 px-space-md">Type</th>
+            <th class="py-3 px-space-md">Applicant & Ward</th>
+            <th class="py-3 px-space-md">Filed By</th>
+            <th class="py-3 px-space-md">Applied On</th>
+            <th class="py-3 px-space-md">Status</th>
+            <th class="py-3 px-space-md text-right rounded-r-lg">Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
+          {% for sr in requests %}
+          <tr class="hover:bg-surface-container-low/70 transition-colors group">
+            <td class="py-space-md px-space-md">
+              <div class="font-semibold text-primary font-mono text-xs">{{ sr['request_no'] }}</div>
+            </td>
+            <td class="py-space-md px-space-md">
+              <div class="font-medium text-primary">{{ sub_type_labels.get(sr['sub_type'], sr['sub_type'].replace('_',' ').title()) }}</div>
+            </td>
+            <td class="py-space-md px-space-md">
+              <div class="font-medium text-on-surface">{{ sr['applicant_name'] }}</div>
+              <div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
+                <span class="material-symbols-outlined text-[14px]">location_on</span> {{ sr['ward'] }}
+              </div>
+            </td>
+            <td class="py-space-md px-space-md text-on-surface-variant">
+              {{ sr['filer_name'] }}
+            </td>
+            <td class="py-space-md px-space-md font-medium">
+              {{ sr['created_at'][:10] }}
+            </td>
+            <td class="py-space-md px-space-md">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
+                {% if sr['status'] == 'APPROVED' %}bg-secondary-fixed text-on-secondary-fixed
+                {% elif sr['status'] == 'REJECTED' %}bg-error-container text-on-error-container
+                {% else %}bg-tertiary-fixed text-on-tertiary-fixed-variant{% endif %}">
+                <span class="w-1.5 h-1.5 rounded-full {% if sr['status'] == 'APPROVED' %}bg-secondary{% elif sr['status'] == 'REJECTED' %}bg-error{% else %}bg-on-tertiary-container{% endif %}"></span>
+                {{ sr['status'] }}
+              </span>
+            </td>
+            <td class="py-space-md px-space-md text-right">
+              <a href="{{ url_for('admin_service_request_detail', request_no=sr['request_no']) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all">
+                <span class="material-symbols-outlined text-[16px]">rate_review</span>
+                <span>Review</span>
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4">
+      <span class="material-symbols-outlined text-[48px] opacity-50">file_copy</span>
+      <p class="font-body-md text-body-md">No service requests found.</p>
+    </div>
+    {% endif %}
   </div>
-  {% else %}
-  <div class="empty-state">
-    <i class="bi bi-file-earmark d-block mb-2" style="font-size:2.5rem;"></i>
-    <p class="mb-0">No service requests found.</p>
-  </div>
-  {% endif %}
 
 </div>
 {% endblock %}

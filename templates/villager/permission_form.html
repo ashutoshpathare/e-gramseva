@@ -5,213 +5,274 @@
 {% block title %}Apply: {{ type_labels[sub_type] }}{% endblock %}
 {% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
 
+{% block head_extra %}
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: { extend: {
+    colors: {
+      "primary":                  "#022448",
+      "primary-container":        "#1e3a5f",
+      "on-primary":               "#ffffff",
+      "on-primary-container":     "#8aa4cf",
+      "secondary":                "#006c4a",
+      "on-secondary":             "#ffffff",
+      "secondary-container":      "#82f5c1",
+      "on-secondary-container":   "#00714e",
+      "error":                    "#ba1a1a",
+      "surface":                  "#f8f9ff",
+      "on-surface":               "#0b1c30",
+      "on-surface-variant":       "#43474e",
+      "surface-container-lowest": "#ffffff",
+      "surface-container-low":    "#eff4ff",
+      "surface-container":        "#e5eeff",
+      "surface-container-high":   "#dce9ff",
+      "surface-container-highest":"#d3e4fe",
+      "outline":                  "#74777f",
+      "outline-variant":          "#c4c6cf",
+      "on-primary-fixed-variant": "#2d486d",
+      "primary-fixed":            "#d5e3ff",
+      "secondary-fixed":          "#85f8c4",
+    },
+    borderRadius: {
+      DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem",
+      "2xl": "1rem", "3xl": "1.5rem", full: "9999px"
+    },
+  }}
+};
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
-  <div class="form-page-wrap">
+<div class="bg-surface min-h-screen font-sans text-on-surface pb-12">
+  <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-surface-container-high/40 blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+    
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm text-on-surface-variant">
+        <li>
+          <a href="{{ url_for('permission_services') }}" class="hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Permission Services
+          </a>
+        </li>
+      </ol>
+    </nav>
 
-    <div class="pt-2 mb-2">
-      <a href="{{ url_for('permission_services') }}" class="back-link">
-        <i class="bi bi-arrow-left me-1"></i>Back to Permission Services
-      </a>
-    </div>
-
-    <div class="form-page-header">
-      <h1 class="page-title">{{ type_labels[sub_type] }} &mdash; Application</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">
-        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
-        A unique request number will be generated on submission.
-      </p>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-xs font-semibold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Statutory Civic Service
+        </div>
+        <h1 class="text-3xl font-bold text-primary tracking-tight">
+          {{ type_labels[sub_type] }} &mdash; Application
+        </h1>
+        <p class="text-sm text-on-surface-variant flex items-center gap-2">
+          Fields marked <span class="text-error font-bold">*</span> are required. A unique request number will be generated on submission.
+        </p>
+      </div>
+      <div class="hidden sm:flex items-center gap-4 bg-surface-container-lowest shadow-sm rounded-xl p-3 px-4">
+        <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[22px]">timer</span>
+        </div>
+        <div>
+          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Statutory SLA</span>
+          <span class="text-base font-bold text-on-surface">15 Working Days</span>
+        </div>
+      </div>
     </div>
 
     {# ── Outstanding-dues warning banner (shared partial, Phase 9.2) ── #}
     {% include 'villager/_dues_banner.html' %}
     {# ──────────────────────────────────────────────────────────────── #}
 
-    <form method="post"
-          action="{{ url_for('permission_apply', sub_type=sub_type.lower()) }}"
-          enctype="multipart/form-data" novalidate>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
+      <form method="post" action="{{ url_for('permission_apply', sub_type=sub_type.lower()) }}" enctype="multipart/form-data" novalidate class="lg:col-span-8 bg-surface-container-lowest shadow-sm rounded-2xl p-6 sm:p-8 space-y-8">
+        
+        <!-- SECTION 1: Applicant Details -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
+            <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
+            <h2 class="text-lg font-bold text-primary tracking-tight">Applicant Details</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">Applicant Name <span class="text-error">*</span></label>
+              <input type="text" id="applicant_name" name="applicant_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" value="{{ form.get('applicant_name', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">Ward <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                    <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <!-- Section 1: Applicant Details -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">1</span> Applicant Details
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="applicant_name" class="form-label">
-              Applicant Name <span class="required-mark">*</span>
-            </label>
-            <input type="text" id="applicant_name" name="applicant_name" class="form-control"
-                   value="{{ form.get('applicant_name', '') }}" required>
+        <!-- SECTION 2: Permission-specific details -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
+            <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">2</span>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ type_labels[sub_type] }} Details</h2>
           </div>
-          <div class="col-md-6">
-            <label for="ward" class="form-label">
-              Ward <span class="required-mark">*</span>
-            </label>
-            <select id="ward" name="ward" class="form-select" required>
-              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
-                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
-                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
-                  {{ w }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-      </div>
 
-      <!-- Section 2: Permission-specific details -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">2</span> {{ type_labels[sub_type] }} Details
-        </div>
-
-        {% if sub_type == 'BUILDING' %}
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label for="plot_no" class="form-label">
-              Plot / Survey Number <span class="required-mark">*</span>
-            </label>
-            <input type="text" id="plot_no" name="plot_no" class="form-control"
-                   placeholder="e.g. Plot 45-A, Survey No. 123"
-                   value="{{ form.get('plot_no', '') }}" required>
-          </div>
-          <div class="col-md-4">
-            <label for="plot_area_sqft" class="form-label">Plot Area (sq ft)</label>
-            <input type="number" id="plot_area_sqft" name="plot_area_sqft" class="form-control"
-                   step="1" min="1" placeholder="e.g. 1200"
-                   value="{{ form.get('plot_area_sqft', '') }}">
-          </div>
-          <div class="col-md-4">
-            <label for="construction_type" class="form-label">
-              Construction Type <span class="required-mark">*</span>
-            </label>
-            <select id="construction_type" name="construction_type" class="form-select" required>
-              <option value="" disabled {% if not form.get('construction_type') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              <option value="Residential"
-                {% if form.get('construction_type') == 'Residential' %}selected{% endif %}>
-                Residential
-              </option>
-              <option value="Commercial"
-                {% if form.get('construction_type') == 'Commercial' %}selected{% endif %}>
-                Commercial
-              </option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="building_height_m" class="form-label">Proposed Height (metres)</label>
-            <input type="number" id="building_height_m" name="building_height_m" class="form-control"
-                   step="0.1" min="0" placeholder="e.g. 7.5"
-                   value="{{ form.get('building_height_m', '') }}">
-          </div>
-          <div class="col-md-4">
-            <label for="architect_name" class="form-label">Architect / Engineer Name</label>
-            <input type="text" id="architect_name" name="architect_name" class="form-control"
-                   placeholder="Licensed architect or engineer"
-                   value="{{ form.get('architect_name', '') }}">
-          </div>
-          <div class="col-md-4">
-            <label for="estimated_cost" class="form-label">Estimated Cost (&#8377;)</label>
-            <input type="number" id="estimated_cost" name="estimated_cost" class="form-control"
-                   step="1" min="0" placeholder="e.g. 500000"
-                   value="{{ form.get('estimated_cost', '') }}">
-          </div>
-        </div>
-
-        {% elif sub_type == 'WATER' %}
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="property_no" class="form-label">Property Number (if registered)</label>
-            <input type="text" id="property_no" name="property_no" class="form-control"
-                   placeholder="e.g. EGS-PROP-2026-0001 (optional)"
-                   value="{{ form.get('property_no', '') }}">
-            <div class="form-text">Leave blank if not yet registered in the property records.</div>
-          </div>
-          <div class="col-md-3">
-            <label for="connection_type" class="form-label">
-              Connection Type <span class="required-mark">*</span>
-            </label>
-            <select id="connection_type" name="connection_type" class="form-select" required>
-              <option value="" disabled {% if not form.get('connection_type') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              <option value="Domestic"
-                {% if form.get('connection_type') == 'Domestic' %}selected{% endif %}>
-                Domestic
-              </option>
-              <option value="Commercial"
-                {% if form.get('connection_type') == 'Commercial' %}selected{% endif %}>
-                Commercial
-              </option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="pipe_size_inch" class="form-label">Pipe Size</label>
-            <select id="pipe_size_inch" name="pipe_size_inch" class="form-select">
-              <option value="" {% if not form.get('pipe_size_inch') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for size in ['15mm (0.5 inch)', '20mm (0.75 inch)', '25mm (1 inch)', '32mm (1.25 inch)'] %}
-                <option value="{{ size }}"
-                  {% if form.get('pipe_size_inch') == size %}selected{% endif %}>
-                  {{ size }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-12">
-            <label for="purpose_description" class="form-label">Purpose / Description</label>
-            <textarea id="purpose_description" name="purpose_description"
-                      class="form-control" rows="3"
-                      placeholder="Briefly describe the intended use (e.g. new household, commercial kitchen, irrigation)">{{ form.get('purpose_description', '') }}</textarea>
-          </div>
-        </div>
-        {% endif %}
-      </div>
-
-      <!-- Section 3: Document Upload -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">3</span> Supporting Document
-          <span class="section-optional">(recommended)</span>
-        </div>
-        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
           {% if sub_type == 'BUILDING' %}
-            Upload a site plan, architectural drawing, or identity proof.
-          {% else %}
-            Upload ownership proof, identity proof, or any supporting document.
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <label for="plot_no" class="block text-sm text-on-surface-variant font-medium">Plot / Survey Number <span class="text-error">*</span></label>
+              <input type="text" id="plot_no" name="plot_no" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Plot 45-A" value="{{ form.get('plot_no', '') }}" required>
+            </div>
+            <div class="space-y-1">
+              <label for="plot_area_sqft" class="block text-sm text-on-surface-variant font-medium">Plot Area (sq ft)</label>
+              <input type="number" id="plot_area_sqft" name="plot_area_sqft" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" step="1" min="1" placeholder="e.g. 1200" value="{{ form.get('plot_area_sqft', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="construction_type" class="block text-sm text-on-surface-variant font-medium">Construction Type <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="construction_type" name="construction_type" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('construction_type') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="Residential" {% if form.get('construction_type') == 'Residential' %}selected{% endif %}>Residential</option>
+                  <option value="Commercial" {% if form.get('construction_type') == 'Commercial' %}selected{% endif %}>Commercial</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label for="building_height_m" class="block text-sm text-on-surface-variant font-medium">Proposed Height (m)</label>
+              <input type="number" id="building_height_m" name="building_height_m" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" step="0.1" min="0" placeholder="e.g. 7.5" value="{{ form.get('building_height_m', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="architect_name" class="block text-sm text-on-surface-variant font-medium">Architect / Engineer</label>
+              <input type="text" id="architect_name" name="architect_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="Licensed name" value="{{ form.get('architect_name', '') }}">
+            </div>
+            <div class="space-y-1">
+              <label for="estimated_cost" class="block text-sm text-on-surface-variant font-medium">Estimated Cost (&#8377;)</label>
+              <input type="number" id="estimated_cost" name="estimated_cost" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" step="1" min="0" placeholder="e.g. 500000" value="{{ form.get('estimated_cost', '') }}">
+            </div>
+          </div>
+
+          {% elif sub_type == 'WATER' %}
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+            <div class="space-y-1 sm:col-span-6">
+              <label for="property_no" class="block text-sm text-on-surface-variant font-medium">Property Number (if registered)</label>
+              <input type="text" id="property_no" name="property_no" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. EGS-PROP-2026 (optional)" value="{{ form.get('property_no', '') }}">
+              <p class="text-xs text-on-surface-variant">Leave blank if not yet registered in records.</p>
+            </div>
+            <div class="space-y-1 sm:col-span-3">
+              <label for="connection_type" class="block text-sm text-on-surface-variant font-medium">Connection Type <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="connection_type" name="connection_type" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('connection_type') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="Domestic" {% if form.get('connection_type') == 'Domestic' %}selected{% endif %}>Domestic</option>
+                  <option value="Commercial" {% if form.get('connection_type') == 'Commercial' %}selected{% endif %}>Commercial</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+            <div class="space-y-1 sm:col-span-3">
+              <label for="pipe_size_inch" class="block text-sm text-on-surface-variant font-medium">Pipe Size</label>
+              <div class="relative">
+                <select id="pipe_size_inch" name="pipe_size_inch" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer">
+                  <option value="" {% if not form.get('pipe_size_inch') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  {% for size in ['15mm (0.5 inch)', '20mm (0.75 inch)', '25mm (1 inch)', '32mm (1.25 inch)'] %}
+                    <option value="{{ size }}" {% if form.get('pipe_size_inch') == size %}selected{% endif %}>{{ size }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+            <div class="space-y-1 sm:col-span-12">
+              <label for="purpose_description" class="block text-sm text-on-surface-variant font-medium">Purpose / Description</label>
+              <textarea id="purpose_description" name="purpose_description" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" rows="3" placeholder="Briefly describe the intended use...">{{ form.get('purpose_description', '') }}</textarea>
+            </div>
+          </div>
           {% endif %}
-          Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
-        </p>
-        <input type="file" id="document" name="document" class="form-control"
-               accept=".jpg,.jpeg,.png,.webp,.pdf" style="max-width:400px;">
-      </div>
+        </section>
 
-      <!-- Submit -->
-      <div class="form-submit-bar">
-        {% if unpaid_dues %}
-        {# Phase 9.2 — UX block: dues present, submit is disabled. Backend gate in permission_apply() enforces this on POST. #}
-        <button type="submit" id="submit-permission-btn" class="btn btn-primary" disabled
-                title="Clear your outstanding tax dues before submitting"
-                style="opacity:.45; cursor:not-allowed;">
-          <i class="bi bi-lock me-1"></i>Blocked &mdash; Clear Dues First
-        </button>
-        {% else %}
-        <button type="submit" id="submit-permission-btn" class="btn btn-primary">
-          <i class="bi bi-send me-1"></i>Submit Application
-        </button>
-        {% endif %}
-        <a href="{{ url_for('permission_services') }}" class="btn btn-outline-secondary ms-2">
-          Cancel
-        </a>
-      </div>
+        <!-- SECTION 3: Document Upload -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-surface-container">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
+              <h2 class="text-lg font-bold text-primary tracking-tight">Supporting Document</h2>
+            </div>
+            <span class="text-sm text-on-surface-variant font-medium">(recommended)</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">
+            {% if sub_type == 'BUILDING' %}
+              Upload a site plan, architectural drawing, or identity proof.
+            {% else %}
+              Upload ownership proof, identity proof, or any supporting document.
+            {% endif %}
+            Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+          </p>
+          <div class="relative">
+            <input type="file" id="document" name="document" class="w-full bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-container hover:file:text-white transition-all cursor-pointer" accept=".jpg,.jpeg,.png,.webp,.pdf">
+          </div>
+        </section>
 
-    </form>
+        <!-- Submit Bar -->
+        <div class="pt-4 flex flex-col sm:flex-row gap-3">
+          {% if unpaid_dues %}
+          <button type="submit" id="submit-permission-btn" class="flex-1 py-3.5 px-6 rounded-lg bg-outline text-white font-semibold flex items-center justify-center gap-2 cursor-not-allowed opacity-75" disabled title="Clear your outstanding tax dues before submitting">
+            <span class="material-symbols-outlined text-[20px]">lock</span>
+            Blocked &mdash; Clear Dues First
+          </button>
+          {% else %}
+          <button type="submit" id="submit-permission-btn" class="flex-1 py-3.5 px-6 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.99]">
+            <span class="material-symbols-outlined text-[20px]">send</span>
+            Submit Application
+          </button>
+          {% endif %}
+          <a href="{{ url_for('permission_services') }}" class="py-3.5 px-6 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold flex items-center justify-center text-center transition-all">
+            Cancel
+          </a>
+        </div>
+      </form>
+
+      <!-- Contextual Sidebar -->
+      <aside class="hidden lg:block lg:col-span-4 space-y-6">
+        <div class="bg-surface-container-lowest shadow-sm rounded-2xl p-6 space-y-4 border border-surface-container">
+          <h3 class="text-base font-bold text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary text-[22px]">account_tree</span>
+            Review Process Workflow
+          </h3>
+          <p class="text-sm text-on-surface-variant">Standard verification timeline:</p>
+          <ol class="space-y-4 relative pl-6 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container-high">
+            <li class="relative">
+              <span class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[10px] font-bold">1</span>
+              <h4 class="text-sm font-semibold text-on-surface">Online Submission</h4>
+              <p class="text-xs text-on-surface-variant mt-1">Auto-generation of tracking ID</p>
+            </li>
+            <li class="relative">
+              <span class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center text-[10px] font-bold">2</span>
+              <h4 class="text-sm font-semibold text-on-surface">Physical Verification</h4>
+              <p class="text-xs text-on-surface-variant mt-1">Junior Engineer site inspection</p>
+            </li>
+            <li class="relative">
+              <span class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center text-[10px] font-bold">3</span>
+              <h4 class="text-sm font-semibold text-on-surface">Panchayat Resolution</h4>
+              <p class="text-xs text-on-surface-variant mt-1">Scrutiny of NOC and dues</p>
+            </li>
+            <li class="relative">
+              <span class="absolute -left-6 top-1 w-5 h-5 rounded-full bg-surface-container-high text-primary flex items-center justify-center text-[10px] font-bold">4</span>
+              <h4 class="text-sm font-semibold text-on-surface">Digital Certificate</h4>
+              <p class="text-xs text-on-surface-variant mt-1">Signed permit issuance</p>
+            </li>
+          </ol>
+        </div>
+      </aside>
+    </div>
   </div>
 </div>
 {% endblock %}
