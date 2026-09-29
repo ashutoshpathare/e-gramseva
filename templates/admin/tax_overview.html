@@ -4,10 +4,10 @@
 {% block description %}Tax collection overview across all properties.{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full">
+<div class="flex flex-col gap-8 lg:gap-12 w-full">
 
   <!-- Header -->
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full pt-2">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full pt-2">
     <div>
       <h1 class="font-headline-md text-headline-md text-primary tracking-tight">{{ _('Tax Overview') }}</h1>
       <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Tax collection status across all properties') }}</p>
@@ -19,7 +19,7 @@
   </div>
 
   <!-- Stats -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-space-md w-full">
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 w-full">
     <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
       <div class="font-headline-sm text-headline-sm font-bold text-on-surface">{{ stats.total }}</div>
       <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Total Records') }}</div>
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
     <!-- Filters -->
     <form method="get" action="{{ url_for('admin_tax_overview') }}" class="flex flex-wrap items-end gap-space-sm w-full">
       <div class="flex flex-col gap-1">
@@ -76,30 +76,30 @@
       <table class="w-full text-left min-w-[900px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg">{{ _('Property') }}</th>
-            <th class="py-3 px-space-md">{{ _('Owner') }}</th>
-            <th class="py-3 px-space-md">{{ _('Ward') }}</th>
-            <th class="py-3 px-space-md">{{ _('Tax Type') }}</th>
-            <th class="py-3 px-space-md">{{ _('F.Y.') }}</th>
-            <th class="py-3 px-space-md">{{ _('Amount Due') }}</th>
-            <th class="py-3 px-space-md">{{ _('Due Date') }}</th>
-            <th class="py-3 px-space-md">{{ _('Status') }}</th>
-            <th class="py-3 px-space-md rounded-r-lg"></th>
+            <th class="py-4 px-6 rounded-l-lg">{{ _('Property') }}</th>
+            <th class="py-4 px-6">{{ _('Owner') }}</th>
+            <th class="py-4 px-6">{{ _('Ward') }}</th>
+            <th class="py-4 px-6">{{ _('Tax Type') }}</th>
+            <th class="py-4 px-6">{{ _('F.Y.') }}</th>
+            <th class="py-4 px-6">{{ _('Amount Due') }}</th>
+            <th class="py-4 px-6">{{ _('Due Date') }}</th>
+            <th class="py-4 px-6">{{ _('Status') }}</th>
+            <th class="py-4 px-6 rounded-r-lg"></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
           {% for r in records %}
           <tr class="hover:bg-surface-container-low/70 transition-colors">
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <span class="font-semibold text-primary font-mono text-xs">{{ r['property_no'] }}</span>
             </td>
-            <td class="py-space-md px-space-md font-medium text-on-surface">{{ r['owner_name'] }}</td>
-            <td class="py-space-md px-space-md">{{ r['ward'] }}</td>
-            <td class="py-space-md px-space-md">{{ r['tax_type'].replace('_', ' ').title() }}</td>
-            <td class="py-space-md px-space-md">{{ r['financial_year'] }}</td>
-            <td class="py-space-md px-space-md font-semibold">₹{{ '{:,.0f}'.format(r['amount_due']) }}</td>
-            <td class="py-space-md px-space-md whitespace-nowrap">{{ r['due_date'] }}</td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6 font-medium text-on-surface">{{ r['owner_name'] }}</td>
+            <td class="py-4 px-6">{{ r['ward'] }}</td>
+            <td class="py-4 px-6">{{ r['tax_type'].replace('_', ' ').title() }}</td>
+            <td class="py-4 px-6">{{ r['financial_year'] }}</td>
+            <td class="py-4 px-6 font-semibold">₹{{ '{:,.0f}'.format(r['amount_due']) }}</td>
+            <td class="py-4 px-6 whitespace-nowrap">{{ r['due_date'] }}</td>
+            <td class="py-4 px-6">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
                 {% if r['status'] == 'PAID' %}bg-secondary-fixed text-on-secondary-fixed
                 {% elif r['status'] == 'OVERDUE' %}bg-error-container text-on-error-container
@@ -108,7 +108,7 @@
                 {{ r['status'] }}
               </span>
             </td>
-            <td class="py-space-md px-space-md text-right">
+            <td class="py-4 px-6 text-right">
               <a href="{{ url_for('admin_property_detail', property_no=r['property_no']) }}" class="inline-block px-3 py-1.5 rounded text-primary hover:bg-primary/10 font-label-sm text-label-sm font-semibold transition-colors">{{ _('View') }}</a>
             </td>
           </tr>

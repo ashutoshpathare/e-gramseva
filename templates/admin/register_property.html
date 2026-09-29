@@ -4,10 +4,10 @@
 {% block description %}Official property register — all registered properties in the Gram Panchayat.{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full">
+<div class="flex flex-col gap-8 lg:gap-12 w-full">
 
   <!-- Top Breadcrumb & Executive Title Bar -->
-  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-space-xs">
       <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
         <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
@@ -29,7 +29,7 @@
   </div>
 
   <!-- Main Section: Table -->
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
     <!-- Filter Controls Bar -->
     <form method="get" action="{{ url_for('admin_register_property_nondi') }}" id="form-filter-property" class="flex flex-wrap items-end gap-space-sm w-full">
       <div class="flex flex-col gap-1">
@@ -68,31 +68,31 @@
       <table class="w-full text-left min-w-[900px]" id="tbl-property-register">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg w-16">{{ _('Sr.') }}</th>
-            <th class="py-3 px-space-md">{{ _('Property No.') }}</th>
-            <th class="py-3 px-space-md">{{ _('Owner Name') }}</th>
-            <th class="py-3 px-space-md">{{ _('Ward') }}</th>
-            <th class="py-3 px-space-md">{{ _('Type') }}</th>
-            <th class="py-3 px-space-md">{{ _('Area (sq ft)') }}</th>
-            <th class="py-3 px-space-md">{{ _('Assessed Value') }}</th>
-            <th class="py-3 px-space-md">{{ _('Registered On') }}</th>
-            <th class="py-3 px-space-md rounded-r-lg">{{ _('Status') }}</th>
+            <th class="py-4 px-6 rounded-l-lg w-16">{{ _('Sr.') }}</th>
+            <th class="py-4 px-6">{{ _('Property No.') }}</th>
+            <th class="py-4 px-6">{{ _('Owner Name') }}</th>
+            <th class="py-4 px-6">{{ _('Ward') }}</th>
+            <th class="py-4 px-6">{{ _('Type') }}</th>
+            <th class="py-4 px-6">{{ _('Area (sq ft)') }}</th>
+            <th class="py-4 px-6">{{ _('Assessed Value') }}</th>
+            <th class="py-4 px-6">{{ _('Registered On') }}</th>
+            <th class="py-4 px-6 rounded-r-lg">{{ _('Status') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
           {% for rec in records %}
           <tr class="hover:bg-surface-container-low/70 transition-colors">
-            <td class="py-space-md px-space-md text-on-surface-variant font-medium">{{ loop.index }}</td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6 text-on-surface-variant font-medium">{{ loop.index }}</td>
+            <td class="py-4 px-6">
               <span class="font-semibold text-primary font-mono text-xs">{{ rec['property_no'] }}</span>
             </td>
-            <td class="py-space-md px-space-md font-medium text-on-surface">{{ rec['owner_name'] }}</td>
-            <td class="py-space-md px-space-md">{{ rec['ward'] }}</td>
-            <td class="py-space-md px-space-md">{{ rec['property_type'].replace('_', ' ').title() }}</td>
-            <td class="py-space-md px-space-md">{{ rec['area_sqft'] | int }}</td>
-            <td class="py-space-md px-space-md font-semibold">₹{{ '{:,.0f}'.format(rec['assessed_value']) }}</td>
-            <td class="py-space-md px-space-md">{{ rec['registered_at'][:10] }}</td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6 font-medium text-on-surface">{{ rec['owner_name'] }}</td>
+            <td class="py-4 px-6">{{ rec['ward'] }}</td>
+            <td class="py-4 px-6">{{ rec['property_type'].replace('_', ' ').title() }}</td>
+            <td class="py-4 px-6">{{ rec['area_sqft'] | int }}</td>
+            <td class="py-4 px-6 font-semibold">₹{{ '{:,.0f}'.format(rec['assessed_value']) }}</td>
+            <td class="py-4 px-6">{{ rec['registered_at'][:10] }}</td>
+            <td class="py-4 px-6">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
                 {% if rec['status'] == 'ACTIVE' %}bg-secondary-fixed text-on-secondary-fixed
                 {% elif rec['status'] == 'DISPUTED' %}bg-error-container text-on-error-container

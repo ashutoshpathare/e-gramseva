@@ -4,7 +4,7 @@
 {% block description %}Admin view and management for complaint {{ complaint['complaint_id'] }}.{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full">
+<div class="flex flex-col gap-8 lg:gap-12 w-full">
 
   <!-- Back Link -->
   <div>
@@ -15,7 +15,7 @@
   </div>
 
   <!-- Header -->
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-2">
       <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-mono">{{ complaint['complaint_id'] }}</h1>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-on-surface-variant font-body-sm text-body-sm">
@@ -44,10 +44,10 @@
     </span>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 w-full">
 
     <!-- LEFT: Info + Update Form -->
-    <div class="lg:col-span-7 flex flex-col gap-space-lg">
+    <div class="lg:col-span-7 flex flex-col gap-8">
 
       <!-- Complaint Info -->
       <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
@@ -104,7 +104,7 @@
 
       <!-- Resident's complaint photo -->
       {% if complaint['photo_path'] %}
-      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col gap-6">
         <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ _('Resident\'s Complaint Photo') }}</h2>
         <div class="rounded-lg overflow-hidden border border-outline-variant/30 max-w-full">
           <img src="{{ url_for('static', filename='uploads/' + complaint['photo_path']) }}" alt="Resident complaint photo" class="w-full h-auto max-h-[600px] object-contain bg-surface-container-lowest">
@@ -113,13 +113,13 @@
       {% endif %}
 
       <!-- Management Form -->
-      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-primary/20 p-space-lg flex flex-col gap-space-md bg-gradient-to-br from-surface-container-lowest to-surface-container-low/30">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-primary/20 p-6 lg:p-8 flex flex-col gap-6 bg-gradient-to-br from-surface-container-lowest to-surface-container-low/30">
         <h2 class="font-title-md text-title-md text-primary font-bold flex items-center gap-2">
           <span class="material-symbols-outlined text-[20px]">edit_square</span>
           {{ _('Update This Complaint') }}
         </h2>
-        <form method="post" action="{{ url_for('admin_update_complaint', complaint_id=complaint['complaint_id']) }}" enctype="multipart/form-data" class="flex flex-col gap-space-md">
-          <div class="flex flex-col sm:flex-row gap-space-md">
+        <form method="post" action="{{ url_for('admin_update_complaint', complaint_id=complaint['complaint_id']) }}" enctype="multipart/form-data" class="flex flex-col gap-6">
+          <div class="flex flex-col sm:flex-row gap-6">
             <div class="w-full sm:w-1/2">
               <label for="status" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">{{ _('Status') }}</label>
               <div class="relative">
@@ -162,10 +162,10 @@
     </div>
 
     <!-- RIGHT: Audit Trail + Feedback -->
-    <div class="lg:col-span-5 flex flex-col gap-space-lg">
+    <div class="lg:col-span-5 flex flex-col gap-8">
 
       <!-- Audit Trail -->
-      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col gap-6">
         <h2 class="font-title-md text-title-md text-on-surface font-semibold mb-2">{{ _('Audit Trail — Complete History') }}</h2>
         <div class="relative pl-6 border-l-2 border-outline-variant/30 space-y-6">
           {% for log in logs %}
@@ -210,7 +210,7 @@
       </div>
 
       <!-- QR Code -->
-      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col items-center justify-center text-center gap-3">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col items-center justify-center text-center gap-3">
         <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ _('QR Code — Scan to Track') }}</h2>
         <div class="p-2 bg-white rounded-lg border border-outline-variant/20 inline-block shadow-sm">
           <img src="{{ url_for('complaint_qr', complaint_id=complaint['complaint_id']) }}" alt="QR code for {{ complaint['complaint_id'] }}" width="120" height="120" loading="lazy">
@@ -220,7 +220,7 @@
 
       <!-- Feedback -->
       {% if feedback_row %}
-      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-sm">
+      <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col gap-space-sm">
         <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ _('Resident Feedback') }}</h2>
         <div class="flex items-center gap-2 mb-1">
           <div class="flex text-amber-500 text-lg">

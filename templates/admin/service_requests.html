@@ -16,10 +16,10 @@
 } %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full">
+<div class="flex flex-col gap-8 lg:gap-12 w-full">
 
   <!-- Top Breadcrumb & Executive Title Bar -->
-  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-space-xs">
       <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
         <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
@@ -38,8 +38,8 @@
   </div>
 
   <!-- Stats Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md lg:gap-space-lg w-full">
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 lg:gap-12 w-full">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Total Requests') }}</span>
@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Pending Review') }}</span>
@@ -61,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Approved') }}</span>
@@ -75,7 +75,7 @@
   </div>
 
   <!-- Main Section: Table -->
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
     <!-- Filter Controls Bar -->
     <form method="get" action="{{ url_for('admin_service_requests') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-space-sm w-full">
       <div class="lg:col-span-4 relative">
@@ -113,37 +113,37 @@
       <table class="w-full text-left min-w-[900px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg">{{ _('Request No.') }}</th>
-            <th class="py-3 px-space-md">{{ _('Type') }}</th>
-            <th class="py-3 px-space-md">{{ _('Applicant & Ward') }}</th>
-            <th class="py-3 px-space-md">{{ _('Filed By') }}</th>
-            <th class="py-3 px-space-md">{{ _('Applied On') }}</th>
-            <th class="py-3 px-space-md">{{ _('Status') }}</th>
-            <th class="py-3 px-space-md text-right rounded-r-lg">{{ _('Action') }}</th>
+            <th class="py-4 px-6 rounded-l-lg">{{ _('Request No.') }}</th>
+            <th class="py-4 px-6">{{ _('Type') }}</th>
+            <th class="py-4 px-6">{{ _('Applicant & Ward') }}</th>
+            <th class="py-4 px-6">{{ _('Filed By') }}</th>
+            <th class="py-4 px-6">{{ _('Applied On') }}</th>
+            <th class="py-4 px-6">{{ _('Status') }}</th>
+            <th class="py-4 px-6 text-right rounded-r-lg">{{ _('Action') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
           {% for sr in requests %}
           <tr class="hover:bg-surface-container-low/70 transition-colors group">
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="font-semibold text-primary font-mono text-xs">{{ sr['request_no'] }}</div>
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="font-medium text-primary">{{ sub_type_labels.get(sr['sub_type'], sr['sub_type'].replace('_',' ').title()) }}</div>
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="font-medium text-on-surface">{{ sr['applicant_name'] }}</div>
               <div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
                 <span class="material-symbols-outlined text-[14px]">location_on</span> {{ sr['ward'] }}
               </div>
             </td>
-            <td class="py-space-md px-space-md text-on-surface-variant">
+            <td class="py-4 px-6 text-on-surface-variant">
               {{ sr['filer_name'] }}
             </td>
-            <td class="py-space-md px-space-md font-medium">
+            <td class="py-4 px-6 font-medium">
               {{ sr['created_at'][:10] }}
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
                 {% if sr['status'] == 'APPROVED' %}bg-secondary-fixed text-on-secondary-fixed
                 {% elif sr['status'] == 'REJECTED' %}bg-error-container text-on-error-container
@@ -152,7 +152,7 @@
                 {{ sr['status'] }}
               </span>
             </td>
-            <td class="py-space-md px-space-md text-right">
+            <td class="py-4 px-6 text-right">
               <a href="{{ url_for('admin_service_request_detail', request_no=sr['request_no']) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all">
                 <span class="material-symbols-outlined text-[16px]">rate_review</span>
                 <span>{{ _('Review') }}</span>

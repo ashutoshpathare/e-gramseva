@@ -4,7 +4,7 @@
 {% block description %}Register a new property in the Gram Panchayat records.{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full max-w-[800px]">
+<div class="flex flex-col gap-8 lg:gap-12 w-full max-w-[800px]">
 
   <!-- Back Link -->
   <div class="pt-2">
@@ -19,15 +19,15 @@
     <p class="font-body-md text-body-md text-on-surface-variant">{{ _('A unique property number (EGS-PROP-XXXX) will be auto-generated on submission.') }}</p>
   </div>
 
-  <form method="post" action="{{ url_for('admin_register_property') }}" novalidate class="flex flex-col gap-space-lg">
+  <form method="post" action="{{ url_for('admin_register_property') }}" novalidate class="flex flex-col gap-8">
 
     <!-- Owner lookup -->
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col gap-6">
       <h2 class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2 border-b border-outline-variant/30 pb-3">
         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-bold text-xs">1</span>
         {{ _('Property Owner') }}
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label for="owner_mobile" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">
             {{ _('Owner\'s Mobile Number') }} <span class="text-error">*</span>
@@ -39,12 +39,12 @@
     </div>
 
     <!-- Property details -->
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg flex flex-col gap-space-md">
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-6 lg:p-8 flex flex-col gap-6">
       <h2 class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2 border-b border-outline-variant/30 pb-3">
         <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary font-bold text-xs">2</span>
         {{ _('Property Details') }}
       </h2>
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div class="md:col-span-4">
           <label for="ward" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">{{ _('Ward') }} <span class="text-error">*</span></label>
           <div class="relative">

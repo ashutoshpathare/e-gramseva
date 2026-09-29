@@ -4,10 +4,10 @@
 {% block description %}Gram Panchayat administration — manage all citizen complaints.{% endblock %}
 
 {% block content %}
-<div class="flex flex-col gap-space-xl w-full">
+<div class="flex flex-col gap-8 lg:gap-12 w-full">
   
   <!-- Top Breadcrumb & Executive Title Bar -->
-  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-space-xs">
       <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
         <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
@@ -26,9 +26,9 @@
   </div>
 
   <!-- 4 Prominent Stat Cards Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md lg:gap-space-lg w-full">
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 lg:gap-8 lg:gap-12 w-full">
     <!-- Card 1: Total Complaints -->
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Total Complaints') }}</span>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <!-- Card 2: Pending -->
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Pending Review') }}</span>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <!-- Card 3: High Priority -->
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('High Priority') }}</span>
@@ -64,7 +64,7 @@
       </div>
     </div>
     <!-- Card 4: Resolved -->
-    <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
           <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Resolved') }}</span>
@@ -78,9 +78,9 @@
   </div>
 
   <!-- Main Section: Complaints Table -->
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-lg flex flex-col gap-space-lg w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
     <!-- Section Header & Filters Toolbar -->
-    <div class="flex flex-col gap-space-md">
+    <div class="flex flex-col gap-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
         <div>
           <h2 class="font-title-lg text-title-lg text-primary font-bold">{{ _('Recent Complaints') }}</h2>
@@ -136,24 +136,24 @@
       <table class="w-full text-left min-w-[900px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg">{{ _('Complaint ID') }}</th>
-            <th class="py-3 px-space-md">{{ _('Category & Priority') }}</th>
-            <th class="py-3 px-space-md">{{ _('Applicant & Ward') }}</th>
-            <th class="py-3 px-space-md">{{ _('Assigned To') }}</th>
-            <th class="py-3 px-space-md">{{ _('Filed On') }}</th>
-            <th class="py-3 px-space-md">{{ _('Status') }}</th>
-            <th class="py-3 px-space-md text-right rounded-r-lg">{{ _('Action') }}</th>
+            <th class="py-4 px-6 rounded-l-lg">{{ _('Complaint ID') }}</th>
+            <th class="py-4 px-6">{{ _('Category & Priority') }}</th>
+            <th class="py-4 px-6">{{ _('Applicant & Ward') }}</th>
+            <th class="py-4 px-6">{{ _('Assigned To') }}</th>
+            <th class="py-4 px-6">{{ _('Filed On') }}</th>
+            <th class="py-4 px-6">{{ _('Status') }}</th>
+            <th class="py-4 px-6 text-right rounded-r-lg">{{ _('Action') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
           {% for c in complaints %}
           <tr class="hover:bg-surface-container-low/70 transition-colors group {% if c['priority'] == 'High' %}bg-error-container/10{% endif %}">
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="flex items-center gap-1.5">
                 <span class="font-semibold text-primary font-mono text-xs">{{ c['complaint_id'] }}</span>
               </div>
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="font-medium text-primary">{{ c['category'] }}</div>
               {% if c['priority'] == 'High' %}
                 <div class="font-label-sm text-label-sm text-error flex items-center gap-1 mt-1">
@@ -162,19 +162,19 @@
                 <div class="font-label-sm text-label-sm text-on-surface-variant mt-1">{{ _('Normal') }}</div>
               {% endif %}
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <div class="font-medium text-on-surface">{{ c['filer_name'] }}</div>
               <div class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mt-1">
                 <span class="material-symbols-outlined text-[14px]">location_on</span> {{ c['ward'] }}
               </div>
             </td>
-            <td class="py-space-md px-space-md text-on-surface-variant">
+            <td class="py-4 px-6 text-on-surface-variant">
               {{ c['assigned_to'] if c['assigned_to'] else '—' }}
             </td>
-            <td class="py-space-md px-space-md font-medium">
+            <td class="py-4 px-6 font-medium">
               {{ c['created_at'][:10] }}
             </td>
-            <td class="py-space-md px-space-md">
+            <td class="py-4 px-6">
               <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold
                 {% if c['status'] == 'Resolved' %}bg-secondary-fixed text-on-secondary-fixed
                 {% elif c['status'] == 'In Progress' %}bg-tertiary-fixed text-on-tertiary-fixed
@@ -183,7 +183,7 @@
                 {{ c['status'] }}
               </span>
             </td>
-            <td class="py-space-md px-space-md text-right">
+            <td class="py-4 px-6 text-right">
               <a href="{{ url_for('admin_complaint_detail', complaint_id=c['complaint_id']) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all">
                 <span class="material-symbols-outlined text-[16px]">rate_review</span>
                 <span>{{ _('Manage') }}</span>
