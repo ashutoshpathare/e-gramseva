@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}{{ _('Certificate Services') }}{% endblock %}
-{% block description %}Apply for Birth, Death, or Residence certificates from the Gram Panchayat.{% endblock %}
+{% block description %}{{ _('Apply for Birth, Death, or Residence certificates from the Gram Panchayat.') }}{% endblock %}
 
 
 
@@ -16,13 +16,13 @@
         <div class="max-w-3xl space-y-4">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-primary text-xs font-semibold">
             <span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
-            <span>Citizen Service Portal &bull; Gram Panchayat Digital Window</span>
+            <span>{{ _('Citizen Service Portal &bull; Gram Panchayat Digital Window') }}</span>
           </div>
           <h1 class="text-3xl md:text-4xl font-bold text-primary tracking-tight">
             {{ _('Certificate Services') }}
           </h1>
           <p class="text-base md:text-lg text-on-surface-variant leading-relaxed">
-            Apply for official Gram Panchayat certificates online. Upload your documents and track your application status without visiting the Panchayat office.
+            {{ _('Apply for official Gram Panchayat certificates online. Upload your documents and track your application status without visiting the Panchayat office.') }}
           </p>
         </div>
         <div class="flex items-center gap-4 pt-2">
@@ -31,8 +31,8 @@
               <span class="material-symbols-outlined text-[28px]">speed</span>
             </div>
             <div>
-              <div class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Avg. Fulfillment</div>
-              <div class="text-lg text-on-surface font-semibold">2-3 Days</div>
+              <div class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Avg. Fulfillment') }}</div>
+              <div class="text-lg text-on-surface font-semibold">{{ _('2-3 Days') }}</div>
             </div>
           </div>
         </div>
@@ -59,19 +59,18 @@
         <span style="font-size:1.6rem; line-height:1; flex-shrink:0;">⚠️</span>
         <div style="flex:1;">
           <p style="margin:0 0 6px; font-weight:700; font-size:1rem; letter-spacing:.01em;">
-            Outstanding Tax Dues — Certificate Applications Blocked
+            {{ _('Outstanding Tax Dues — Certificate Applications Blocked') }}
           </p>
           <p style="margin:0 0 12px; font-size:0.85rem; color:#fecaca; line-height:1.5;">
-            You have unpaid property-tax dues. All certificate applications are on hold until
-            every due below is settled.
+            {{ _('You have unpaid property-tax dues. All certificate applications are on hold until every due below is settled.') }}
           </p>
           <table style="width:100%; border-collapse:collapse; font-size:0.825rem; color:#fff;">
             <thead>
               <tr style="border-bottom:1px solid rgba(255,255,255,.25);">
-                <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Property&nbsp;No.</th>
-                <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Tax Type</th>
-                <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Financial Year</th>
-                <th style="padding:5px 0 5px 10px; text-align:right; font-weight:600; color:#fecaca; white-space:nowrap;">Amount Due</th>
+                <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Property&nbsp;No.') }}</th>
+                <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Tax Type') }}</th>
+                <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Financial Year') }}</th>
+                <th style="padding:5px 0 5px 10px; text-align:right; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Amount Due') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -95,7 +94,7 @@
                  transition:opacity .2s;
                "
                onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-              <i class="bi bi-credit-card-2-front"></i> Pay Dues Now
+              <i class="bi bi-credit-card-2-front"></i> {{ _('Pay Dues Now') }}
             </a>
           </div>
         </div>
@@ -106,8 +105,8 @@
 
     <div class="flex items-center justify-between mb-8">
       <div class="flex items-center gap-3">
-        <span class="text-lg font-bold text-primary">Public Registry Services</span>
-        <span class="bg-surface-container text-on-surface-variant text-xs font-semibold px-2.5 py-0.5 rounded-full">3 Services</span>
+        <span class="text-lg font-bold text-primary">{{ _('Public Registry Services') }}</span>
+        <span class="bg-surface-container text-on-surface-variant text-xs font-semibold px-2.5 py-0.5 rounded-full">{{ _('3 Services') }}</span>
       </div>
     </div>
 
@@ -129,11 +128,11 @@
             {{ _('Birth Certificate') }}
           </h3>
           <p class="text-sm text-on-surface-variant mb-4">
-            Official birth registration certificate issued by the Gram Panchayat. Required for school admission, Aadhaar enrollment, and other government services.
+            {{ _('Official birth registration certificate issued by the Gram Panchayat. Required for school admission, Aadhaar enrollment, and other government services.') }}
           </p>
           <ul class="text-xs text-on-surface-variant list-disc pl-4 mb-4 space-y-1">
-            <li>Parent's identity proof (Aadhaar / Voter ID)</li>
-            <li>Hospital discharge certificate (if available)</li>
+            <li>{{ _('Parent\'s identity proof (Aadhaar / Voter ID)') }}</li>
+            <li>{{ _('Hospital discharge certificate (if available)') }}</li>
           </ul>
         </div>
         <div class="pt-4 border-t border-surface-container">
@@ -160,11 +159,11 @@
             {{ _('Death Certificate') }}
           </h3>
           <p class="text-sm text-on-surface-variant mb-4">
-            Official death registration certificate. Required for insurance claims, property transfer, and legal proceedings.
+            {{ _('Official death registration certificate. Required for insurance claims, property transfer, and legal proceedings.') }}
           </p>
           <ul class="text-xs text-on-surface-variant list-disc pl-4 mb-4 space-y-1">
-            <li>Deceased's identity proof</li>
-            <li>Medical certificate of cause of death</li>
+            <li>{{ _('Deceased\'s identity proof') }}</li>
+            <li>{{ _('Medical certificate of cause of death') }}</li>
           </ul>
         </div>
         <div class="pt-4 border-t border-surface-container">
@@ -191,11 +190,11 @@
             {{ _('Residence Certificate') }}
           </h3>
           <p class="text-sm text-on-surface-variant mb-4">
-            Proof of residence issued by the Gram Panchayat. Required for school admission, employment, and government scheme applications.
+            {{ _('Proof of residence issued by the Gram Panchayat. Required for school admission, employment, and government scheme applications.') }}
           </p>
           <ul class="text-xs text-on-surface-variant list-disc pl-4 mb-4 space-y-1">
-            <li>Aadhaar card or ration card copy</li>
-            <li>Electricity bill / property tax receipt</li>
+            <li>{{ _('Aadhaar card or ration card copy') }}</li>
+            <li>{{ _('Electricity bill / property tax receipt') }}</li>
           </ul>
         </div>
         <div class="pt-4 border-t border-surface-container">

@@ -10,20 +10,20 @@
   <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
     <div class="flex flex-col gap-space-xs">
       <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
-        <span class="hover:text-primary transition-colors cursor-pointer">Administration</span>
+        <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-primary font-semibold">Malmatta Nondi</span>
+        <span class="text-primary font-semibold">{{ _('Malmatta Nondi') }}</span>
       </div>
       <div class="flex items-center gap-3">
-        <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">मालमत्ता नोंद — Malmatta Nondi</h1>
+        <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">{{ _('मालमत्ता नोंद — Malmatta Nondi') }}</h1>
         <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md font-bold">{{ records | length }}</span>
       </div>
-      <p class="font-body-md text-body-md text-on-surface-variant">Property Register • Gram Panchayat • Official Record (Read-only)</p>
+      <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Property Register • Gram Panchayat • Official Record (Read-only)') }}</p>
     </div>
     <div class="flex items-center gap-space-sm">
       <a href="{{ url_for('admin_register_print', register_type='property', ward=filters.ward, date_from=filters.date_from, date_to=filters.date_to) }}" class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface border border-outline-variant/30 text-on-surface-variant font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low hover:text-on-surface transition-all" target="_blank" id="btn-print-property">
         <span class="material-symbols-outlined text-[18px]">print</span>
-        <span>Print Register</span>
+        <span>{{ _('Print Register') }}</span>
       </a>
     </div>
   </div>
@@ -33,10 +33,10 @@
     <!-- Filter Controls Bar -->
     <form method="get" action="{{ url_for('admin_register_property_nondi') }}" id="form-filter-property" class="flex flex-wrap items-end gap-space-sm w-full">
       <div class="flex flex-col gap-1">
-        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Filter Ward</span>
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">{{ _('Filter Ward') }}</span>
         <div class="relative w-48">
           <select name="ward" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()" id="filter-ward-property">
-            <option value="">All Wards</option>
+            <option value="">{{ _('All Wards') }}</option>
             {% for w in wards %}
               <option value="{{ w }}" {% if filters.ward == w %}selected{% endif %}>{{ w }}</option>
             {% endfor %}
@@ -45,18 +45,18 @@
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">Registered From</span>
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">{{ _('Registered From') }}</span>
         <input type="date" name="date_from" class="pl-3 pr-3 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none border border-outline-variant/30 w-auto" value="{{ filters.date_from }}" id="filter-date-from-property">
       </div>
       <div class="flex flex-col gap-1">
-        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">To</span>
+        <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">{{ _('To') }}</span>
         <input type="date" name="date_to" class="pl-3 pr-3 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none border border-outline-variant/30 w-auto" value="{{ filters.date_to }}" id="filter-date-to-property">
       </div>
       <div class="flex items-center gap-2 pb-0.5">
-        <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all" id="btn-apply-property">Apply</button>
+        <button type="submit" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all" id="btn-apply-property">{{ _('Apply') }}</button>
         {% if filters.ward or filters.date_from or filters.date_to %}
           <a href="{{ url_for('admin_register_property_nondi') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors" id="btn-clear-property">
-            Clear
+            {{ _('Clear') }}
           </a>
         {% endif %}
       </div>
@@ -68,15 +68,15 @@
       <table class="w-full text-left min-w-[900px]" id="tbl-property-register">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg w-16">Sr.</th>
-            <th class="py-3 px-space-md">Property No.</th>
-            <th class="py-3 px-space-md">Owner Name</th>
-            <th class="py-3 px-space-md">Ward</th>
-            <th class="py-3 px-space-md">Type</th>
-            <th class="py-3 px-space-md">Area (sq ft)</th>
-            <th class="py-3 px-space-md">Assessed Value</th>
-            <th class="py-3 px-space-md">Registered On</th>
-            <th class="py-3 px-space-md rounded-r-lg">Status</th>
+            <th class="py-3 px-space-md rounded-l-lg w-16">{{ _('Sr.') }}</th>
+            <th class="py-3 px-space-md">{{ _('Property No.') }}</th>
+            <th class="py-3 px-space-md">{{ _('Owner Name') }}</th>
+            <th class="py-3 px-space-md">{{ _('Ward') }}</th>
+            <th class="py-3 px-space-md">{{ _('Type') }}</th>
+            <th class="py-3 px-space-md">{{ _('Area (sq ft)') }}</th>
+            <th class="py-3 px-space-md">{{ _('Assessed Value') }}</th>
+            <th class="py-3 px-space-md">{{ _('Registered On') }}</th>
+            <th class="py-3 px-space-md rounded-r-lg">{{ _('Status') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">

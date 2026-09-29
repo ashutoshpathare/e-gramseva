@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Apply: {{ scheme.label }}{% endblock %}
-{% block description %}Application form for {{ scheme.label }} ({{ scheme.subtitle }}) through the Gram Panchayat.{% endblock %}
+{% block description %}{{ _('Application form for') }} {{ scheme.label }} ({{ scheme.subtitle }}) through the Gram Panchayat.{% endblock %}
 
 
 
@@ -16,7 +16,7 @@
         <li>
           <a href="{{ url_for('scheme_services') }}" class="hover:text-primary transition-colors flex items-center gap-1">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            Back to Government Schemes
+            {{ _('Back to Government Schemes') }}
           </a>
         </li>
       </ol>
@@ -29,10 +29,10 @@
           {{ scheme.subtitle }}
         </div>
         <h1 class="text-3xl font-bold text-primary tracking-tight">
-          {{ scheme.label }} &mdash; Application
+          {{ scheme.label }} &mdash; {{ _('Application') }}
         </h1>
         <p class="text-sm text-on-surface-variant flex items-center gap-2">
-          Fields marked <span class="text-error font-bold">*</span> are required. A unique request number will be generated on submission.
+          {{ _('Fields marked') }} <span class="text-error font-bold">*</span> {{ _('are required. A unique request number will be generated on submission.') }}
         </p>
       </div>
       <div class="hidden sm:flex items-center gap-4 bg-surface-container-lowest shadow-sm rounded-xl p-3 px-4">
@@ -40,8 +40,8 @@
           <span class="material-symbols-outlined text-[22px]">timer</span>
         </div>
         <div>
-          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Statutory SLA</span>
-          <span class="text-base font-bold text-on-surface">15 Working Days</span>
+          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Statutory SLA') }}</span>
+          <span class="text-base font-bold text-on-surface">{{ _('15 Working Days') }}</span>
         </div>
       </div>
     </div>
@@ -59,19 +59,19 @@
         <section class="space-y-4">
           <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
             <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
-            <h2 class="text-lg font-bold text-primary tracking-tight">Applicant Details</h2>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Applicant Details') }}</h2>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">Applicant Name <span class="text-error">*</span></label>
+              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Applicant Name') }} <span class="text-error">*</span></label>
               <input type="text" id="applicant_name" name="applicant_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" value="{{ form.get('applicant_name', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="ward" class="block text-sm text-on-surface-variant font-medium">Ward <span class="text-error">*</span></label>
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">{{ _('Ward') }} <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
                     <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
                   {% endfor %}
@@ -99,7 +99,7 @@
               <label for="house_status" class="block text-sm text-on-surface-variant font-medium">Current House Status <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="house_status" name="house_status" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('house_status') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('house_status') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for hs in ['Kachha', 'Pucca', 'None'] %}
                     <option value="{{ hs }}" {% if form.get('house_status') == hs %}selected{% endif %}>{{ hs }}</option>
                   {% endfor %}
@@ -108,8 +108,8 @@
               </div>
             </div>
             <div class="space-y-1">
-              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">Aadhaar Last 4 Digits</label>
-              <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 5678" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
+              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">{{ _('Aadhaar Last 4 Digits') }}</label>
+              <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. 5678') }}" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
             </div>
             <div class="space-y-1">
               <label for="bank_account_no" class="block text-sm text-on-surface-variant font-medium">Bank Account Number</label>
@@ -127,7 +127,7 @@
               <label for="existing_lpg_connection" class="block text-sm text-on-surface-variant font-medium">Existing LPG Connection? <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="existing_lpg_connection" name="existing_lpg_connection" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('existing_lpg_connection') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('existing_lpg_connection') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   <option value="No" {% if form.get('existing_lpg_connection') == 'No' %}selected{% endif %}>No</option>
                   <option value="Yes" {% if form.get('existing_lpg_connection') == 'Yes' %}selected{% endif %}>Yes</option>
                 </select>
@@ -135,7 +135,7 @@
               </div>
             </div>
             <div class="space-y-1">
-              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">Aadhaar Last 4 Digits</label>
+              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">{{ _('Aadhaar Last 4 Digits') }}</label>
               <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 1234" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
             </div>
           </div>
@@ -151,7 +151,7 @@
               <input type="number" id="land_area_acres" name="land_area_acres" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" min="0" step="0.01" placeholder="e.g. 1.50" value="{{ form.get('land_area_acres', '') }}">
             </div>
             <div class="space-y-1">
-              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">Aadhaar Last 4 Digits</label>
+              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">{{ _('Aadhaar Last 4 Digits') }}</label>
               <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 9012" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
             </div>
             <div class="space-y-1">
@@ -167,7 +167,7 @@
           <div class="flex items-center justify-between pb-2 border-b border-surface-container">
             <div class="flex items-center gap-3">
               <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
-              <h2 class="text-lg font-bold text-primary tracking-tight">Supporting Document</h2>
+              <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Supporting Document') }}</h2>
             </div>
             <span class="text-sm text-on-surface-variant font-medium">(recommended)</span>
           </div>

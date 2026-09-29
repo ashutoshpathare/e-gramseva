@@ -22,17 +22,17 @@
   <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md w-full">
     <div class="flex flex-col gap-space-xs">
       <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
-        <span class="hover:text-primary transition-colors cursor-pointer">Administration</span>
+        <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span class="text-primary font-semibold">Service Requests</span>
+        <span class="text-primary font-semibold">{{ _('Service Requests') }}</span>
       </div>
-      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Service Requests</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant">Certificate, permission, and scheme applications from residents</p>
+      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">{{ _('Service Requests') }}</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Certificate, permission, and scheme applications from residents') }}</p>
     </div>
     <div class="flex items-center gap-space-sm">
       <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container-low transition-all border border-outline-variant/30">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-        <span>Complaints Dashboard</span>
+        <span>{{ _('Complaints Dashboard') }}</span>
       </a>
     </div>
   </div>
@@ -42,7 +42,7 @@
     <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Total Requests</span>
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Total Requests') }}</span>
           <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">{{ stats.total }}</div>
         </div>
         <div class="w-11 h-11 rounded-lg bg-surface-container-low text-primary-container flex items-center justify-center shrink-0">
@@ -53,7 +53,7 @@
     <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Pending Review</span>
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Pending Review') }}</span>
           <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight" style="color: #d97706;">{{ stats.pending }}</div>
         </div>
         <div class="w-11 h-11 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
@@ -64,7 +64,7 @@
     <div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
       <div class="flex items-start justify-between">
         <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">Approved</span>
+          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Approved') }}</span>
           <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight text-secondary">{{ stats.approved }}</div>
         </div>
         <div class="w-11 h-11 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
@@ -80,7 +80,7 @@
     <form method="get" action="{{ url_for('admin_service_requests') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-space-sm w-full">
       <div class="lg:col-span-4 relative">
         <select name="sub_type" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
-          <option value="">All Types</option>
+          <option value="">{{ _('All Types') }}</option>
           {% for t in all_sub_types %}
             <option value="{{ t }}" {% if filters.sub_type == t %}selected{% endif %}>
               {{ sub_type_labels.get(t, t) }}
@@ -91,7 +91,7 @@
       </div>
       <div class="lg:col-span-3 relative">
         <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
-          <option value="">All Statuses</option>
+          <option value="">{{ _('All Statuses') }}</option>
           {% for s in service_statuses %}
             <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
           {% endfor %}
@@ -101,7 +101,7 @@
       <div class="lg:col-span-3 flex items-center gap-2">
         {% if filters.status or filters.sub_type %}
           <a href="{{ url_for('admin_service_requests') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 transition-colors">
-            Clear
+            {{ _('Clear') }}
           </a>
         {% endif %}
       </div>
@@ -113,13 +113,13 @@
       <table class="w-full text-left min-w-[900px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-3 px-space-md rounded-l-lg">Request No.</th>
-            <th class="py-3 px-space-md">Type</th>
-            <th class="py-3 px-space-md">Applicant & Ward</th>
-            <th class="py-3 px-space-md">Filed By</th>
-            <th class="py-3 px-space-md">Applied On</th>
-            <th class="py-3 px-space-md">Status</th>
-            <th class="py-3 px-space-md text-right rounded-r-lg">Action</th>
+            <th class="py-3 px-space-md rounded-l-lg">{{ _('Request No.') }}</th>
+            <th class="py-3 px-space-md">{{ _('Type') }}</th>
+            <th class="py-3 px-space-md">{{ _('Applicant & Ward') }}</th>
+            <th class="py-3 px-space-md">{{ _('Filed By') }}</th>
+            <th class="py-3 px-space-md">{{ _('Applied On') }}</th>
+            <th class="py-3 px-space-md">{{ _('Status') }}</th>
+            <th class="py-3 px-space-md text-right rounded-r-lg">{{ _('Action') }}</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">
@@ -155,7 +155,7 @@
             <td class="py-space-md px-space-md text-right">
               <a href="{{ url_for('admin_service_request_detail', request_no=sr['request_no']) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-all">
                 <span class="material-symbols-outlined text-[16px]">rate_review</span>
-                <span>Review</span>
+                <span>{{ _('Review') }}</span>
               </a>
             </td>
           </tr>
@@ -166,7 +166,7 @@
     {% else %}
     <div class="p-space-xl flex flex-col items-center justify-center text-center text-on-surface-variant space-y-4">
       <span class="material-symbols-outlined text-[48px] opacity-50">file_copy</span>
-      <p class="font-body-md text-body-md">No service requests found.</p>
+      <p class="font-body-md text-body-md">{{ _('No service requests found.') }}</p>
     </div>
     {% endif %}
   </div>

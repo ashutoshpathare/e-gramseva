@@ -3,7 +3,7 @@
 {% set type_labels = {'BUILDING': 'Building Permission', 'WATER': 'Water Connection Permission'} %}
 
 {% block title %}Apply: {{ type_labels[sub_type] }}{% endblock %}
-{% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
+{% block description %}{{ _('Application form for') }} {{ type_labels[sub_type] }} {{ _('from the Gram Panchayat.') }}{% endblock %}
 
 
 
@@ -18,7 +18,7 @@
         <li>
           <a href="{{ url_for('permission_services') }}" class="hover:text-primary transition-colors flex items-center gap-1">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            Back to Permission Services
+            {{ _('Back to Permission Services') }}
           </a>
         </li>
       </ol>
@@ -28,13 +28,13 @@
       <div class="space-y-1">
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-xs font-semibold uppercase tracking-wider">
           <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-          Statutory Civic Service
+          {{ _('Statutory Civic Service') }}
         </div>
         <h1 class="text-3xl font-bold text-primary tracking-tight">
-          {{ type_labels[sub_type] }} &mdash; Application
+          {{ type_labels[sub_type] }} &mdash; {{ _('Application') }}
         </h1>
         <p class="text-sm text-on-surface-variant flex items-center gap-2">
-          Fields marked <span class="text-error font-bold">*</span> are required. A unique request number will be generated on submission.
+          {{ _('Fields marked') }} <span class="text-error font-bold">*</span> {{ _('are required. A unique request number will be generated on submission.') }}
         </p>
       </div>
       <div class="hidden sm:flex items-center gap-4 bg-surface-container-lowest shadow-sm rounded-xl p-3 px-4">
@@ -42,8 +42,8 @@
           <span class="material-symbols-outlined text-[22px]">timer</span>
         </div>
         <div>
-          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Statutory SLA</span>
-          <span class="text-base font-bold text-on-surface">15 Working Days</span>
+          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Statutory SLA') }}</span>
+          <span class="text-base font-bold text-on-surface">{{ _('15 Working Days') }}</span>
         </div>
       </div>
     </div>
@@ -59,19 +59,19 @@
         <section class="space-y-4">
           <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
             <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
-            <h2 class="text-lg font-bold text-primary tracking-tight">Applicant Details</h2>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Applicant Details') }}</h2>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">Applicant Name <span class="text-error">*</span></label>
+              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Applicant Name') }} <span class="text-error">*</span></label>
               <input type="text" id="applicant_name" name="applicant_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" value="{{ form.get('applicant_name', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="ward" class="block text-sm text-on-surface-variant font-medium">Ward <span class="text-error">*</span></label>
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">{{ _('Ward') }} <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
                     <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
                   {% endfor %}
@@ -103,7 +103,7 @@
               <label for="construction_type" class="block text-sm text-on-surface-variant font-medium">Construction Type <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="construction_type" name="construction_type" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('construction_type') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('construction_type') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   <option value="Residential" {% if form.get('construction_type') == 'Residential' %}selected{% endif %}>Residential</option>
                   <option value="Commercial" {% if form.get('construction_type') == 'Commercial' %}selected{% endif %}>Commercial</option>
                 </select>
@@ -135,7 +135,7 @@
               <label for="connection_type" class="block text-sm text-on-surface-variant font-medium">Connection Type <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="connection_type" name="connection_type" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('connection_type') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('connection_type') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   <option value="Domestic" {% if form.get('connection_type') == 'Domestic' %}selected{% endif %}>Domestic</option>
                   <option value="Commercial" {% if form.get('connection_type') == 'Commercial' %}selected{% endif %}>Commercial</option>
                 </select>
@@ -146,7 +146,7 @@
               <label for="pipe_size_inch" class="block text-sm text-on-surface-variant font-medium">Pipe Size</label>
               <div class="relative">
                 <select id="pipe_size_inch" name="pipe_size_inch" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer">
-                  <option value="" {% if not form.get('pipe_size_inch') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" {% if not form.get('pipe_size_inch') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for size in ['15mm (0.5 inch)', '20mm (0.75 inch)', '25mm (1 inch)', '32mm (1.25 inch)'] %}
                     <option value="{{ size }}" {% if form.get('pipe_size_inch') == size %}selected{% endif %}>{{ size }}</option>
                   {% endfor %}
@@ -167,7 +167,7 @@
           <div class="flex items-center justify-between pb-2 border-b border-surface-container">
             <div class="flex items-center gap-3">
               <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
-              <h2 class="text-lg font-bold text-primary tracking-tight">Supporting Document</h2>
+              <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Supporting Document') }}</h2>
             </div>
             <span class="text-sm text-on-surface-variant font-medium">(recommended)</span>
           </div>

@@ -63,10 +63,10 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="material-symbols-outlined text-[16px]">call</span> 
-        <span>Panchayat Helpline: 1800-XXX-XXXX</span>
+        <span>{{ _('Panchayat Helpline: 1800-XXX-XXXX') }}</span>
         <span class="hidden md:flex items-center gap-2 ml-4 pl-4 border-l border-primary-container">
           <span class="material-symbols-outlined text-[16px]">schedule</span> 
-          <span>Mon&ndash;Sat, 9 am &ndash; 6 pm</span>
+          <span>{{ _('Mon&ndash;Sat, 9 am &ndash; 6 pm') }}</span>
         </span>
       </div>
     </div>
@@ -83,7 +83,7 @@
           <div class="text-xl md:text-2xl font-bold text-primary tracking-tight flex items-center">
             &#x0907;-&#x0917;&#x094D;&#x0930;&#x093E;&#x092E;&#x0938;&#x0947;&#x0935;&#x093E; <span class="text-outline-variant font-normal px-2">|</span> e-gramSeva
           </div>
-          <div class="text-sm font-medium text-on-surface-variant">Citizen Services Portal &mdash; Gram Panchayat</div>
+          <div class="text-sm font-medium text-on-surface-variant">{{ _('Citizen Services Portal &mdash; Gram Panchayat') }}</div>
         </div>
       </div>
       
@@ -117,12 +117,11 @@
           
           <form method="post" action="{{ url_for('logout') }}" class="m-0">
             <button type="submit" class="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-error hover:bg-error-container hover:text-on-error-container rounded-lg transition-colors border border-transparent hover:border-error-container">
-              <span class="material-symbols-outlined text-[18px]">logout</span> Logout
-            </button>
+              <span class="material-symbols-outlined text-[18px]">logout</span>{{ _('Logout') }}</button>
           </form>
         {% else %}
-          <a href="{{ url_for('login') }}" class="inline-block px-4 py-2 text-sm font-semibold text-primary hover:bg-surface-container-high rounded-lg transition-colors border border-transparent">Login</a>
-          <a href="{{ url_for('register') }}" class="inline-block px-4 py-2 text-sm font-semibold text-on-primary bg-primary hover:bg-primary-container rounded-lg shadow-sm transition-colors">Register</a>
+          <a href="{{ url_for('login') }}" class="inline-block px-4 py-2 text-sm font-semibold text-primary hover:bg-surface-container-high rounded-lg transition-colors border border-transparent">{{ _('Login') }}</a>
+          <a href="{{ url_for('register') }}" class="inline-block px-4 py-2 text-sm font-semibold text-on-primary bg-primary hover:bg-primary-container rounded-lg shadow-sm transition-colors">{{ _('Register') }}</a>
         {% endif %}
       </div>
     </div>
@@ -152,14 +151,10 @@
             </a>
           </li>
           <li>
-            <a href="{{ url_for('permission_services') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('permission_services','permission_apply') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Permissions
-            </a>
+            <a href="{{ url_for('permission_services') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('permission_services','permission_apply') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Permissions') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('scheme_services') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('scheme_services','scheme_apply') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Schemes
-            </a>
+            <a href="{{ url_for('scheme_services') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('scheme_services','scheme_apply') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Schemes') }}</a>
           </li>
           <li>
             <a href="{{ url_for('villager_property_tax') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'villager_property_tax' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
@@ -168,47 +163,31 @@
           </li>
         {% elif session.get('role') == 'admin' %}
           <li>
-            <a href="{{ url_for('admin_dashboard') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_dashboard' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              All Complaints
-            </a>
+            <a href="{{ url_for('admin_dashboard') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_dashboard' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('All Complaints') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_service_requests') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_service_requests','admin_service_request_detail') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Service Requests
-            </a>
+            <a href="{{ url_for('admin_service_requests') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_service_requests','admin_service_request_detail') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Service Requests') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_properties') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_properties','admin_property_detail','admin_register_property','admin_tax_overview') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Properties
-            </a>
+            <a href="{{ url_for('admin_properties') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_properties','admin_property_detail','admin_register_property','admin_tax_overview') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Properties') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_reports') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_reports' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Reports
-            </a>
+            <a href="{{ url_for('admin_reports') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_reports' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Reports') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_notices') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_notices' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Notice Board
-            </a>
+            <a href="{{ url_for('admin_notices') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_notices' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Notice Board') }}</a>
           </li>
           <li class="px-2">
             <span class="w-px h-4 bg-outline-variant inline-block align-middle"></span>
           </li>
           <li>
-            <a href="{{ url_for('admin_register_birth') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_register_birth' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Janma Nondi
-            </a>
+            <a href="{{ url_for('admin_register_birth') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_register_birth' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Janma Nondi') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_register_death') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_register_death' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Mrutyu Nondi
-            </a>
+            <a href="{{ url_for('admin_register_death') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint == 'admin_register_death' %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Mrutyu Nondi') }}</a>
           </li>
           <li>
-            <a href="{{ url_for('admin_register_property_nondi') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_register_property_nondi','admin_register_print') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">
-              Malmatta Nondi
-            </a>
+            <a href="{{ url_for('admin_register_property_nondi') }}" class="inline-block px-3 py-2 rounded-lg transition-colors {% if request.endpoint in ('admin_register_property_nondi','admin_register_print') %}bg-primary text-on-primary font-semibold{% else %}text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface{% endif %}">{{ _('Malmatta Nondi') }}</a>
           </li>
         {% endif %}
       </ul>
@@ -244,7 +223,7 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm text-on-surface-variant">
         <div>
           <strong class="text-on-surface">e-gramSeva &mdash; इ-ग्रामसेवा</strong><br>
-          <span>Citizen Services Portal &copy; 2026. Gram Panchayat.</span>
+          <span>{{ _('Citizen Services Portal &copy; 2026. Gram Panchayat.') }}</span>
         </div>
         <div class="md:text-right font-medium">
           <span>National e-Governance Programme <span class="text-outline-variant px-2">|</span> NIC</span>

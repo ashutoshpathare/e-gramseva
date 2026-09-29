@@ -3,7 +3,7 @@
 {% set type_labels = {'BIRTH': 'Birth Certificate', 'DEATH': 'Death Certificate', 'RESIDENCE': 'Residence Certificate'} %}
 
 {% block title %}Apply: {{ _(type_labels[sub_type]) }}{% endblock %}
-{% block description %}Application form for {{ type_labels[sub_type] }} from the Gram Panchayat.{% endblock %}
+{% block description %}{{ _('Application form for') }} {{ type_labels[sub_type] }} {{ _('from the Gram Panchayat.') }}{% endblock %}
 
 
 
@@ -18,7 +18,7 @@
         <li>
           <a href="{{ url_for('certificate_services') }}" class="hover:text-primary transition-colors flex items-center gap-1">
             <span class="material-symbols-outlined text-[16px]">arrow_back</span>
-            Back to Certificate Services
+            {{ _('Back to Certificate Services') }}
           </a>
         </li>
       </ol>
@@ -28,13 +28,13 @@
       <div class="space-y-1">
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-xs font-semibold uppercase tracking-wider">
           <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-          Statutory Civic Service
+          {{ _('Statutory Civic Service') }}
         </div>
         <h1 class="text-3xl font-bold text-primary tracking-tight">
-          {{ _(type_labels[sub_type]) }} &mdash; Application
+          {{ _(type_labels[sub_type]) }} &mdash; {{ _('Application') }}
         </h1>
         <p class="text-sm text-on-surface-variant flex items-center gap-2">
-          Fields marked <span class="text-error font-bold">*</span> are required. A unique request number will be generated on submission.
+          {{ _('Fields marked') }} <span class="text-error font-bold">*</span> {{ _('are required. A unique request number will be generated on submission.') }}
         </p>
       </div>
       <div class="hidden sm:flex items-center gap-4 bg-surface-container-lowest shadow-sm rounded-xl p-3 px-4">
@@ -42,8 +42,8 @@
           <span class="material-symbols-outlined text-[22px]">timer</span>
         </div>
         <div>
-          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Statutory SLA</span>
-          <span class="text-base font-bold text-on-surface">15 Working Days</span>
+          <span class="block text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Statutory SLA') }}</span>
+          <span class="text-base font-bold text-on-surface">{{ _('15 Working Days') }}</span>
         </div>
       </div>
     </div>
@@ -59,19 +59,19 @@
         <section class="space-y-4">
           <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
             <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
-            <h2 class="text-lg font-bold text-primary tracking-tight">Applicant Details</h2>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Applicant Details') }}</h2>
           </div>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">Applicant Name <span class="text-error">*</span></label>
+              <label for="applicant_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Applicant Name') }} <span class="text-error">*</span></label>
               <input type="text" id="applicant_name" name="applicant_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" value="{{ form.get('applicant_name', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="ward" class="block text-sm text-on-surface-variant font-medium">Ward <span class="text-error">*</span></label>
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">{{ _('Ward') }} <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
                     <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
                   {% endfor %}
@@ -92,21 +92,21 @@
           {% if sub_type == 'BIRTH' %}
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="space-y-1">
-              <label for="date_of_birth" class="block text-sm text-on-surface-variant font-medium">Date of Birth <span class="text-error">*</span></label>
+              <label for="date_of_birth" class="block text-sm text-on-surface-variant font-medium">{{ _('Date of Birth') }} <span class="text-error">*</span></label>
               <input type="date" id="date_of_birth" name="date_of_birth" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('date_of_birth', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="place_of_birth" class="block text-sm text-on-surface-variant font-medium">Place of Birth</label>
-              <input type="text" id="place_of_birth" name="place_of_birth" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Shivaji Hospital" value="{{ form.get('place_of_birth', '') }}">
+              <label for="place_of_birth" class="block text-sm text-on-surface-variant font-medium">{{ _('Place of Birth') }}</label>
+              <input type="text" id="place_of_birth" name="place_of_birth" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. Shivaji Hospital') }}" value="{{ form.get('place_of_birth', '') }}">
             </div>
             <div class="space-y-1">
-              <label for="gender" class="block text-sm text-on-surface-variant font-medium">Gender</label>
+              <label for="gender" class="block text-sm text-on-surface-variant font-medium">{{ _('Gender') }}</label>
               <div class="relative">
                 <select id="gender" name="gender" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all appearance-none cursor-pointer">
                   <option value="">—</option>
-                  <option value="Male" {% if form.get('gender')=='Male' %}selected{% endif %}>Male</option>
-                  <option value="Female" {% if form.get('gender')=='Female' %}selected{% endif %}>Female</option>
-                  <option value="Other" {% if form.get('gender')=='Other' %}selected{% endif %}>Other</option>
+                  <option value="Male" {% if form.get('gender')=='Male' %}selected{% endif %}>{{ _('Male') }}</option>
+                  <option value="Female" {% if form.get('gender')=='Female' %}selected{% endif %}>{{ _('Female') }}</option>
+                  <option value="Other" {% if form.get('gender')=='Other' %}selected{% endif %}>{{ _('Other') }}</option>
                 </select>
                 <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
               </div>
@@ -114,11 +114,11 @@
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1">
-              <label for="father_name" class="block text-sm text-on-surface-variant font-medium">Father's Name</label>
+              <label for="father_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Father\'s Name') }}</label>
               <input type="text" id="father_name" name="father_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('father_name', '') }}">
             </div>
             <div class="space-y-1">
-              <label for="mother_name" class="block text-sm text-on-surface-variant font-medium">Mother's Name</label>
+              <label for="mother_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Mother\'s Name') }}</label>
               <input type="text" id="mother_name" name="mother_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('mother_name', '') }}">
             </div>
           </div>
@@ -126,23 +126,23 @@
           {% elif sub_type == 'DEATH' %}
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="space-y-1 sm:col-span-2">
-              <label for="deceased_name" class="block text-sm text-on-surface-variant font-medium">Deceased's Full Name <span class="text-error">*</span></label>
+              <label for="deceased_name" class="block text-sm text-on-surface-variant font-medium">{{ _('Deceased\'s Full Name') }} <span class="text-error">*</span></label>
               <input type="text" id="deceased_name" name="deceased_name" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('deceased_name', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="date_of_death" class="block text-sm text-on-surface-variant font-medium">Date of Death <span class="text-error">*</span></label>
+              <label for="date_of_death" class="block text-sm text-on-surface-variant font-medium">{{ _('Date of Death') }} <span class="text-error">*</span></label>
               <input type="date" id="date_of_death" name="date_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('date_of_death', '') }}" required>
             </div>
             <div class="space-y-1">
-              <label for="relation" class="block text-sm text-on-surface-variant font-medium">Relation to Deceased</label>
-              <input type="text" id="relation" name="relation" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Son, Daughter" value="{{ form.get('relation', '') }}">
+              <label for="relation" class="block text-sm text-on-surface-variant font-medium">{{ _('Relation to Deceased') }}</label>
+              <input type="text" id="relation" name="relation" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. Son, Daughter') }}" value="{{ form.get('relation', '') }}">
             </div>
             <div class="space-y-1">
-              <label for="place_of_death" class="block text-sm text-on-surface-variant font-medium">Place of Death</label>
+              <label for="place_of_death" class="block text-sm text-on-surface-variant font-medium">{{ _('Place of Death') }}</label>
               <input type="text" id="place_of_death" name="place_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('place_of_death', '') }}">
             </div>
             <div class="space-y-1">
-              <label for="cause_of_death" class="block text-sm text-on-surface-variant font-medium">Cause of Death</label>
+              <label for="cause_of_death" class="block text-sm text-on-surface-variant font-medium">{{ _('Cause of Death') }}</label>
               <input type="text" id="cause_of_death" name="cause_of_death" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" value="{{ form.get('cause_of_death', '') }}">
             </div>
           </div>
@@ -150,20 +150,20 @@
           {% elif sub_type == 'RESIDENCE' %}
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
             <div class="space-y-1 sm:col-span-8">
-              <label for="full_address" class="block text-sm text-on-surface-variant font-medium">Full Residential Address <span class="text-error">*</span></label>
-              <input type="text" id="full_address" name="full_address" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="House No., Street, Village, Taluka, District" value="{{ form.get('full_address', '') }}" required>
+              <label for="full_address" class="block text-sm text-on-surface-variant font-medium">{{ _('Full Residential Address') }} <span class="text-error">*</span></label>
+              <input type="text" id="full_address" name="full_address" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('House No., Street, Village, Taluka, District') }}" value="{{ form.get('full_address', '') }}" required>
             </div>
             <div class="space-y-1 sm:col-span-4">
-              <label for="resident_since" class="block text-sm text-on-surface-variant font-medium">Resident Since</label>
-              <input type="text" id="resident_since" name="resident_since" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 2005 or Birth" value="{{ form.get('resident_since', '') }}">
+              <label for="resident_since" class="block text-sm text-on-surface-variant font-medium">{{ _('Resident Since') }}</label>
+              <input type="text" id="resident_since" name="resident_since" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. 2005 or Birth') }}" value="{{ form.get('resident_since', '') }}">
             </div>
             <div class="space-y-1 sm:col-span-6">
-              <label for="purpose" class="block text-sm text-on-surface-variant font-medium">Purpose of Certificate</label>
-              <input type="text" id="purpose" name="purpose" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. School admission, Employment" value="{{ form.get('purpose', '') }}">
+              <label for="purpose" class="block text-sm text-on-surface-variant font-medium">{{ _('Purpose of Certificate') }}</label>
+              <input type="text" id="purpose" name="purpose" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. School admission, Employment') }}" value="{{ form.get('purpose', '') }}">
             </div>
             <div class="space-y-1 sm:col-span-6">
-              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">Aadhaar Last 4 Digits</label>
-              <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. 5678" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
+              <label for="aadhaar_last4" class="block text-sm text-on-surface-variant font-medium">{{ _('Aadhaar Last 4 Digits') }}</label>
+              <input type="text" id="aadhaar_last4" name="aadhaar_last4" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="{{ _('e.g. 5678') }}" maxlength="4" value="{{ form.get('aadhaar_last4', '') }}">
             </div>
           </div>
           {% endif %}
@@ -174,13 +174,12 @@
           <div class="flex items-center justify-between pb-2 border-b border-surface-container">
             <div class="flex items-center gap-3">
               <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
-              <h2 class="text-lg font-bold text-primary tracking-tight">Supporting Document</h2>
+              <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Supporting Document') }}</h2>
             </div>
-            <span class="text-sm text-on-surface-variant font-medium">(optional)</span>
+            <span class="text-sm text-on-surface-variant font-medium">{{ _('(optional)') }}</span>
           </div>
           <p class="text-sm text-on-surface-variant">
-            Upload a scanned copy of your identity proof (Aadhaar, Voter ID) or supporting document.
-            Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.
+            {{ _('Upload a scanned copy of your identity proof (Aadhaar, Voter ID) or supporting document. Accepted formats: JPG, PNG, WebP, PDF. Max 5 MB.') }}
           </p>
           <div class="relative">
             <input type="file" id="document" name="document" class="w-full bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-container hover:file:text-white transition-all cursor-pointer" accept=".jpg,.jpeg,.png,.webp,.pdf">
@@ -212,15 +211,15 @@
           <div class="p-6 space-y-4">
             <div class="flex items-center gap-3 mb-2">
               <span class="material-symbols-outlined text-primary text-[28px]">account_balance</span>
-              <h3 class="text-base font-bold text-primary">Gram Panchayat Helpdesk</h3>
+              <h3 class="text-base font-bold text-primary">{{ _('Gram Panchayat Helpdesk') }}</h3>
             </div>
             <div class="space-y-3 text-sm text-on-surface-variant">
               <div class="flex items-center justify-between">
-                <span>Timings:</span>
-                <span class="font-medium text-on-surface">10 AM to 5 PM</span>
+                <span>{{ _('Timings:') }}</span>
+                <span class="font-medium text-on-surface">{{ _('10 AM to 5 PM') }}</span>
               </div>
               <div class="flex items-center justify-between">
-                <span>Contact:</span>
+                <span>{{ _('Contact:') }}</span>
                 <span class="font-medium text-on-surface">1800-233-4566</span>
               </div>
             </div>
@@ -235,15 +234,15 @@
           <ul class="space-y-3 text-sm text-on-surface-variant">
             <li class="flex items-start gap-2">
               <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
-              <span>Verify all spellings precisely match your Aadhaar card.</span>
+              <span>{{ _('Verify all spellings precisely match your Aadhaar card.') }}</span>
             </li>
             <li class="flex items-start gap-2">
               <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
-              <span>A valid phone number is required for SMS updates.</span>
+              <span>{{ _('A valid phone number is required for SMS updates.') }}</span>
             </li>
             <li class="flex items-start gap-2">
               <span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">check_circle</span>
-              <span>Ensure supporting documents are legible and under 5 MB.</span>
+              <span>{{ _('Ensure supporting documents are legible and under 5 MB.') }}</span>
             </li>
           </ul>
         </div>

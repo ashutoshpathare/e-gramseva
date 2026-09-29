@@ -40,7 +40,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
       <form method="post" action="{{ url_for('new_complaint') }}" enctype="multipart/form-data" novalidate id="complaint-form" class="lg:col-span-8 bg-surface-container-lowest shadow-sm rounded-2xl p-6 sm:p-8 space-y-8">
         
-        <!-- Section 1: Complaint Details -->
+        <!-- Section 1: {{ _('Complaint Details') }} -->
         <section class="space-y-4">
           <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
             <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
@@ -52,7 +52,7 @@
               <label for="category" class="block text-sm text-on-surface-variant font-medium">{{ _('Category') }} <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="category" name="category" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('category') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('category') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for cat in ['Road','Water','Street Lights','Garbage','Drainage','Electricity','Other'] %}
                     <option value="{{ cat }}" {% if form.get('category') == cat %}selected{% endif %}>{{ _(cat) }}</option>
                   {% endfor %}
@@ -65,7 +65,7 @@
               <label for="ward" class="block text-sm text-on-surface-variant font-medium">{{ _('Ward') }} <span class="text-error">*</span></label>
               <div class="relative">
                 <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
-                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; {{ _('Select') }} &mdash;</option>
                   {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
                     <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
                   {% endfor %}
@@ -86,7 +86,7 @@
           
           <div class="space-y-1 pt-2">
             <label for="address_detail" class="block text-sm text-on-surface-variant font-medium">
-              {{ _('Address') }} <span class="text-outline font-normal">(optional)</span>
+              {{ _('Address') }} <span class="text-outline font-normal">{{ _('(optional)') }}</span>
             </label>
             <input type="text" id="address_detail" name="address_detail" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Near ZP School, Shivaji Nagar" value="{{ form.get('address_detail', '') }}">
           </div>
@@ -99,7 +99,7 @@
               <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">2</span>
               <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Location') }}</h2>
             </div>
-            <span class="text-sm text-outline font-medium">(optional)</span>
+            <span class="text-sm text-outline font-medium">{{ _('(optional)') }}</span>
           </div>
           <p class="text-sm text-on-surface-variant">
             Capture your GPS coordinates to help pinpoint the exact location.
@@ -126,7 +126,7 @@
               <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
               <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Photo') }}</h2>
             </div>
-            <span class="text-sm text-outline font-medium">(optional)</span>
+            <span class="text-sm text-outline font-medium">{{ _('(optional)') }}</span>
           </div>
           <p class="text-sm text-on-surface-variant">
             Upload a photo of the issue. Accepted: JPG, PNG, WebP. Max 5 MB.

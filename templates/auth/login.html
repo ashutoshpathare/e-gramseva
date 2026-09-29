@@ -19,7 +19,7 @@
     {# Gov initiative pill #}
     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container shadow-sm w-fit">
       <span class="w-2 h-2 rounded-full bg-secondary"></span>
-      <span class="text-xs font-bold uppercase tracking-widest text-primary">Government of India &bull; MoPR Initiative</span>
+      <span class="text-xs font-bold uppercase tracking-widest text-primary">{{ _('Government of India &bull; MoPR Initiative') }}</span>
     </div>
 
     {# Main heading #}
@@ -28,8 +28,7 @@
         Empowering Rural Governance Through Digital Access
       </h1>
       <p class="text-base text-on-surface-variant leading-relaxed max-w-xl">
-        Direct, transparent, and expedited access to Gram Panchayat civil certificates,
-        land and property assessments, localized welfare benefits, and citizen grievance tracking.
+        {{ _('Direct, transparent, and expedited access to Gram Panchayat civil certificates, land and property assessments, localized welfare benefits, and citizen grievance tracking.') }}
       </p>
     </div>
 
@@ -37,7 +36,7 @@
     <div class="w-full bg-surface-container-low rounded-2xl p-6 shadow-sm relative overflow-hidden">
       <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary-fixed/30 rounded-full blur-2xl pointer-events-none"></div>
       <div class="flex items-center justify-between mb-3 text-on-surface-variant">
-        <span class="text-xs font-semibold uppercase tracking-wider text-on-primary-fixed-variant">Gram Panchayat Architectural Node</span>
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-primary-fixed-variant">{{ _('Gram Panchayat Architectural Node') }}</span>
         <span class="text-xs font-semibold text-secondary flex items-center gap-1">
           <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Live Node
         </span>
@@ -109,8 +108,8 @@
           <span class="material-symbols-outlined text-primary" style="font-size:20px;">description</span>
         </div>
         <div class="min-w-0">
-          <p class="text-sm font-bold text-primary truncate">100% Paperless</p>
-          <p class="text-xs text-on-surface-variant truncate">Instant e-Records</p>
+          <p class="text-sm font-bold text-primary truncate">{{ _('100% Paperless') }}</p>
+          <p class="text-xs text-on-surface-variant truncate">{{ _('Instant e-Records') }}</p>
         </div>
       </div>
       <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center gap-3">
@@ -118,8 +117,8 @@
           <span class="material-symbols-outlined text-secondary" style="font-size:20px;">payments</span>
         </div>
         <div class="min-w-0">
-          <p class="text-sm font-bold text-primary truncate">Direct Benefit</p>
-          <p class="text-xs text-on-surface-variant truncate">Zero-Leakage DBT</p>
+          <p class="text-sm font-bold text-primary truncate">{{ _('Direct Benefit') }}</p>
+          <p class="text-xs text-on-surface-variant truncate">{{ _('Zero-Leakage DBT') }}</p>
         </div>
       </div>
       <div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex items-center gap-3">
@@ -127,8 +126,8 @@
           <span class="material-symbols-outlined text-primary" style="font-size:20px;">verified</span>
         </div>
         <div class="min-w-0">
-          <p class="text-sm font-bold text-primary truncate">e-Sign Certified</p>
-          <p class="text-xs text-on-surface-variant truncate">Statutory Validity</p>
+          <p class="text-sm font-bold text-primary truncate">{{ _('e-Sign Certified') }}</p>
+          <p class="text-xs text-on-surface-variant truncate">{{ _('Statutory Validity') }}</p>
         </div>
       </div>
     </div>
@@ -145,9 +144,9 @@
       <div class="mb-6">
         <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-xs font-semibold mb-2">
           <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-          <span>Citizen &bull; Sarpanch &bull; Sachiv</span>
+          <span>{{ _('Citizen &bull; Sarpanch &bull; Sachiv') }}</span>
         </div>
-        <h2 class="text-2xl font-bold text-primary">Welcome Back</h2>
+        <h2 class="text-2xl font-bold text-primary">{{ _('Welcome Back') }}</h2>
         <p class="text-sm text-on-surface-variant mt-1">
           Login with your registered mobile number and password.
         </p>
@@ -168,7 +167,7 @@
               id="mobile"
               name="mobile"
               class="w-full bg-transparent py-3 px-4 text-sm text-on-surface placeholder-outline focus:outline-none"
-              placeholder="10-digit mobile number"
+              placeholder="{{ _('10-digit mobile number') }}"
               maxlength="10"
               inputmode="numeric"
               autofocus
@@ -188,7 +187,7 @@
               id="password"
               name="password"
               class="w-full bg-transparent py-3 pl-4 pr-12 text-sm text-on-surface placeholder-outline focus:outline-none"
-              placeholder="Enter your password"
+              placeholder="{{ _('Enter your password') }}"
               required
             >
             <button
@@ -208,7 +207,7 @@
           id="btn-login"
           class="w-full bg-primary-container text-on-primary py-3.5 px-4 rounded-xl text-sm font-bold tracking-wide shadow-md hover:bg-primary transition-all flex items-center justify-center gap-2 active:scale-[0.99]"
         >
-          <span>Sign In to Portal</span>
+          <span>{{ _('Sign In to Portal') }}</span>
           <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
         </button>
 
@@ -222,7 +221,7 @@
 
         {# Panchayat staff note #}
         <p class="text-xs text-center text-on-surface-variant">
-          <strong class="text-on-surface">Gram Panchayat staff?</strong>
+          <strong class="text-on-surface">{{ _('Gram Panchayat staff?') }}</strong>
           Use your official credentials above — there is no separate admin login page.
         </p>
 
@@ -239,7 +238,7 @@
       {# Security tag #}
       <div class="mt-5 flex items-center justify-center gap-2 text-on-surface-variant bg-surface-container-low/60 rounded-xl py-3 px-4">
         <span class="material-symbols-outlined text-secondary" style="font-size:16px;">lock</span>
-        <span class="text-xs text-center">Protected by National Informatics Infrastructure &bull; 256-bit SSL</span>
+        <span class="text-xs text-center">{{ _('Protected by National Informatics Infrastructure &bull; 256-bit SSL') }}</span>
       </div>
 
     </div>

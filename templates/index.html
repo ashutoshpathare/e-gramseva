@@ -2,7 +2,7 @@
 
 
 
-{% block title %}Home — e-gramSeva Citizen Services Portal{% endblock %}
+{% block title %}{{ _('Home') }} — e-gramSeva Citizen Services Portal{% endblock %}
 {% block description %}e-gramSeva — Gram Panchayat citizen services portal. File complaints, apply for certificates, permissions, and government schemes online.{% endblock %}
 
 {% block content %}
@@ -16,8 +16,7 @@
         इ-ग्रामसेवा &nbsp;|&nbsp; e-gramSeva
       </h1>
       <p class="text-lg md:text-xl text-blue-100 max-w-2xl font-medium">
-        File civic complaints and track their resolution online &mdash;
-        anytime, from any device.
+        {{ _('File civic complaints and track their resolution online &mdash; anytime, from any device.') }}
       </p>
       
       <div class="mt-6 flex flex-wrap justify-center gap-4">
@@ -50,7 +49,7 @@
     <div class="lg:col-span-2 flex flex-col gap-space-md">
       <div class="flex items-center gap-2 border-b border-gray-200 pb-2">
         <span class="material-symbols-outlined text-[24px] text-primary">campaign</span>
-        <h2 class="text-xl font-bold text-on-surface">{{ _('Panchayat Notices') }}</h2>
+        <h2 class="text-xl font-bold text-on-surface">{{ _('Notice Board') }}</h2>
       </div>
       
       <div class="flex flex-col gap-4">
@@ -70,7 +69,7 @@
         {% else %}
         <div class="bg-surface-container-lowest rounded-xl p-12 shadow-sm border border-gray-200 flex flex-col items-center justify-center text-center gap-3">
           <span class="material-symbols-outlined text-[48px] text-gray-300">info</span>
-          <p class="text-on-surface-variant font-medium">{{ _('No notices posted yet') }}.</p>
+          <p class="text-on-surface-variant font-medium">{{ _('No notices posted yet.') }}</p>
         </div>
         {% endif %}
       </div>
@@ -86,23 +85,23 @@
       <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-gray-200 flex flex-col gap-6">
         <div class="flex gap-4 items-start">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">1</div>
-          <p class="text-on-surface-variant font-medium mt-1">Register with your mobile number and ward number.</p>
+          <p class="text-on-surface-variant font-medium mt-1">{{ _('Register with your mobile number and ward number.') }}</p>
         </div>
         <div class="flex gap-4 items-start">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">2</div>
-          <p class="text-on-surface-variant font-medium mt-1">File a complaint with a description and optional photo.</p>
+          <p class="text-on-surface-variant font-medium mt-1">{{ _('File a complaint with a description and optional photo.') }}</p>
         </div>
         <div class="flex gap-4 items-start">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">3</div>
-          <p class="text-on-surface-variant font-medium mt-1">Track the status as Gram Panchayat assigns a worker.</p>
+          <p class="text-on-surface-variant font-medium mt-1">{{ _('Track the status as Gram Panchayat assigns a worker.') }}</p>
         </div>
         <div class="flex gap-4 items-start">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">4</div>
-          <p class="text-on-surface-variant font-medium mt-1">Get notified when your complaint is resolved.</p>
+          <p class="text-on-surface-variant font-medium mt-1">{{ _('Get notified when your complaint is resolved.') }}</p>
         </div>
         <div class="flex gap-4 items-start">
           <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">5</div>
-          <p class="text-on-surface-variant font-medium mt-1">Rate the resolution to help improve services.</p>
+          <p class="text-on-surface-variant font-medium mt-1">{{ _('Rate the resolution to help improve services.') }}</p>
         </div>
       </div>
     </div>

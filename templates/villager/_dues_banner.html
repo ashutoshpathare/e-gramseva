@@ -28,10 +28,10 @@
       <table style="width:100%; border-collapse:collapse; font-size:0.825rem; color:#fff;">
         <thead>
           <tr style="border-bottom:1px solid rgba(255,255,255,.25);">
-            <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Property&nbsp;No.</th>
-            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Tax Type</th>
-            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">Financial Year</th>
-            <th style="padding:5px 0 5px 10px; text-align:right; font-weight:600; color:#fecaca; white-space:nowrap;">Amount Due</th>
+            <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Property&nbsp;No.') }}</th>
+            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Tax Type') }}</th>
+            <th style="padding:5px 10px; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Financial Year') }}</th>
+            <th style="padding:5px 0 5px 10px; text-align:right; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Amount Due') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +55,7 @@
              transition:opacity .2s;
            "
            onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-          <i class="bi bi-credit-card-2-front"></i> Pay Dues Now
+          <i class="bi bi-credit-card-2-front"></i> {{ _('Pay Dues Now') }}
         </a>
       </div>
     </div>

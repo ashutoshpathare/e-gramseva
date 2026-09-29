@@ -11,7 +11,7 @@
     
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-primary tracking-tight">Property &amp; Tax</h1>
+        <h1 class="text-3xl font-bold text-primary tracking-tight">{{ _('Property & Tax') }}</h1>
         <p class="text-sm text-on-surface-variant mt-1">
           {{ session['full_name'] }}
           {% if session.get('ward') %} &mdash; {{ session['ward'] }}{% endif %}
@@ -19,7 +19,7 @@
       </div>
       <a href="{{ url_for('villager_dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface border border-outline-variant text-on-surface-variant font-medium hover:bg-surface-container transition-colors">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-        My Complaints
+        {{ _('My Complaints') }}
       </a>
     </div>
 
@@ -72,12 +72,12 @@
               <table class="w-full text-left min-w-[700px]">
                 <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-semibold">
                   <tr>
-                    <th class="px-4 py-3">Tax Type</th>
-                    <th class="px-4 py-3">Financial Year</th>
-                    <th class="px-4 py-3">Amount Due</th>
-                    <th class="px-4 py-3">Due Date</th>
-                    <th class="px-4 py-3">Status</th>
-                    <th class="px-4 py-3 text-right">Action</th>
+                    <th class="px-4 py-3">{{ _('Tax Type') }}</th>
+                    <th class="px-4 py-3">{{ _('Financial Year') }}</th>
+                    <th class="px-4 py-3">{{ _('Amount Due') }}</th>
+                    <th class="px-4 py-3">{{ _('Due Date') }}</th>
+                    <th class="px-4 py-3">{{ _('Status') }}</th>
+                    <th class="px-4 py-3 text-right">{{ _('Action') }}</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-surface-container text-sm text-on-surface bg-surface-container-lowest">
@@ -107,7 +107,7 @@
                             Pay Now
                           </button>
                         {% else %}
-                          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-outline cursor-not-allowed text-xs font-medium" disabled title="Payment gateway not configured">
+                          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-outline cursor-not-allowed text-xs font-medium" disabled title="{{ _('Payment gateway not configured') }}">
                             <span class="material-symbols-outlined text-[16px]">credit_card_off</span>
                             Pay Now
                           </button>
@@ -128,7 +128,7 @@
             </div>
             {% else %}
             <div class="bg-surface-container rounded-xl p-6 text-center">
-              <p class="text-sm text-on-surface-variant">No tax records yet.</p>
+              <p class="text-sm text-on-surface-variant">{{ _('No tax records yet.') }}</p>
             </div>
             {% endif %}
           </div>
@@ -144,13 +144,13 @@
               <table class="w-full text-left min-w-[700px]">
                 <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-semibold">
                   <tr>
-                    <th class="px-4 py-3">Receipt No.</th>
-                    <th class="px-4 py-3">Tax Type</th>
-                    <th class="px-4 py-3">Year</th>
-                    <th class="px-4 py-3">Amount Paid</th>
-                    <th class="px-4 py-3">Method</th>
-                    <th class="px-4 py-3">Paid On</th>
-                    <th class="px-4 py-3 text-right">Action</th>
+                    <th class="px-4 py-3">{{ _('Receipt No.') }}</th>
+                    <th class="px-4 py-3">{{ _('Tax Type') }}</th>
+                    <th class="px-4 py-3">{{ _('Year') }}</th>
+                    <th class="px-4 py-3">{{ _('Amount Paid') }}</th>
+                    <th class="px-4 py-3">{{ _('Method') }}</th>
+                    <th class="px-4 py-3">{{ _('Paid On') }}</th>
+                    <th class="px-4 py-3 text-right">{{ _('Action') }}</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-surface-container text-sm text-on-surface bg-surface-container-lowest">
@@ -185,8 +185,8 @@
     {% else %}
     <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-12 flex flex-col items-center justify-center text-center mt-8">
       <span class="material-symbols-outlined text-[64px] text-gray-300 mb-4">real_estate_agent</span>
-      <h3 class="text-xl font-bold text-on-surface mb-2">No properties registered</h3>
-      <p class="text-on-surface-variant">Contact the Gram Panchayat office to link a property to your account.</p>
+      <h3 class="text-xl font-bold text-on-surface mb-2">{{ _('No properties registered') }}</h3>
+      <p class="text-on-surface-variant">{{ _('Contact the Gram Panchayat office to link a property to your account.') }}</p>
     </div>
     {% endif %}
 

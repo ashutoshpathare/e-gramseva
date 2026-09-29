@@ -30,11 +30,11 @@
         <div class="space-y-1">
           <div class="flex flex-wrap items-center gap-2">
             <h1 class="text-2xl font-bold text-primary tracking-tight">
-              Namaste, {{ session['full_name'] }}
+              {{ _('Namaste, ') }}{{ session['full_name'] }}
             </h1>
             <span class="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-lowest text-secondary text-xs font-semibold shadow-sm">
               <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-              Active Citizen
+              {{ _('Active Citizen') }}
             </span>
           </div>
           <p class="text-sm text-on-surface-variant flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -42,7 +42,7 @@
               <span>{{ session['ward'] }}</span>
               <span class="text-outline-variant">•</span>
             {% endif %}
-            <span class="text-primary font-semibold">Gram Panchayat</span>
+            <span class="text-primary font-semibold">{{ _('Gram Panchayat') }}</span>
           </p>
         </div>
       </div>
@@ -50,7 +50,7 @@
       <div class="flex flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between gap-3">
         <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-surface-container-lowest shadow-sm text-secondary text-xs font-semibold">
           <span class="material-symbols-outlined text-secondary" style="font-size:18px;">check_circle</span>
-          Aadhaar Verified
+          {{ _('Aadhaar Verified') }}
         </div>
         <div class="flex items-center gap-1.5 text-on-surface-variant text-xs font-semibold bg-surface-container-highest/40 px-4 py-1 rounded-lg">
           <span class="material-symbols-outlined text-primary" style="font-size:16px;">calendar_today</span>
@@ -64,7 +64,7 @@
       <a href="{{ url_for('new_complaint') }}"
          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-sm font-semibold shadow-sm hover:bg-primary-container transition-all duration-200 hover:-translate-y-0.5">
         <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>
-        {{ _('File New Complaint') }}
+        {{ _('File a Complaint') }}
       </a>
       <a href="{{ url_for('certificate_services') }}"
          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant text-primary text-sm font-semibold hover:bg-surface-container transition-all duration-200 hover:-translate-y-0.5">
@@ -80,13 +80,13 @@
   <section class="space-y-4">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
       <div>
-        <span class="text-xs font-bold uppercase tracking-widest text-primary-container">One-Click Citizen Portal</span>
-        <h2 class="text-xl font-bold text-on-surface tracking-tight">Quick Civic Services</h2>
-        <p class="text-sm text-on-surface-variant">Access instant village administration services and online governance tools</p>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary-container">{{ _('One-Click Citizen Portal') }}</span>
+        <h2 class="text-xl font-bold text-on-surface tracking-tight">{{ _('Quick Civic Services') }}</h2>
+        <p class="text-sm text-on-surface-variant">{{ _('Access instant village administration services and online governance tools') }}</p>
       </div>
       <div class="hidden md:flex items-center gap-1 text-xs text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-lg">
         <span class="material-symbols-outlined text-secondary" style="font-size:14px;">bolt</span>
-        <span>End-to-End Digitized &amp; Paperless</span>
+        <span>{{ _('End-to-End Digitized &amp; Paperless') }}</span>
       </div>
     </div>
 
@@ -99,15 +99,15 @@
             <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
               <span class="material-symbols-outlined" style="font-size:26px;">workspace_premium</span>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-surface-container text-xs font-semibold text-primary">3 Types</span>
+            <span class="px-2 py-0.5 rounded-full bg-surface-container text-xs font-semibold text-primary">{{ _('3 Types') }}</span>
           </div>
           <div>
-            <h3 class="text-base font-semibold text-on-surface group-hover:text-primary transition-colors">Apply Certificate</h3>
-            <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">Birth, Death &amp; Residence certificates</p>
+            <h3 class="text-base font-semibold text-on-surface group-hover:text-primary transition-colors">{{ _('Apply Certificate') }}</h3>
+            <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">{{ _('Birth, Death &amp; Residence certificates') }}</p>
           </div>
         </div>
         <div class="pt-4 mt-4 flex items-center justify-between text-primary text-xs font-semibold group-hover:translate-x-0.5 transition-transform">
-          <span>Apply Now</span>
+          <span>{{ _('Apply Now') }}</span>
           <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
         </div>
       </a>
@@ -119,15 +119,15 @@
             <div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
               <span class="material-symbols-outlined" style="font-size:26px;">approval</span>
             </div>
-            <span class="px-2 py-0.5 rounded-full bg-secondary/10 text-xs font-semibold text-secondary">Instant ACK</span>
+            <span class="px-2 py-0.5 rounded-full bg-secondary/10 text-xs font-semibold text-secondary">{{ _('Instant ACK') }}</span>
           </div>
           <div>
-            <h3 class="text-base font-semibold text-on-surface group-hover:text-primary transition-colors">Apply Permission</h3>
-            <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">Building construction, water connection</p>
+            <h3 class="text-base font-semibold text-on-surface group-hover:text-primary transition-colors">{{ _('Apply Permission') }}</h3>
+            <p class="text-xs text-on-surface-variant mt-1 line-clamp-2">{{ _('Building construction, water connection') }}</p>
           </div>
         </div>
         <div class="pt-4 mt-4 flex items-center justify-between text-primary text-xs font-semibold group-hover:translate-x-0.5 transition-transform">
-          <span>Submit Request</span>
+          <span>{{ _('Submit Request') }}</span>
           <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
         </div>
       </a>
@@ -203,7 +203,7 @@
     {# ── LEFT column (8 cols) ── #}
     <div class="lg:col-span-8 space-y-8">
 
-      {# My Complaints #}
+      {# {{ _('My Complaints') }} #}
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -215,7 +215,7 @@
           </div>
           <a href="{{ url_for('new_complaint') }}"
              class="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary-container transition-colors">
-            <span>{{ _('File New') }}</span>
+            <span>{{ _('File a Complaint') }}</span>
             <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>
           </a>
         </div>
@@ -276,7 +276,7 @@
           <a href="{{ url_for('new_complaint') }}"
              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-on-primary text-sm font-semibold hover:bg-primary-container transition-colors">
             <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span>
-            {{ _('File New Complaint') }}
+            {{ _('File a Complaint') }}
           </a>
         </div>
         {% endif %}
@@ -308,8 +308,8 @@
                   <th class="py-3 px-5" scope="col">Application &amp; ID</th>
                   <th class="py-3 px-4" scope="col">Applicant &amp; Ward</th>
                   <th class="py-3 px-4" scope="col">Submitted On</th>
-                  <th class="py-3 px-4" scope="col">Status</th>
-                  <th class="py-3 px-5 text-right" scope="col">Action</th>
+                  <th class="py-3 px-4" scope="col">{{ _('Status') }}</th>
+                  <th class="py-3 px-5 text-right" scope="col">{{ _('Action') }}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-surface-container text-sm">
@@ -455,7 +455,7 @@
            class="block w-full py-2 px-4 rounded-xl bg-primary text-on-primary text-xs font-semibold text-center hover:bg-primary-container transition-colors shadow-sm">
           <span class="inline-flex items-center gap-1 justify-center">
             <span class="material-symbols-outlined" style="font-size:16px;">add_circle</span>
-            {{ _('File New Complaint') }}
+            {{ _('File a Complaint') }}
           </span>
         </a>
       </div>

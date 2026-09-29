@@ -9,12 +9,12 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md w-full pt-2">
     <div>
-      <h1 class="font-headline-md text-headline-md text-primary tracking-tight">Notice Board Management</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant">Active notices appear on the public home page.</p>
+      <h1 class="font-headline-md text-headline-md text-primary tracking-tight">{{ _('Notice Board Management') }}</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Active notices appear on the public home page.') }}</p>
     </div>
     <a href="{{ url_for('admin_dashboard') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md transition-colors">
       <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-      <span>Back to Dashboard</span>
+      <span>{{ _('Back to Dashboard') }}</span>
     </a>
   </div>
 
@@ -22,24 +22,24 @@
   <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-lg max-w-[640px] flex flex-col gap-space-md">
     <h2 class="font-title-md text-title-md text-on-surface font-bold flex items-center gap-2">
       <span class="material-symbols-outlined text-[20px] text-primary">campaign</span>
-      Post New Notice
+      {{ _('Post New Notice') }}
     </h2>
     <form method="post" action="{{ url_for('admin_post_notice') }}" class="flex flex-col gap-space-md">
       <div>
         <label for="notice-title" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">
-          Notice Title <span class="text-error">*</span>
+          {{ _('Notice Title') }} <span class="text-error">*</span>
         </label>
-        <input type="text" id="notice-title" name="title" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="e.g. Water Supply Schedule — Ward 3 & 5" required>
+        <input type="text" id="notice-title" name="title" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" placeholder="{{ _('e.g. Water Supply Schedule — Ward 3 & 5') }}" required>
       </div>
       <div>
         <label for="notice-body" class="block font-label-sm text-label-sm font-semibold text-on-surface-variant mb-1">
-          Notice Details <span class="text-error">*</span>
+          {{ _('Notice Details') }} <span class="text-error">*</span>
         </label>
-        <textarea id="notice-body" name="body" class="w-full px-4 py-3 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" rows="4" required placeholder="Full notice text. Include dates, timings, contact info as needed.&#10;Example:&#10;Water supply will be available 6–8 AM on Tuesday, 12 August 2026 for Ward 3 and Ward 5.&#10;For queries: Gram Panchayat office — 9876500000"></textarea>
+        <textarea id="notice-body" name="body" class="w-full px-4 py-3 rounded-lg bg-surface border border-outline-variant/50 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder:text-outline-variant/70" rows="4" required placeholder="{{ _('Full notice text. Include dates, timings, contact info as needed.&#10;Example:&#10;Water supply will be available 6–8 AM on Tuesday, 12 August 2026 for Ward 3 and Ward 5.&#10;For queries: Gram Panchayat office — 9876500000') }}"></textarea>
       </div>
       <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-on-primary font-label-lg shadow-sm hover:bg-primary-container transition-all self-start">
         <span class="material-symbols-outlined text-[20px]">campaign</span>
-        <span>Post Notice</span>
+        <span>{{ _('Post Notice') }}</span>
       </button>
     </form>
   </div>
@@ -47,7 +47,7 @@
   <!-- Existing notices -->
   <div class="flex flex-col gap-space-md w-full">
     <div class="flex items-center gap-3">
-      <h2 class="font-title-md text-title-md text-on-surface font-bold">All Notices</h2>
+      <h2 class="font-title-md text-title-md text-on-surface font-bold">{{ _('All Notices') }}</h2>
       <span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm font-bold">{{ notices | length }} total</span>
     </div>
 
@@ -70,7 +70,7 @@
             </span>
             {% if not notice['is_active'] %}
             <span class="text-outline-variant">•</span>
-            <span class="text-error font-semibold">Deactivated</span>
+            <span class="text-error font-semibold">{{ _('Deactivated') }}</span>
             {% endif %}
           </div>
         </div>
@@ -81,10 +81,10 @@
             {% else %}border-secondary text-secondary hover:bg-secondary/10{% endif %}">
             {% if notice['is_active'] %}
               <span class="material-symbols-outlined text-[18px]">visibility_off</span>
-              <span>Deactivate</span>
+              <span>{{ _('Deactivate') }}</span>
             {% else %}
               <span class="material-symbols-outlined text-[18px]">visibility</span>
-              <span>Activate</span>
+              <span>{{ _('Activate') }}</span>
             {% endif %}
           </button>
         </form>
@@ -94,7 +94,7 @@
     {% else %}
     <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-xl flex flex-col items-center justify-center text-center max-w-[640px]">
       <span class="material-symbols-outlined text-[48px] text-outline-variant mb-4">campaign</span>
-      <p class="font-body-lg text-body-lg text-on-surface-variant">No notices posted yet.</p>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">{{ _('No notices posted yet.') }}</p>
     </div>
     {% endif %}
   </div>

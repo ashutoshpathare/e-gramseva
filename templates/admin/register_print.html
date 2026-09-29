@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    {{ _('*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     @page { size: A4 landscape; margin: 10mm 12mm; }
 
@@ -204,15 +204,15 @@
       padding: 40px 0;
       color: #666;
       font-size: 12px;
-    }
+    }') }}
   </style>
 </head>
 <body>
 
   <!-- Print / close controls (hidden on print) -->
   <div class="print-bar no-print">
-    <button onclick="window.print()" id="btn-do-print">Print / Save as PDF</button>
-    <button class="btn-close-tab" onclick="window.close()" id="btn-close-print">Close</button>
+    <button onclick="window.print()" id="btn-do-print">{{ _('Print / Save as PDF') }}</button>
+    <button class="btn-close-tab" onclick="window.close()" id="btn-close-print">{{ _('Close') }}</button>
   </div>
 
   <div class="reg-page">
@@ -223,9 +223,9 @@
 
       <!-- Letterhead header — same pattern as certificate.html -->
       <div class="reg-header">
-        <div class="reg-header-devanagari">ग्राम पंचायत &mdash; इ-ग्रामसेवा</div>
-        <div class="reg-header-english">Gram Panchayat &mdash; e-gramSeva</div>
-        <div class="reg-header-sub">Citizen Services Portal &bull; Official Register</div>
+        <div class="reg-header-devanagari">{{ _('ग्राम पंचायत &mdash; इ-ग्रामसेवा') }}</div>
+        <div class="reg-header-english">{{ _('Gram Panchayat &mdash; e-gramSeva') }}</div>
+        <div class="reg-header-sub">{{ _('Citizen Services Portal &bull; Official Register') }}</div>
       </div>
 
       <!-- Register title -->
@@ -243,30 +243,30 @@
       <table class="reg-table" id="tbl-print-register">
         <thead>
           <tr>
-            <th style="width:32px;">Sr.</th>
+            <th style="width:32px;">{{ _('Sr.') }}</th>
             {% if register_type == 'birth' %}
-              <th>Request No.</th>
-              <th>Applicant Name</th>
-              <th>Ward</th>
-              <th>Date of Birth</th>
-              <th>Approved On</th>
-              <th>Status</th>
+              <th>{{ _('Request No.') }}</th>
+              <th>{{ _('Applicant Name') }}</th>
+              <th>{{ _('Ward') }}</th>
+              <th>{{ _('Date of Birth') }}</th>
+              <th>{{ _('Approved On') }}</th>
+              <th>{{ _('Status') }}</th>
             {% elif register_type == 'death' %}
-              <th>Request No.</th>
-              <th>Applicant Name</th>
-              <th>Ward</th>
-              <th>Date of Death</th>
-              <th>Approved On</th>
-              <th>Status</th>
+              <th>{{ _('Request No.') }}</th>
+              <th>{{ _('Applicant Name') }}</th>
+              <th>{{ _('Ward') }}</th>
+              <th>{{ _('Date of Death') }}</th>
+              <th>{{ _('Approved On') }}</th>
+              <th>{{ _('Status') }}</th>
             {% else %}
-              <th>Property No.</th>
-              <th>Owner Name</th>
-              <th>Ward</th>
-              <th>Type</th>
-              <th>Area (sq ft)</th>
-              <th>Assessed Value</th>
-              <th>Registered On</th>
-              <th>Status</th>
+              <th>{{ _('Property No.') }}</th>
+              <th>{{ _('Owner Name') }}</th>
+              <th>{{ _('Ward') }}</th>
+              <th>{{ _('Type') }}</th>
+              <th>{{ _('Area (sq ft)') }}</th>
+              <th>{{ _('Assessed Value') }}</th>
+              <th>{{ _('Registered On') }}</th>
+              <th>{{ _('Status') }}</th>
             {% endif %}
           </tr>
         </thead>
@@ -280,14 +280,14 @@
               <td>{{ rec['ward'] }}</td>
               <td>{{ rec['form_data'].get('date_of_birth', '—') }}</td>
               <td>{{ rec['updated_at'][:10] }}</td>
-              <td><span class="reg-badge reg-badge-approved">APPROVED</span></td>
+              <td><span class="reg-badge reg-badge-approved">{{ _('APPROVED') }}</span></td>
             {% elif register_type == 'death' %}
               <td>{{ rec['request_no'] }}</td>
               <td>{{ rec['applicant_name'] }}</td>
               <td>{{ rec['ward'] }}</td>
               <td>{{ rec['form_data'].get('date_of_death', '—') }}</td>
               <td>{{ rec['updated_at'][:10] }}</td>
-              <td><span class="reg-badge reg-badge-approved">APPROVED</span></td>
+              <td><span class="reg-badge reg-badge-approved">{{ _('APPROVED') }}</span></td>
             {% else %}
               <td>{{ rec['property_no'] }}</td>
               <td>{{ rec['owner_name'] }}</td>
@@ -307,20 +307,20 @@
         </tbody>
       </table>
       {% else %}
-      <div class="empty-note">No records found for the selected filters.</div>
+      <div class="empty-note">{{ _('No records found for the selected filters.') }}</div>
       {% endif %}
 
       <!-- Signature block — same pattern as certificate.html -->
       <div class="reg-signatures">
         <div class="sig-block">
           <div class="sig-line"></div>
-          <div class="sig-title">Gram Sevak</div>
-          <div class="sig-sub">Village Level Worker</div>
+          <div class="sig-title">{{ _('Gram Sevak') }}</div>
+          <div class="sig-sub">{{ _('Village Level Worker') }}</div>
         </div>
         <div class="sig-block">
           <div class="sig-line"></div>
-          <div class="sig-title">Sarpanch</div>
-          <div class="sig-sub">Gram Panchayat</div>
+          <div class="sig-title">{{ _('Sarpanch') }}</div>
+          <div class="sig-sub">{{ _('Gram Panchayat') }}</div>
         </div>
       </div>
 
@@ -334,10 +334,10 @@
   </div><!-- reg-page -->
 
   <script>
-    // Auto-trigger print dialog when opened in new tab
+    {{ _('// Auto-trigger print dialog when opened in new tab
     window.addEventListener('load', function () {
       window.print();
-    });
+    });') }}
   </script>
 </body>
 </html>
