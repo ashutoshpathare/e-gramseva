@@ -3,135 +3,172 @@
 {% block title %}{{ _('File a Complaint') }}{% endblock %}
 {% block description %}Register a new civic complaint with your Gram Panchayat online.{% endblock %}
 
-{% block content %}
-<div class="container-fluid px-3 px-md-4">
-  <div class="form-page-wrap">
 
-    <div class="form-page-header">
-      <h1 class="page-title">{{ _('File a New Complaint') }}</h1>
-      <p class="text-muted mb-0" style="font-size:0.875rem;">
-        Fields marked <span style="color:var(--maroon);font-weight:700;">*</span> are required.
-        A unique complaint ID will be auto-generated on submission.
-      </p>
+
+{% block content %}
+<div class="bg-surface min-h-[calc(100vh-140px)] font-sans text-on-surface pb-12 w-full">
+  <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 overflow-hidden">
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-surface-container-high/40 blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -left-20 w-80 h-80 rounded-full bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+    
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm text-on-surface-variant">
+        <li>
+          <a href="{{ url_for('villager_dashboard') }}" class="hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            Back to Dashboard
+          </a>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-xs font-semibold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Civic Grievance
+        </div>
+        <h1 class="text-3xl font-bold text-primary tracking-tight">
+          {{ _('File a New Complaint') }}
+        </h1>
+        <p class="text-sm text-on-surface-variant flex items-center gap-2">
+          Fields marked <span class="text-error font-bold">*</span> are required. A unique complaint ID will be auto-generated on submission.
+        </p>
+      </div>
     </div>
 
-    <form method="post" action="{{ url_for('new_complaint') }}"
-          enctype="multipart/form-data" novalidate id="complaint-form">
-
-      <!-- Section 1: Complaint Details -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">1</span> {{ _('Complaint Details') }}
-        </div>
-
-        <div class="row g-3">
-          <div class="col-md-6">
-            <label for="category" class="form-label">
-              {{ _('Category') }} <span class="required-mark">*</span>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-4">
+      <form method="post" action="{{ url_for('new_complaint') }}" enctype="multipart/form-data" novalidate id="complaint-form" class="lg:col-span-8 bg-surface-container-lowest shadow-sm rounded-2xl p-6 sm:p-8 space-y-8">
+        
+        <!-- Section 1: Complaint Details -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-3 pb-2 border-b border-surface-container">
+            <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">1</span>
+            <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Complaint Details') }}</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label for="category" class="block text-sm text-on-surface-variant font-medium">{{ _('Category') }} <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="category" name="category" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('category') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  {% for cat in ['Road','Water','Street Lights','Garbage','Drainage','Electricity','Other'] %}
+                    <option value="{{ cat }}" {% if form.get('category') == cat %}selected{% endif %}>{{ _(cat) }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+            
+            <div class="space-y-1">
+              <label for="ward" class="block text-sm text-on-surface-variant font-medium">{{ _('Ward') }} <span class="text-error">*</span></label>
+              <div class="relative">
+                <select id="ward" name="ward" class="w-full bg-surface-container-lowest px-4 py-3 pr-10 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none cursor-pointer" required>
+                  <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>&mdash; Select &mdash;</option>
+                  {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5','Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
+                    <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>{{ w }}</option>
+                  {% endfor %}
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-3.5 text-outline-variant pointer-events-none">expand_more</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="space-y-1 pt-2">
+            <label for="description" class="block text-sm text-on-surface-variant font-medium">{{ _('Description') }} <span class="text-error">*</span></label>
+            <textarea id="description" name="description" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" rows="4" placeholder="Describe the problem clearly (minimum 20 characters)" required>{{ form.get('description', '') }}</textarea>
+            <div class="text-xs text-on-surface-variant flex items-center justify-between mt-1">
+              <span>Minimum 20 characters required</span>
+              <span><span id="char-count" class="font-medium text-primary">{{ form.get('description', '') | length }}</span> characters</span>
+            </div>
+          </div>
+          
+          <div class="space-y-1 pt-2">
+            <label for="address_detail" class="block text-sm text-on-surface-variant font-medium">
+              {{ _('Address') }} <span class="text-outline font-normal">(optional)</span>
             </label>
-            <select id="category" name="category" class="form-select" required>
-              <option value="" disabled {% if not form.get('category') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for cat in ['Road','Water','Street Lights','Garbage','Drainage','Electricity','Other'] %}
-                <option value="{{ cat }}" {% if form.get('category') == cat %}selected{% endif %}>
-                  {{ _(cat) }}
-                </option>
-              {% endfor %}
-            </select>
+            <input type="text" id="address_detail" name="address_detail" class="w-full bg-surface-container-lowest px-4 py-3 rounded-lg shadow-sm border border-outline-variant text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 transition-all" placeholder="e.g. Near ZP School, Shivaji Nagar" value="{{ form.get('address_detail', '') }}">
           </div>
-          <div class="col-md-6">
-            <label for="ward" class="form-label">
-              {{ _('Ward') }} <span class="required-mark">*</span>
-            </label>
-            <select id="ward" name="ward" class="form-select" required>
-              <option value="" disabled {% if not form.get('ward') %}selected{% endif %}>
-                &mdash; Select &mdash;
-              </option>
-              {% for w in ['Ward 1','Ward 2','Ward 3','Ward 4','Ward 5',
-                           'Ward 6','Ward 7','Ward 8','Ward 9','Ward 10'] %}
-                <option value="{{ w }}" {% if form.get('ward') == w %}selected{% endif %}>
-                  {{ w }}
-                </option>
-              {% endfor %}
-            </select>
+        </section>
+
+        <!-- Section 2: Location -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-surface-container">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">2</span>
+              <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Location') }}</h2>
+            </div>
+            <span class="text-sm text-outline font-medium">(optional)</span>
           </div>
-        </div>
-
-        <div class="mt-3">
-          <label for="description" class="form-label">
-            {{ _('Description') }} <span class="required-mark">*</span>
-          </label>
-          <textarea id="description" name="description" class="form-control" rows="4"
-                    placeholder="Describe the problem clearly (minimum 20 characters)"
-                    required>{{ form.get('description', '') }}</textarea>
-          <div class="form-text">
-            <span id="char-count">{{ form.get('description', '') | length }}</span> characters
-            &mdash; minimum 20 required
+          <p class="text-sm text-on-surface-variant">
+            Capture your GPS coordinates to help pinpoint the exact location.
+          </p>
+          <input type="hidden" id="latitude" name="latitude" value="{{ form.get('latitude', '') }}">
+          <input type="hidden" id="longitude" name="longitude" value="{{ form.get('longitude', '') }}">
+          
+          <div class="flex items-center flex-wrap gap-4 pt-2">
+            <button type="button" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-outline-variant bg-surface hover:bg-surface-container text-primary font-medium transition-colors" id="btn-location">
+              <span class="material-symbols-outlined text-[18px]">my_location</span>
+              {{ _('Use My Location') }}
+            </button>
+            <span id="location-info" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary-fixed text-on-secondary-fixed text-sm font-medium {% if not form.get('latitude') %}hidden{% endif %}">
+              <span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+              <code id="location-display" class="font-mono text-xs">{{ form.get('latitude', '') }}, {{ form.get('longitude', '') }}</code>
+            </span>
           </div>
-        </div>
+        </section>
 
-        <div class="mt-3">
-          <label for="address_detail" class="form-label">
-            {{ _('Address') }}
-            <span style="color:var(--muted); font-weight:400;">(optional)</span>
-          </label>
-          <input type="text" id="address_detail" name="address_detail" class="form-control"
-                 placeholder="e.g. Near ZP School, Shivaji Nagar"
-                 value="{{ form.get('address_detail', '') }}">
-        </div>
-      </div>
+        <!-- Section 3: Photo -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-surface-container">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-primary-container text-on-primary text-sm flex items-center justify-center">3</span>
+              <h2 class="text-lg font-bold text-primary tracking-tight">{{ _('Photo') }}</h2>
+            </div>
+            <span class="text-sm text-outline font-medium">(optional)</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">
+            Upload a photo of the issue. Accepted: JPG, PNG, WebP. Max 5 MB.
+          </p>
+          <div class="pt-2">
+            <input type="file" id="photo" name="photo" class="w-full sm:w-auto bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-fixed file:text-on-primary-fixed hover:file:bg-primary-container hover:file:text-white transition-all cursor-pointer" accept=".jpg,.jpeg,.png,.webp">
+          </div>
+          <div id="photo-preview-wrap" class="mt-4 {% if not form.get('photo') %}hidden{% endif %}">
+            <p class="text-sm font-semibold text-on-surface mb-2">Preview:</p>
+            <img id="photo-preview" src="" alt="Photo preview" class="max-w-xs rounded-lg shadow-sm border border-outline-variant">
+          </div>
+        </section>
 
-      <!-- Section 2: Location -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">2</span> {{ _('Location') }}
-          <span class="section-optional">(optional)</span>
-        </div>
-        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
-          Capture your GPS coordinates to help pinpoint the exact location.
-        </p>
-        <input type="hidden" id="latitude"  name="latitude"  value="{{ form.get('latitude', '') }}">
-        <input type="hidden" id="longitude" name="longitude" value="{{ form.get('longitude', '') }}">
-        <div class="d-flex align-items-center gap-3 flex-wrap">
-          <button type="button" class="btn btn-outline-secondary" id="btn-location">
-            <i class="bi bi-geo-alt me-1"></i>{{ _('Use My Location') }}
+        <!-- Submit Bar -->
+        <div class="pt-4 flex flex-col sm:flex-row gap-3 border-t border-surface-container mt-8 pt-8">
+          <button type="submit" id="btn-submit" class="flex-1 py-3.5 px-6 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.99]">
+            <span class="material-symbols-outlined text-[20px]">send</span>
+            {{ _('Submit Complaint') }}
           </button>
-          <span id="location-info" class="location-info {% if not form.get('latitude') %}d-none{% endif %}">
-            <i class="bi bi-check-circle-fill text-success me-1"></i>
-            <code id="location-display">{{ form.get('latitude', '') }}, {{ form.get('longitude', '') }}</code>
-          </span>
+          <a href="{{ url_for('villager_dashboard') }}" class="py-3.5 px-6 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-semibold flex items-center justify-center text-center transition-all">
+            {{ _('Cancel') }}
+          </a>
         </div>
-      </div>
 
-      <!-- Section 3: Photo -->
-      <div class="form-section">
-        <div class="form-section-heading">
-          <span class="section-num">3</span> {{ _('Photo') }}
-          <span class="section-optional">(optional)</span>
+      </form>
+
+      <!-- Contextual Sidebar -->
+      <aside class="hidden lg:block lg:col-span-4 space-y-6">
+        <div class="bg-surface-container-lowest shadow-sm rounded-2xl overflow-hidden border border-surface-container">
+          <div class="p-6 space-y-4">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="material-symbols-outlined text-primary text-[28px]">policy</span>
+              <h3 class="text-base font-bold text-primary">Grievance Policy</h3>
+            </div>
+            <div class="space-y-3 text-sm text-on-surface-variant">
+              <p>Complaints filed through this portal are monitored directly by the Gram Panchayat executive board.</p>
+              <p>Resolution time varies by category. Road and infrastructure complaints may require budget approval.</p>
+            </div>
+          </div>
         </div>
-        <p style="font-size:0.875rem; color:var(--muted); margin-bottom:12px;">
-          Upload a photo of the issue. Accepted: JPG, PNG, WebP. Max 5 MB.
-        </p>
-        <input type="file" id="photo" name="photo" class="form-control"
-               accept=".jpg,.jpeg,.png,.webp" style="max-width:400px;">
-        <div id="photo-preview-wrap" class="mt-3 d-none">
-          <p style="font-size:0.8125rem; font-weight:600; margin-bottom:6px;">Preview:</p>
-          <img id="photo-preview" src="" alt="Photo preview" class="photo-preview-img">
-        </div>
-      </div>
-
-      <!-- Submit bar -->
-      <div class="form-submit-bar">
-        <button type="submit" class="btn btn-primary" id="btn-submit">
-          <i class="bi bi-send me-1"></i>{{ _('Submit Complaint') }}
-        </button>
-        <a href="{{ url_for('villager_dashboard') }}" class="btn btn-outline-secondary ms-2">
-          {{ _('Cancel') }}
-        </a>
-      </div>
-
-    </form>
+      </aside>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -148,7 +185,7 @@
     var btn = this;
     if (!navigator.geolocation){ alert('Geolocation not supported.'); return; }
     btn.disabled = true;
-    btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Getting…';
+    btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">hourglass_empty</span>Getting…';
     navigator.geolocation.getCurrentPosition(
       function(pos){
         var lat = pos.coords.latitude.toFixed(6);
@@ -156,11 +193,13 @@
         document.getElementById('latitude').value  = lat;
         document.getElementById('longitude').value = lng;
         document.getElementById('location-display').textContent = lat + ', ' + lng;
-        document.getElementById('location-info').classList.remove('d-none');
-        btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>' + capturedLabel;
-        btn.classList.replace('btn-outline-secondary', 'btn-outline-success');
+        document.getElementById('location-info').classList.remove('hidden');
+        document.getElementById('location-info').classList.add('inline-flex');
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check_circle</span>' + capturedLabel;
+        btn.classList.remove('text-primary');
+        btn.classList.add('text-secondary', 'border-secondary', 'bg-secondary-fixed/20');
       },
-      function(err){ alert('Error: ' + err.message); btn.disabled = false; }
+      function(err){ alert('Error: ' + err.message); btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">my_location</span>{{ _("Use My Location") }}'; }
     );
   });
 
@@ -170,9 +209,12 @@
     var preview = document.getElementById('photo-preview');
     if (file && file.type.startsWith('image/')){
       var reader = new FileReader();
-      reader.onload = function(e){ preview.src = e.target.result; wrap.classList.remove('d-none'); };
+      reader.onload = function(e){ 
+        preview.src = e.target.result; 
+        wrap.classList.remove('hidden'); 
+      };
       reader.readAsDataURL(file);
-    } else { wrap.classList.add('d-none'); preview.src = ''; }
+    } else { wrap.classList.add('hidden'); preview.src = ''; }
   });
 </script>
 {% endblock %}

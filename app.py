@@ -47,8 +47,8 @@ SCHEMES = {
     'pmay': {
         'label':       'PM Awas Yojana',
         'subtitle':    'Housing Assistance Scheme',
-        'icon':        'bi-house-fill',
-        'icon_color':  'var(--navy)',
+        'icon':        'home',
+        'icon_color':  '#022448',
         'eligibility': (
             'Below Poverty Line (BPL) families or those without a pucca house. '
             'Annual household income below \u20b93 lakh for rural beneficiaries.'
@@ -58,7 +58,7 @@ SCHEMES = {
     'ujjwala': {
         'label':       'Ujjwala Yojana',
         'subtitle':    'LPG Connection Scheme',
-        'icon':        'bi-fire',
+        'icon':        'propane',
         'icon_color':  '#92400e',
         'eligibility': (
             'Women from BPL households who do not already hold an LPG connection. '
@@ -69,7 +69,7 @@ SCHEMES = {
     'kisan_samman': {
         'label':       'Kisan Samman Nidhi',
         'subtitle':    'Farmer Income Support Scheme',
-        'icon':        'bi-tree-fill',
+        'icon':        'agriculture',
         'icon_color':  '#065f46',
         'eligibility': (
             'Small and marginal farmers owning cultivable land up to 2 hectares. '

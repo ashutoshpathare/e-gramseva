@@ -4,44 +4,7 @@
 {% block description %}Log in to e-gramSeva to file complaints, apply for certificates, permissions, and government schemes online.{% endblock %}
 
 {# ── Tailwind scoped to this page only (Material Symbols already in base.html) ── #}
-{% block head_extra %}
-<script src="https://cdn.tailwindcss.com"></script>
-<script id="tailwind-config">
-tailwind.config = {
-  darkMode: "class",
-  theme: { extend: {
-    colors: {
-      "primary":                  "#022448",
-      "primary-container":        "#1e3a5f",
-      "on-primary":               "#ffffff",
-      "on-primary-container":     "#8aa4cf",
-      "secondary":                "#006c4a",
-      "on-secondary":             "#ffffff",
-      "error":                    "#ba1a1a",
-      "surface":                  "#f8f9ff",
-      "on-surface":               "#0b1c30",
-      "on-surface-variant":       "#43474e",
-      "surface-container-lowest": "#ffffff",
-      "surface-container-low":    "#eff4ff",
-      "surface-container":        "#e5eeff",
-      "surface-container-high":   "#dce9ff",
-      "surface-container-highest":"#d3e4fe",
-      "outline":                  "#74777f",
-      "outline-variant":          "#c4c6cf",
-      "on-primary-fixed-variant": "#2d486d",
-      "primary-fixed":            "#d5e3ff",
-    },
-    borderRadius: {
-      DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem",
-      "2xl": "1rem", "3xl": "1.5rem", full: "9999px"
-    },
-  }}
-};
-</script>
-<style>
-  .login-page { font-family: 'Inter', 'Noto Sans', sans-serif; }
-</style>
-{% endblock %}
+
 
 {% block content %}
 <div class="login-page bg-surface min-h-screen pb-12">

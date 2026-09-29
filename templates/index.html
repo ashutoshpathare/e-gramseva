@@ -1,91 +1,108 @@
 {% extends 'base.html' %}
 
+
+
 {% block title %}Home — e-gramSeva Citizen Services Portal{% endblock %}
 {% block description %}e-gramSeva — Gram Panchayat citizen services portal. File complaints, apply for certificates, permissions, and government schemes online.{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-3 px-md-4">
+<div class="flex flex-col gap-space-xl w-full max-w-7xl mx-auto px-4 md:px-8 py-6">
 
   <!-- Welcome banner -->
-  <div class="home-banner">
-    <div class="home-banner-title">
-      इ-ग्रामसेवा &nbsp;|&nbsp; e-gramSeva
+  <div class="bg-primary text-white rounded-xl p-8 md:p-12 shadow-lg flex flex-col items-center text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
+    <div class="relative z-10 flex flex-col items-center gap-4">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+        इ-ग्रामसेवा &nbsp;|&nbsp; e-gramSeva
+      </h1>
+      <p class="text-lg md:text-xl text-blue-100 max-w-2xl font-medium">
+        File civic complaints and track their resolution online &mdash;
+        anytime, from any device.
+      </p>
+      
+      <div class="mt-6 flex flex-wrap justify-center gap-4">
+        {% if not session.get('user_id') %}
+          <a href="{{ url_for('register') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-primary font-semibold shadow-sm hover:bg-gray-50 transition-colors text-base">
+            <span class="material-symbols-outlined text-[20px]">person_add</span>
+            {{ _('Register') }}
+          </a>
+          <a href="{{ url_for('login') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white text-white font-semibold hover:bg-white/10 transition-colors text-base">
+            <span class="material-symbols-outlined text-[20px]">login</span>
+            {{ _('Login') }}
+          </a>
+        {% elif session.get('role') == 'villager' %}
+          <a href="{{ url_for('villager_dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-primary font-semibold shadow-sm hover:bg-gray-50 transition-colors text-base">
+            <span class="material-symbols-outlined text-[20px]">checklist</span>
+            {{ _('My Complaints') }}
+          </a>
+          <a href="{{ url_for('new_complaint') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-white text-white font-semibold hover:bg-white/10 transition-colors text-base">
+            <span class="material-symbols-outlined text-[20px]">add_circle</span>
+            {{ _('File a Complaint') }}
+          </a>
+        {% endif %}
+      </div>
     </div>
-    <p class="home-banner-sub">
-      File civic complaints and track their resolution online &mdash;
-      anytime, from any device.
-    </p>
-    {% if not session.get('user_id') %}
-    <div class="d-flex gap-2 flex-wrap">
-      <a href="{{ url_for('register') }}" class="btn btn-primary">
-        <i class="bi bi-person-plus me-1"></i>{{ _('Register') }}
-      </a>
-      <a href="{{ url_for('login') }}" class="btn btn-outline-light">
-        <i class="bi bi-box-arrow-in-right me-1"></i>{{ _('Login') }}
-      </a>
-    </div>
-    {% elif session.get('role') == 'villager' %}
-    <div class="d-flex gap-2 flex-wrap">
-      <a href="{{ url_for('villager_dashboard') }}" class="btn btn-primary">
-        <i class="bi bi-list-check me-1"></i>{{ _('My Complaints') }}
-      </a>
-      <a href="{{ url_for('new_complaint') }}" class="btn btn-outline-light">
-        <i class="bi bi-plus-circle me-1"></i>{{ _('File a Complaint') }}
-      </a>
-    </div>
-    {% endif %}
   </div>
 
-  <div class="row g-3 mt-1">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg w-full">
 
     <!-- Notice board -->
-    <div class="col-lg-8">
-      <div class="notice-board">
-        <div class="notice-board-header">
-          <i class="bi bi-megaphone-fill me-2"></i>{{ _('Panchayat Notices') }}
-        </div>
+    <div class="lg:col-span-2 flex flex-col gap-space-md">
+      <div class="flex items-center gap-2 border-b border-gray-200 pb-2">
+        <span class="material-symbols-outlined text-[24px] text-primary">campaign</span>
+        <h2 class="text-xl font-bold text-on-surface">{{ _('Panchayat Notices') }}</h2>
+      </div>
+      
+      <div class="flex flex-col gap-4">
         {% if notices %}
           {% for notice in notices %}
-          <div class="notice-item">
-            <div class="notice-title">{{ notice['title'] }}</div>
-            <div class="notice-body">{{ notice['body'] }}</div>
-            <div class="notice-date">
-              <i class="bi bi-calendar3 me-1"></i>{{ notice['created_at'][:10] }}
+          <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-gray-200 flex flex-col gap-3 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start gap-4">
+              <h3 class="text-lg font-bold text-on-surface">{{ notice['title'] }}</h3>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-primary text-sm font-medium whitespace-nowrap">
+                <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                {{ notice['created_at'][:10] }}
+              </span>
             </div>
+            <p class="text-on-surface-variant leading-relaxed">{{ notice['body'] }}</p>
           </div>
           {% endfor %}
         {% else %}
-        <div class="notice-empty">
-          <i class="bi bi-info-circle me-1"></i>
-          {{ _('No notices posted yet') }}.
+        <div class="bg-surface-container-lowest rounded-xl p-12 shadow-sm border border-gray-200 flex flex-col items-center justify-center text-center gap-3">
+          <span class="material-symbols-outlined text-[48px] text-gray-300">info</span>
+          <p class="text-on-surface-variant font-medium">{{ _('No notices posted yet') }}.</p>
         </div>
         {% endif %}
       </div>
     </div>
 
     <!-- How it works -->
-    <div class="col-lg-4">
-      <div class="how-it-works">
-        <div class="hiw-title">{{ _('How It Works') }}</div>
-        <div class="hiw-step">
-          <span class="hiw-num">1</span>
-          <span>Register with your mobile number and ward number.</span>
+    <div class="flex flex-col gap-space-md">
+      <div class="flex items-center gap-2 border-b border-gray-200 pb-2">
+        <span class="material-symbols-outlined text-[24px] text-primary">help</span>
+        <h2 class="text-xl font-bold text-on-surface">{{ _('How It Works') }}</h2>
+      </div>
+      
+      <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-gray-200 flex flex-col gap-6">
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">1</div>
+          <p class="text-on-surface-variant font-medium mt-1">Register with your mobile number and ward number.</p>
         </div>
-        <div class="hiw-step">
-          <span class="hiw-num">2</span>
-          <span>File a complaint with a description and optional photo.</span>
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">2</div>
+          <p class="text-on-surface-variant font-medium mt-1">File a complaint with a description and optional photo.</p>
         </div>
-        <div class="hiw-step">
-          <span class="hiw-num">3</span>
-          <span>Track the status as Gram Panchayat assigns a worker.</span>
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">3</div>
+          <p class="text-on-surface-variant font-medium mt-1">Track the status as Gram Panchayat assigns a worker.</p>
         </div>
-        <div class="hiw-step">
-          <span class="hiw-num">4</span>
-          <span>Get notified when your complaint is resolved.</span>
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">4</div>
+          <p class="text-on-surface-variant font-medium mt-1">Get notified when your complaint is resolved.</p>
         </div>
-        <div class="hiw-step">
-          <span class="hiw-num">5</span>
-          <span>Rate the resolution to help improve services.</span>
+        <div class="flex gap-4 items-start">
+          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-surface-container-low text-primary flex items-center justify-center font-bold">5</div>
+          <p class="text-on-surface-variant font-medium mt-1">Rate the resolution to help improve services.</p>
         </div>
       </div>
     </div>
