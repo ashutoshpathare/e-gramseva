@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    {{ _('*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     @page { size: A4 landscape; margin: 10mm 12mm; }
 
@@ -204,7 +204,7 @@
       padding: 40px 0;
       color: #666;
       font-size: 12px;
-    }') }}
+    }
   </style>
 </head>
 <body>
@@ -223,9 +223,9 @@
 
       <!-- Letterhead header — same pattern as certificate.html -->
       <div class="reg-header">
-        <div class="reg-header-devanagari">{{ _('ग्राम पंचायत &mdash; इ-ग्रामसेवा') }}</div>
-        <div class="reg-header-english">{{ _('Gram Panchayat &mdash; e-gramSeva') }}</div>
-        <div class="reg-header-sub">{{ _('Citizen Services Portal &bull; Official Register') }}</div>
+        <div class="reg-header-devanagari">{{ _('ग्राम पंचायत — इ-ग्रामसेवा') }}</div>
+        <div class="reg-header-english">{{ _('Gram Panchayat — e-gramSeva') }}</div>
+        <div class="reg-header-sub">{{ _('Citizen Services Portal • Official Register') }}</div>
       </div>
 
       <!-- Register title -->
@@ -334,10 +334,10 @@
   </div><!-- reg-page -->
 
   <script>
-    {{ _('// Auto-trigger print dialog when opened in new tab
+    // Auto-trigger print dialog when opened in new tab
     window.addEventListener('load', function () {
       window.print();
-    });') }}
+    });
   </script>
 </body>
 </html>
