@@ -9,49 +9,49 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full pt-2">
     <div>
-      <h1 class="font-headline-md text-headline-md text-primary tracking-tight">{{ _('Tax Overview') }}</h1>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary tracking-tight break-words">{{ _('Tax Overview') }}</h1>
       <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Tax collection status across all properties') }}</p>
     </div>
-    <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md transition-colors">
+    <a href="{{ url_for('admin_properties') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-label-md text-label-md transition-colors self-start md:self-auto">
       <span class="material-symbols-outlined text-[18px]">arrow_back</span>
       <span>{{ _('Properties') }}</span>
     </a>
   </div>
 
   <!-- Stats -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 w-full">
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-on-surface">{{ stats.total }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Total Records') }}</div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6 w-full">
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-on-surface">{{ stats.total }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Total Records') }}</div>
     </div>
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-[#d97706]">{{ stats.unpaid }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Unpaid') }}</div>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-[#d97706]">{{ stats.unpaid }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Unpaid') }}</div>
     </div>
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-error">{{ stats.overdue }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Overdue') }}</div>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-error">{{ stats.overdue }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Overdue') }}</div>
     </div>
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-secondary">{{ stats.paid }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Paid') }}</div>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-secondary">{{ stats.paid }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Paid') }}</div>
     </div>
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-error">₹{{ '{:,.0f}'.format(stats.total_due) }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Outstanding') }}</div>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-error">₹{{ '{:,.0f}'.format(stats.total_due) }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Outstanding') }}</div>
     </div>
-    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-space-md flex flex-col gap-1">
-      <div class="font-headline-sm text-headline-sm font-bold text-secondary">₹{{ '{:,.0f}'.format(stats.total_collected) }}</div>
-      <div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">{{ _('Collected') }}</div>
+    <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/30 p-3.5 sm:p-space-md flex flex-col gap-1">
+      <div class="text-lg sm:text-xl font-bold text-secondary">₹{{ '{:,.0f}'.format(stats.total_collected) }}</div>
+      <div class="text-[10px] sm:text-xs text-on-surface-variant uppercase tracking-wider font-semibold">{{ _('Collected') }}</div>
     </div>
   </div>
 
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-4 sm:p-6 lg:p-8 flex flex-col gap-6 lg:gap-12 w-full">
     <!-- Filters -->
-    <form method="get" action="{{ url_for('admin_tax_overview') }}" class="flex flex-wrap items-end gap-space-sm w-full">
-      <div class="flex flex-col gap-1">
+    <form method="get" action="{{ url_for('admin_tax_overview') }}" class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-end gap-2 sm:gap-space-sm w-full">
+      <div class="flex flex-col gap-1 w-full sm:w-auto">
         <span class="font-label-sm text-label-sm font-semibold text-on-surface-variant">{{ _('Filter Status') }}</span>
-        <div class="relative w-48">
+        <div class="relative w-full sm:w-48">
           <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
             <option value="">{{ _('All Statuses') }}</option>
             {% for s in tax_statuses %}
@@ -63,7 +63,7 @@
       </div>
       {% if filters.status %}
         <div class="flex items-center pb-0.5">
-          <a href="{{ url_for('admin_tax_overview') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors">
+          <a href="{{ url_for('admin_tax_overview') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30 transition-colors w-full sm:w-auto text-center">
             {{ _('Clear') }}
           </a>
         </div>
@@ -72,19 +72,19 @@
 
     <!-- Table -->
     {% if records %}
-    <div class="overflow-x-auto -mx-space-lg px-space-lg">
-      <table class="w-full text-left min-w-[900px]">
+    <div class="overflow-x-auto w-full">
+      <table class="w-full text-left min-w-[640px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
-            <th class="py-4 px-6 rounded-l-lg">{{ _('Property') }}</th>
-            <th class="py-4 px-6">{{ _('Owner') }}</th>
-            <th class="py-4 px-6">{{ _('Ward') }}</th>
-            <th class="py-4 px-6">{{ _('Tax Type') }}</th>
-            <th class="py-4 px-6">{{ _('F.Y.') }}</th>
-            <th class="py-4 px-6">{{ _('Amount Due') }}</th>
-            <th class="py-4 px-6">{{ _('Due Date') }}</th>
-            <th class="py-4 px-6">{{ _('Status') }}</th>
-            <th class="py-4 px-6 rounded-r-lg"></th>
+            <th class="py-4 px-6 rounded-l-lg whitespace-nowrap">{{ _('Property') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Owner') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Ward') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Tax Type') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('F.Y.') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Amount Due') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Due Date') }}</th>
+            <th class="py-4 px-6 whitespace-nowrap">{{ _('Status') }}</th>
+            <th class="py-4 px-6 rounded-r-lg whitespace-nowrap"></th>
           </tr>
         </thead>
         <tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface">

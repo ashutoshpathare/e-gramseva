@@ -21,12 +21,12 @@
   <!-- Top Breadcrumb & Executive Title Bar -->
   <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-space-xs">
-      <div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+      <div class="hidden sm:flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md truncate">
         <span class="hover:text-primary transition-colors cursor-pointer">{{ _('Administration') }}</span>
         <span class="material-symbols-outlined text-[14px]">chevron_right</span>
         <span class="text-primary font-semibold">{{ _('Service Requests') }}</span>
       </div>
-      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">{{ _('Service Requests') }}</h1>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary tracking-tight break-words">{{ _('Service Requests') }}</h1>
       <p class="font-body-md text-body-md text-on-surface-variant">{{ _('Certificate, permission, and scheme applications from residents') }}</p>
     </div>
     <div class="flex items-center gap-space-sm">
@@ -38,47 +38,47 @@
   </div>
 
   <!-- Stats Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 lg:gap-12 w-full">
-    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
-      <div class="flex items-start justify-between">
-        <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Total Requests') }}</span>
-          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight">{{ stats.total }}</div>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6 lg:gap-8 w-full">
+    <div class="bg-surface-container-lowest p-3.5 sm:p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between gap-2 sm:gap-3 min-w-0">
+        <div class="flex flex-col gap-1 min-w-0 flex-1">
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-on-surface-variant font-semibold break-words leading-tight">{{ _('Total Requests') }}</span>
+          <div class="text-xl sm:text-2xl lg:text-3xl text-primary font-bold tracking-tight">{{ stats.total }}</div>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-surface-container-low text-primary-container flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-[24px]">folder_shared</span>
-        </div>
-      </div>
-    </div>
-    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
-      <div class="flex items-start justify-between">
-        <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Pending Review') }}</span>
-          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight" style="color: #d97706;">{{ stats.pending }}</div>
-        </div>
-        <div class="w-11 h-11 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-[24px]">hourglass_top</span>
+        <div class="w-8 h-8 sm:w-11 sm:h-11 rounded-lg bg-surface-container-low text-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[18px] sm:text-[24px]">folder_shared</span>
         </div>
       </div>
     </div>
-    <div class="bg-surface-container-lowest p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
-      <div class="flex items-start justify-between">
-        <div class="flex flex-col gap-1">
-          <span class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant font-semibold">{{ _('Approved') }}</span>
-          <div class="font-headline-lg text-headline-lg text-primary font-bold tracking-tight text-secondary">{{ stats.approved }}</div>
+    <div class="bg-surface-container-lowest p-3.5 sm:p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between gap-2 sm:gap-3 min-w-0">
+        <div class="flex flex-col gap-1 min-w-0 flex-1">
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-on-surface-variant font-semibold break-words leading-tight">{{ _('Pending Review') }}</span>
+          <div class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight" style="color: #d97706;">{{ stats.pending }}</div>
         </div>
-        <div class="w-11 h-11 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
-          <span class="material-symbols-outlined text-[24px]">check_circle</span>
+        <div class="w-8 h-8 sm:w-11 sm:h-11 rounded-lg bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[18px] sm:text-[24px]">hourglass_top</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-6 lg:p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between">
+      <div class="flex items-start justify-between gap-2 sm:gap-3 min-w-0">
+        <div class="flex flex-col gap-1 min-w-0 flex-1">
+          <span class="text-[10px] sm:text-xs uppercase tracking-wider text-on-surface-variant font-semibold break-words leading-tight">{{ _('Approved') }}</span>
+          <div class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-secondary">{{ stats.approved }}</div>
+        </div>
+        <div class="w-8 h-8 sm:w-11 sm:h-11 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[18px] sm:text-[24px]">check_circle</span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Main Section: Table -->
-  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-6 lg:p-8 flex flex-col gap-8 lg:gap-12 w-full">
+  <div class="bg-surface-container-lowest rounded-xl shadow-sm p-4 sm:p-6 lg:p-8 flex flex-col gap-6 lg:gap-12 w-full">
     <!-- Filter Controls Bar -->
-    <form method="get" action="{{ url_for('admin_service_requests') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-space-sm w-full">
-      <div class="lg:col-span-4 relative">
+    <form method="get" action="{{ url_for('admin_service_requests') }}" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-12 gap-2 sm:gap-space-sm w-full">
+      <div class="sm:col-span-1 lg:col-span-4 relative w-full">
         <select name="sub_type" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
           <option value="">{{ _('All Types') }}</option>
           {% for t in all_sub_types %}
@@ -89,7 +89,7 @@
         </select>
         <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
       </div>
-      <div class="lg:col-span-3 relative">
+      <div class="sm:col-span-1 lg:col-span-4 relative w-full">
         <select name="status" class="w-full appearance-none pl-3 pr-8 py-2 bg-surface rounded-lg font-body-sm text-body-sm text-on-surface focus:outline-none cursor-pointer border border-outline-variant/30" onchange="this.form.submit()">
           <option value="">{{ _('All Statuses') }}</option>
           {% for s in service_statuses %}
@@ -98,9 +98,9 @@
         </select>
         <span class="material-symbols-outlined absolute right-2 top-2.5 pointer-events-none text-on-surface-variant text-[18px]">arrow_drop_down</span>
       </div>
-      <div class="lg:col-span-3 flex items-center gap-2">
+      <div class="sm:col-span-1 lg:col-span-4 flex items-center gap-2">
         {% if filters.status or filters.sub_type %}
-          <a href="{{ url_for('admin_service_requests') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 transition-colors">
+          <a href="{{ url_for('admin_service_requests') }}" class="px-4 py-2 rounded-lg bg-surface hover:bg-surface-container text-on-surface-variant font-label-sm text-label-sm border border-outline-variant/30 transition-colors w-full sm:w-auto text-center">
             {{ _('Clear') }}
           </a>
         {% endif %}
@@ -109,8 +109,8 @@
 
     <!-- Data Table -->
     {% if requests %}
-    <div class="overflow-x-auto -mx-space-lg px-space-lg">
-      <table class="w-full text-left min-w-[900px]">
+    <div class="overflow-x-auto w-full">
+      <table class="w-full text-left min-w-[640px]">
         <thead>
           <tr class="bg-surface-container-low text-on-surface-variant uppercase font-label-md text-label-md">
             <th class="py-4 px-6 rounded-l-lg">{{ _('Request No.') }}</th>

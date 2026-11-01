@@ -28,7 +28,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-2">
-      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-mono">{{ sr['request_no'] }}</h1>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary tracking-tight font-mono break-words">{{ sr['request_no'] }}</h1>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-on-surface-variant font-body-sm text-body-sm">
         <span class="inline-flex items-center gap-1 font-semibold text-on-surface">
           <span class="material-symbols-outlined text-[16px]">file_copy</span>
@@ -65,6 +65,7 @@
           <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ _('Application Details') }}</h2>
         </div>
         <div class="p-0">
+          <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-body-sm">
             <tbody class="divide-y divide-surface-container">
               <tr class="hover:bg-surface-container-low/30 transition-colors">
@@ -89,6 +90,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 
@@ -98,6 +100,7 @@
           <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ type_labels.get(sr['sub_type'], sr['sub_type']) }} — Submitted Data</h2>
         </div>
         <div class="p-0">
+          <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-body-sm">
             <tbody class="divide-y divide-surface-container">
               {% for key, val in form_data.items() %}
@@ -108,6 +111,7 @@
               {% endfor %}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 

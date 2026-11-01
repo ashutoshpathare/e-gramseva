@@ -18,7 +18,7 @@
             <span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
             <span>{{ _('Citizen Service Portal • Gram Panchayat Digital Window') }}</span>
           </div>
-          <h1 class="text-3xl md:text-4xl font-bold text-primary tracking-tight">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary tracking-tight break-words">
             {{ _('Certificate Services') }}
           </h1>
           <p class="text-base md:text-lg text-on-surface-variant leading-relaxed">
@@ -64,7 +64,8 @@
           <p style="margin:0 0 12px; font-size:0.85rem; color:#fecaca; line-height:1.5;">
             {{ _('You have unpaid property-tax dues. All certificate applications are on hold until every due below is settled.') }}
           </p>
-          <table style="width:100%; border-collapse:collapse; font-size:0.825rem; color:#fff;">
+          <div style="overflow-x:auto; width:100%;">
+          <table style="width:100%; min-width:480px; border-collapse:collapse; font-size:0.825rem; color:#fff;">
             <thead>
               <tr style="border-bottom:1px solid rgba(255,255,255,.25);">
                 <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Property No.') }}</th>
@@ -84,6 +85,7 @@
               {% endfor %}
             </tbody>
           </table>
+          </div>
           <div style="margin-top:14px;">
             <a href="{{ url_for('villager_property_tax') }}"
                style="

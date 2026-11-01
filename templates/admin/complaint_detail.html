@@ -17,7 +17,7 @@
   <!-- Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
     <div class="flex flex-col gap-2">
-      <h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-mono">{{ complaint['complaint_id'] }}</h1>
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary tracking-tight font-mono break-words">{{ complaint['complaint_id'] }}</h1>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 text-on-surface-variant font-body-sm text-body-sm">
         <span class="inline-flex items-center gap-1 font-semibold text-on-surface">
           <span class="material-symbols-outlined text-[16px]">sell</span>
@@ -55,6 +55,7 @@
           <h2 class="font-title-md text-title-md text-on-surface font-semibold">{{ _('Complaint Information') }}</h2>
         </div>
         <div class="p-0">
+          <div class="overflow-x-auto w-full">
           <table class="w-full text-left text-body-sm">
             <tbody class="divide-y divide-surface-container">
               <tr class="hover:bg-surface-container-low/30 transition-colors">
@@ -95,6 +96,7 @@
               {% endif %}
             </tbody>
           </table>
+          </div>
         </div>
         <div class="px-space-lg py-space-md border-t border-outline-variant/30 bg-surface-container-lowest">
           <strong class="block font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">{{ _('Description') }}</strong>

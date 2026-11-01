@@ -7,17 +7,17 @@
 
 {% block content %}
 <div class="bg-surface min-h-[calc(100vh-140px)] font-sans text-on-surface pb-12 w-full">
-  <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
+  <div class="relative w-full max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-12">
     
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
       <div>
-        <h1 class="text-3xl font-bold text-primary tracking-tight">{{ _('Property & Tax') }}</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-primary tracking-tight break-words">{{ _('Property & Tax') }}</h1>
         <p class="text-sm text-on-surface-variant mt-1">
           {{ session['full_name'] }}
           {% if session.get('ward') %} &mdash; {{ session['ward'] }}{% endif %}
         </p>
       </div>
-      <a href="{{ url_for('villager_dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface border border-outline-variant text-on-surface-variant font-medium hover:bg-surface-container transition-colors">
+      <a href="{{ url_for('villager_dashboard') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-surface border border-outline-variant text-on-surface-variant font-medium hover:bg-surface-container transition-colors self-start sm:self-auto">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         {{ _('My Complaints') }}
       </a>
@@ -30,13 +30,13 @@
       
       <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container overflow-hidden">
         <!-- Property header -->
-        <div class="p-6 border-b border-surface-container bg-surface-container-low/30">
+        <div class="p-4 sm:p-6 border-b border-surface-container bg-surface-container-low/30">
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-            <div>
+            <div class="min-w-0">
               <div class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">
                 {{ prop['property_no'] }}
               </div>
-              <h2 class="text-xl font-bold text-primary mb-1">
+              <h2 class="text-lg sm:text-xl font-bold text-primary mb-1 break-words">
                 {{ prop['address'] }}
               </h2>
               <div class="flex flex-wrap items-center gap-2 text-sm text-on-surface-variant">
@@ -50,7 +50,7 @@
               </div>
             </div>
             
-            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold self-start
               {% if prop['status'] == 'ACTIVE' %}bg-secondary-fixed text-on-secondary-fixed-variant
               {% elif prop['status'] == 'DISPUTED' %}bg-error-container text-on-error-container
               {% else %}bg-primary-fixed text-on-primary-fixed-variant{% endif %}">
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
           <!-- Tax Records -->
           <div class="mb-8">
             <h3 class="text-base font-bold text-primary flex items-center gap-2 mb-4">
@@ -68,8 +68,63 @@
             </h3>
 
             {% if pd.tax_records %}
-            <div class="overflow-x-auto rounded-xl border border-surface-container">
-              <table class="w-full text-left min-w-[700px]">
+            {# Mobile: card layout; md+: table layout #}
+            
+            {# --- MOBILE CARDS (hidden on md+) --- #}
+            <div class="flex flex-col gap-3 md:hidden">
+              {% for tr in pd.tax_records %}
+              <div class="bg-surface rounded-xl border border-surface-container p-4 flex flex-col gap-3">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-semibold text-on-surface text-sm">{{ tr['tax_type'].replace('_', ' ').title() }}</div>
+                    <div class="text-xs text-on-surface-variant mt-0.5">{{ tr['financial_year'] }}</div>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider shrink-0
+                    {% if tr['status'] == 'PAID' %}bg-secondary-fixed text-on-secondary-fixed-variant
+                    {% elif tr['status'] == 'UNPAID' %}bg-yellow-100 text-yellow-800
+                    {% elif tr['status'] == 'OVERDUE' %}bg-error-container text-on-error-container
+                    {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+                    {{ tr['status'] }}
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <div>
+                    <span class="text-on-surface-variant text-xs">Amount Due</span>
+                    <div class="font-bold text-on-surface">₹{{ '{:,.0f}'.format(tr['amount_due']) }}</div>
+                  </div>
+                  <div class="text-right">
+                    <span class="text-on-surface-variant text-xs">Due Date</span>
+                    <div class="text-on-surface text-sm">{{ tr['due_date'] }}</div>
+                  </div>
+                </div>
+                {% if tr['status'] in ('UNPAID', 'OVERDUE') %}
+                  {% if razorpay_enabled %}
+                    <button class="pay-now-btn w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-lg bg-primary text-white text-sm font-semibold shadow-sm hover:bg-primary-container transition-all min-h-[44px]"
+                            data-tax-id="{{ tr['id'] }}"
+                            data-amount="{{ tr['amount_due'] }}"
+                            data-desc="{{ tr['tax_type'].replace('_', ' ').title() }} — {{ tr['financial_year'] }}">
+                      <span class="material-symbols-outlined text-[18px]">credit_card</span>
+                      Pay Now
+                    </button>
+                  {% else %}
+                    <button class="w-full flex items-center justify-center gap-1.5 px-4 py-3 rounded-lg border border-outline-variant bg-surface text-outline cursor-not-allowed text-sm font-medium min-h-[44px]" disabled title="{{ _('Payment gateway not configured') }}">
+                      <span class="material-symbols-outlined text-[18px]">credit_card_off</span>
+                      Pay Now
+                    </button>
+                  {% endif %}
+                {% elif tr['status'] == 'PAID' %}
+                  <div class="flex items-center gap-1 text-secondary text-sm font-semibold">
+                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                    Paid
+                  </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+
+            {# --- DESKTOP TABLE (hidden on mobile) --- #}
+            <div class="hidden md:block overflow-x-auto rounded-xl border border-surface-container">
+              <table class="w-full text-left min-w-[640px]">
                 <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-semibold">
                   <tr>
                     <th class="px-4 py-3">{{ _('Tax Type') }}</th>
@@ -99,7 +154,7 @@
                     <td class="px-4 py-3 text-right">
                       {% if tr['status'] in ('UNPAID', 'OVERDUE') %}
                         {% if razorpay_enabled %}
-                          <button class="pay-now-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold shadow-sm hover:bg-primary-container transition-all"
+                          <button class="pay-now-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold shadow-sm hover:bg-primary-container transition-all min-h-[44px]"
                                   data-tax-id="{{ tr['id'] }}"
                                   data-amount="{{ tr['amount_due'] }}"
                                   data-desc="{{ tr['tax_type'].replace('_', ' ').title() }} — {{ tr['financial_year'] }}">
@@ -107,7 +162,7 @@
                             Pay Now
                           </button>
                         {% else %}
-                          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-outline cursor-not-allowed text-xs font-medium" disabled title="{{ _('Payment gateway not configured') }}">
+                          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-outline cursor-not-allowed text-xs font-medium min-h-[44px]" disabled title="{{ _('Payment gateway not configured') }}">
                             <span class="material-symbols-outlined text-[16px]">credit_card_off</span>
                             Pay Now
                           </button>
@@ -140,8 +195,35 @@
               <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
               Payment History
             </h3>
-            <div class="overflow-x-auto rounded-xl border border-surface-container">
-              <table class="w-full text-left min-w-[700px]">
+
+            {# Mobile payment cards #}
+            <div class="flex flex-col gap-3 md:hidden">
+              {% for py in pd.payments %}
+              <div class="bg-surface rounded-xl border border-surface-container p-4 flex flex-col gap-2">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <div class="font-mono text-xs text-primary font-medium">{{ py['receipt_no'] or '—' }}</div>
+                    <div class="text-sm font-medium text-on-surface mt-0.5">{{ py['tax_type'].replace('_', ' ').title() }}</div>
+                    <div class="text-xs text-on-surface-variant">{{ py['financial_year'] }}</div>
+                  </div>
+                  <div class="text-right shrink-0">
+                    <div class="font-bold text-on-surface">₹{{ '{:,.0f}'.format(py['amount_paid']) }}</div>
+                    <div class="text-xs text-on-surface-variant">{{ py['paid_at'][:10] if py['paid_at'] else '—' }}</div>
+                  </div>
+                </div>
+                {% if py['receipt_no'] %}
+                <a href="{{ url_for('receipt_download', receipt_no=py['receipt_no']) }}" class="inline-flex items-center gap-1 text-primary text-xs font-semibold transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">download</span>
+                  Download Receipt
+                </a>
+                {% endif %}
+              </div>
+              {% endfor %}
+            </div>
+
+            {# Desktop payment table #}
+            <div class="hidden md:block overflow-x-auto rounded-xl border border-surface-container">
+              <table class="w-full text-left min-w-[640px]">
                 <thead class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-semibold">
                   <tr>
                     <th class="px-4 py-3">{{ _('Receipt No.') }}</th>
@@ -183,7 +265,7 @@
       </div>
 
     {% else %}
-    <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-12 flex flex-col items-center justify-center text-center mt-8">
+    <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-surface-container p-8 sm:p-12 flex flex-col items-center justify-center text-center mt-8">
       <span class="material-symbols-outlined text-[64px] text-gray-300 mb-4">real_estate_agent</span>
       <h3 class="text-xl font-bold text-on-surface mb-2">{{ _('No properties registered') }}</h3>
       <p class="text-on-surface-variant">{{ _('Contact the Gram Panchayat office to link a property to your account.') }}</p>

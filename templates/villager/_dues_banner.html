@@ -25,7 +25,8 @@
         You cannot submit this application while you have unpaid property-tax dues.
         Clear every due listed below, then return to apply.
       </p>
-      <table style="width:100%; border-collapse:collapse; font-size:0.825rem; color:#fff;">
+      <div style="overflow-x:auto; width:100%;">
+      <table style="width:100%; min-width:480px; border-collapse:collapse; font-size:0.825rem; color:#fff;">
         <thead>
           <tr style="border-bottom:1px solid rgba(255,255,255,.25);">
             <th style="padding:5px 10px 5px 0; text-align:left; font-weight:600; color:#fecaca; white-space:nowrap;">{{ _('Property No.') }}</th>
@@ -45,6 +46,7 @@
           {% endfor %}
         </tbody>
       </table>
+      </div>
       <div style="margin-top:14px;">
         <a href="{{ url_for('villager_property_tax') }}"
            style="
